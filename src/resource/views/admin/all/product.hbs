@@ -1,0 +1,99 @@
+<div class="admin-all-products-container">  
+  <div class="board-title">
+    <p>Sản phẩm:</p>
+  </div>
+
+  <div class="control-bar">
+    <div class="filter-and-create">
+      <div class="sort">
+        <label>Sắp xếp theo:</label>
+        <select id="price" class="filter-btn">
+          <option value="">Giá</option>
+          <option value="1">Giá tăng dần</option>
+          <option value="-1">Giá giảm dần</option>
+        </select>
+
+        <select id="rate" class="filter-btn">
+          <option value="">Đánh giá</option>
+          <option value="1">Đánh giá tăng dần</option>
+          <option value="-1">Đánh giá giảm dần</option>
+        </select>
+
+        <select id="saleNumber" class="filter-btn">
+          <option value="">Lượng bán</option>
+          <option value="1">Lượng bán tăng dần</option>
+          <option value="-1">Lượng bán giảm dần</option>
+        </select>
+      </div>
+
+      <div class="filter">
+        <label>Lọc theo:</label>
+        <select id="categories" class="filter-btn">
+          <option value="">Loại sản phẩm</option>
+          <option value="skincare">Skincare</option>
+          <option value="makeup">Makeup</option>
+        </select>
+         <select id="brand" class="filter-btn">
+          <option value="">Thương hiệu</option>
+        </select>
+      </div>
+      <button id="clear-filter" style="display: none">Xoá bộ lọc</button>
+
+      <a href="/admin/all-products/product/create" class="create-btn" id="create-btn">
+        <i class="fi fi-rr-plus"></i>
+        <p>Thêm Sản Phẩm</p>
+      </a>
+    </div>
+    <input type="text" id="search-input" name="name" placeholder="Tìm kiếm sản phẩm">
+  </div>
+
+  <div class="table">
+    {{> exportFileButton}}
+    <table class="all-items">
+      <thead>
+        <tr>
+          <td style="width:  5%">STT     </td>
+          <td style="width: 10%">Hãng    </td>
+          <td style="width: 30%">Tên     </td>
+          <td style="width: 15%">Giá nhập</td>
+          <td style="width: 15%">Giá bán </td>
+          <td style="width: 10%">Số lượng</td>
+          <td style="width: 15%">Thao tác</td>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each (holderData 10)}}
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>  
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <div id="id01" class="modal">
+      <form class="modal-content">
+        <div class="container">
+          <p><strong>Xoá sản phẩm ?</strong></p>
+          <p id="confirm-message"></p>
+          <div class="clearfix">
+            <button id="delete-button" type="button" class="deletebtn">Xoá</button>
+            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Huỷ</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <span class="pagination"></span>
+</div>
+
+<form style="display: none;" name="delete-form" method="post"></form>
+
+<script src="/js/admin/all/product.js"></script>

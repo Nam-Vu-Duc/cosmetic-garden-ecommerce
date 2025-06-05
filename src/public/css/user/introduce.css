@@ -1,0 +1,40 @@
+.introduce-container {
+  padding: 10px;
+  div {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    padding: 10px 0;
+    gap: 20px;
+    div.title {
+      width: 30%;
+      font-size: 50px;
+      font-weight: bold;
+      background-color: white;
+      padding: 10px;
+      border-radius: 50px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #D1A6A6;
+    }
+    div.content {
+      width: 70%;
+      font-size: large;
+    }
+  }
+
+  div.image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    img {
+      width: 30%;
+      border-radius: 20px;
+    }
+  }
+}
+@media screen and (max-width: 700px) {
+}

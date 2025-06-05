@@ -1,0 +1,190 @@
+.user-all-products-container {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .sort, .filter {
+    width: 100%;
+    max-width: 1300px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+    label {
+      width: 10%;
+      display: flex;
+      justify-content: end;
+    }
+    select, option {
+      width: fit-content;
+      height: 40px;
+      border: 1px solid #D1A6A6;
+      border-radius: 5px;
+      padding-left: 5px;
+      cursor: pointer;
+    }
+    select:focus {
+      outline: 1.5px solid #D1A6A6
+    }
+  }
+  .filter {
+    .range-slide {
+      position: relative;
+      height: 4px;
+      width: 240px;
+    }
+    .slide {
+      position: absolute;
+      top: 0;
+      height: 4px;
+      background: #ccc;
+      left: 9px;
+      right: 9px;
+    }
+    .line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 4px;
+      background-color: #eee;
+    }
+    .thumb {
+      position: absolute;
+      z-index: 2;
+      text-align: left;
+      background-color: #D1A6A6;
+      border-radius: 50%;
+      outline: none;
+      top: -7px;
+      height: 18px;
+      width: 18px;
+      margin-left: -9px;
+    }
+    input {
+      -webkit-appearance: none;
+      appearance: none;
+      position: absolute;
+      pointer-events: none;
+      z-index: 3;
+      height: 3px;
+      top: 0;
+      width: 100%;
+      opacity: 0;
+      margin: 0;
+    }
+    input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      pointer-events: all;
+      border-radius: 50%;
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+    }
+    .display {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      #min, #max {
+        border: 1px solid #D1A6A6;
+        border-radius: 5px;
+        padding: 5px;
+        box-sizing: border-box;
+      }
+      #m-m {
+        width: 30px;
+        height: 3px;
+        background-color: #D1A6A6;
+        border-radius: 99px;
+      }
+
+    }
+  }
+  .all-category-skincare, .all-category-makeup {
+    padding: 10px;
+    width: 100%;
+    max-width: 1300px;
+    ul {
+      padding-inline-start: 0;
+      list-style: none;
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+      overflow-x: scroll;
+      box-sizing: content-box;
+      scroll-behavior: smooth;
+      align-items: center;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(min(175px, 100%), 1fr));
+      scroll-snap-type: x mandatory;
+    }
+    li {
+      border: 1px solid #D1A6A6;
+      border-radius: 5px;
+      padding: 5px;
+      background-color: white;
+      scroll-snap-align: none start;
+    }
+    a {
+      display: flex; 
+      justify-content: space-between;
+      align-items: center;
+      text-decoration: none;
+      color: black;
+      padding: 5px;
+      height: 100%;
+    }
+    img {
+      width: 40px;
+      aspect-ratio: 1/1;
+      border-radius: 10px;
+    }
+  }
+  .pagination {
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 10px;
+    p {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid black;
+      border-radius: 5px;
+      width: 20px;
+      color: black;
+      cursor: pointer;
+    }
+    p.current {
+      border-color: #D1A6A6;
+      background-color: #D1A6A6;
+      color: white;
+      width: 25px;
+      height: 25px;
+    }
+  }
+}
+@media screen and (max-width: 500px) {
+  .title {
+    font-size: 25px !important;
+  }
+  .all-category-skincare, .all-category-makeup {
+    ul {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+      overflow-x: scroll;
+      box-sizing: content-box;
+      scroll-behavior: smooth;
+      align-items: center;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(min(175px, 100%), 1fr));
+      scroll-snap-type: x mandatory;
+    }
+  }
+  .all-products {
+    grid-template-columns: repeat(2, minmax(min(11.25rem, 100%), 1fr)) !important;
+  }
+}

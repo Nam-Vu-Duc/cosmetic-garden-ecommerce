@@ -1,0 +1,37 @@
+.order-checking-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  flex-direction: column;
+  .checking {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    input {
+      width: 80%;
+      height: 50px;
+      text-align: center;
+    }
+  }
+  .order-process {
+    width: 100%;
+  }
+  table {
+    text-align: center;
+  }
+}
+@media screen and (max-width: 700px) {
+  .order-checking-container {
+    h1 {
+      font-size: 25px;
+      text-align: center;
+    }
+  }
+}
+
+@keyframes reloader {
+  to { transform: rotate(360deg)}
+} 

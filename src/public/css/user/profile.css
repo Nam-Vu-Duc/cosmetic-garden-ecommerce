@@ -1,0 +1,99 @@
+.profile-container {
+  display: flex;
+  gap: 20px;
+  .sidebar-menu {
+    width: 200px;
+    max-width: 200px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px 0;
+    height: fit-content;
+    box-sizing: border-box;
+    .avatar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      flex-direction: column;
+      img {
+        max-width: 75px;
+        aspect-ratio: 1 / 1;
+      }
+    }
+    .tag {
+      padding: 5px;
+      box-sizing: border-box;
+      span {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        gap: 5px;
+        text-decoration: none;
+        color: black;
+        height: 40px;
+        width: 100%;
+        border-radius: 5px;
+        padding: 5px 10px;
+        box-sizing: border-box;
+        border: 1px solid white;
+        cursor: pointer;
+      };
+      span.current {
+        background-color: #FFDFDF;
+      }
+      span:hover {
+        border: 1px solid #FFDFDF;
+      }
+    }
+  }
+  .content {
+    width: calc(100vw - 220px);
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    p {
+      background-color: #F0F0F0;
+      height: fit-content;
+      padding: 10px;
+      text-transform: capitalize;
+      font-weight: bolder;
+      margin-block-start: 0px;
+      margin-block-end: 0px;
+      font-size: x-large;
+      text-align: center;
+      border-radius: 5px;
+    }
+    form {
+      width: 100%;
+      display: grid;
+      grid-template-columns: auto auto;
+      .form-group {
+        width: 80%;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      label {
+        font-weight: bolder;
+        text-transform: capitalize;
+      }
+    }
+  }
+}
+@media screen and (max-width: 700px) {
+  .user-update-profile-container {
+    display: block;
+    .sidebar-menu {
+      width: 100% !important;
+    }
+    .content {
+      width: 100% !important;
+      padding: 0 0 10px 0 !important;
+      margin-top: 10px;
+      form {
+        grid-template-columns: auto;
+      }
+    }
+  }
+}

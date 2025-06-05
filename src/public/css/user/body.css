@@ -1,0 +1,237 @@
+@import url('https://cdn-uicons.flaticon.com/2.0.0/uicons-regular-straight/css/uicons-regular-straight.css');
+@import url('https://cdn-uicons.flaticon.com/2.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css');
+@import url('https://cdn-uicons.flaticon.com/2.1.0/uicons-thin-rounded/css/uicons-thin-rounded.css');
+@import url('https://cdn-uicons.flaticon.com/2.1.0/uicons-bold-rounded/css/uicons-bold-rounded.css');
+@import url('https://cdn-uicons.flaticon.com/2.1.0/uicons-solid-rounded/css/uicons-solid-rounded.css');
+@import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css');
+@import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css');
+
+body {
+  max-width: 1300px;
+  margin: auto;
+}
+header {
+  max-width: 1300px;
+  margin: auto;
+}
+main {
+  margin-top: 80px; 
+  margin-bottom: 50px;
+  padding: 0 10px;
+}
+input:not(input[type='radio']) {
+  width: 100%;
+  font-family: 'Roboto', sans-serif;
+  height: 40px;
+  text-indent: 10px;
+  border-radius: 5px;
+  border: 1px solid #D1A6A6;
+  box-sizing: border-box;
+}
+input:focus {
+  outline: 1.5px solid #D1A6A6
+}
+div.title {
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  gap: 5px; 
+  margin-top: 10px;
+  i { color: red; font-size: 25px;}
+  .main-title {
+    display: inline-block;
+    position: relative;
+    color: red;
+    text-decoration: none;
+    font-size: 25px;
+    text-transform: uppercase;
+  }
+  .main-title::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: red;
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+  }
+  .main-title:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+}
+div.products {
+  scroll-behavior: smooth;
+  align-items: center;
+  gap: 10px;
+  height: auto;
+  margin-top: 10px;
+  padding: 15px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(min(11.25rem, 100%), 1fr));
+  scroll-snap-type: x mandatory;
+  overflow-x: auto;
+  max-width: 100%;
+  border-radius: 20px;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  img { max-width: 100%; aspect-ratio: 1 / 1; transition: 0.5s; border-radius: 5px};
+  a, p { text-decoration: none; color: black};
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  p {
+    margin-block-start: 10px;
+    margin-block-end: 5px;
+  }
+  .product {
+    /* scroll-snap-align: start; */
+    position: relative;
+    background-color: white; 
+    min-height: 350px;
+    width: 220px;
+    max-width: 220px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    .loading {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: white;
+      border-radius: 10px;
+      z-index: 2;
+      animation: flicker 1s infinite;
+    }
+    #price {
+      background-color: #FFDFDF;
+      padding: 5px;
+      width: fit-content;
+      border-radius: 5px;
+      font-weight: bolder;
+    }
+    #name {
+      display: flex; 
+      height: 35px;
+      text-overflow: ellipsis; 
+      overflow: hidden;
+      word-wrap: break-word;
+      font-size: 14px;
+    }
+  };
+  .product:hover {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    img { transform: scale(1.05); }
+  }
+}
+div.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  button {
+    width: 150px; 
+    height: 30px;
+    background-color: white;
+    color: #D1A6A6;
+    border: 1px solid #D1A6A6;
+    border-radius: 5px;
+    cursor: pointer;
+  };
+  button:hover {
+    background-color: #D1A6A6;
+    color: white;
+    border: 1px solid white ;
+  }
+}
+table {
+  width: 100%;
+  border-spacing: 0px 10px;
+  padding: 0px 5px;
+  border-radius: 10px;
+  thead {
+    background-color: #D1A6A6;
+    height: 50px;
+    font-weight: bolder;
+    text-align: center;
+    text-transform:capitalize;
+  }
+  tbody {
+    td {
+      height: fit-content;
+      border-bottom: 1px solid black;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    a {
+      width: fit-content; 
+      height: 30px;
+      background-color: white;
+      color: #D1A6A6;
+      border: 1px solid #D1A6A6;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      padding: 5px;
+    }
+    a:hover {
+      background-color: #D1A6A6;
+      color: white;
+    }
+    img {
+      border-radius: 10px;
+      width: 40px;
+      aspect-ratio: 1/1;
+    }
+  }
+  td:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+  td:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+}
+div.submit-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0 10px 0;
+  box-sizing: border-box;
+}
+button {
+  width: fit-content; 
+  height: 30px;
+  background-color: white;
+  color: #D1A6A6;
+  border: 1px solid #D1A6A6;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button.loading {
+  width: 50px !important;
+  height: 50px !important;
+  border: 5px solid #D1A6A6 !important;
+  border-top-color: transparent !important;
+  border-bottom-color: transparent !important;
+  border-radius: 50% !important;
+  background-color: transparent !important;
+  color: transparent !important;
+  user-select: none !important;
+  animation: 1s reloader infinite linear;
+}
+button:hover {
+  background-color: #D1A6A6;
+  color: white;
+}

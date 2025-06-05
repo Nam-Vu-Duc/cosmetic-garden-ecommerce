@@ -1,0 +1,47 @@
+.detail-order-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  .title {
+    width: 90%;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: larger;
+    font-weight: bolder;
+    height: 50px;
+  }
+  table {
+    td.name-group {
+      display: flex;
+      gap: 5px;
+    }
+    a { 
+      display: flex;
+      align-items: center;
+      text-decoration: none; 
+      color: black;
+      padding-left: 0 !important;
+      border: none;
+      background-color: transparent !important
+    }
+  }
+}
+@media screen and (max-width: 700px) {
+  table {
+    tbody {
+      td:nth-child(1) {
+        overflow: hidden;
+        display: -webkit-box;
+        line-clamp: 2; 
+        -webkit-box-orient: vertical;
+      }
+    }
+    width: 100% !important;
+  }
+}
