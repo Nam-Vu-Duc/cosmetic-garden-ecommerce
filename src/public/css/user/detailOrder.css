@@ -30,6 +30,9 @@
       border: none;
       background-color: transparent !important
     }
+    a:hover {
+      color: black;
+    }
   }
 }
 @media screen and (max-width: 700px) {

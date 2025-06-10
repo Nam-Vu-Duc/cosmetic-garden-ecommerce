@@ -1,16 +1,16 @@
 body {
-  background-color: #FFDFDF;
-  font-family: 'Roboto', sans-serif;
+  background-color:#e5e5e5;
+  font-family: helvetica, arial, sans-serif
 }
 body::-webkit-scrollbar {width: 10px;}
-body::-webkit-scrollbar-track {background: #FFDFDF; }
-body::-webkit-scrollbar-thumb {background: #D1A6A6; border-radius: 5px;}
-body::-webkit-scrollbar-thumb:hover {background: #D1A6A6;}
+body::-webkit-scrollbar-track {background: #ffffff; }
+body::-webkit-scrollbar-thumb {background: gray; border-radius: 5px;}
+body::-webkit-scrollbar-thumb:hover {background: gray;}
 .preloader {
   position: fixed;
   width: 100%;
   height: 100vh;
-  background-color: #FFDFDF;
+  background-color: #e5e5e5;
   top: 0;
   left: 0;
   display: flex;
@@ -21,7 +21,7 @@ body::-webkit-scrollbar-thumb:hover {background: #D1A6A6;}
   .loading {
     width: 50px;
     height: 50px;
-    border: 5px solid #D1A6A6;
+    border: 5px solid #389845;
     border-top-color: transparent;
     border-bottom-color: transparent;
     border-radius: 50%;
@@ -41,9 +41,9 @@ div.notification {
   width: 300px;
   z-index: 9999;
   background-color: white;
-  color: #567A0D;
+  color: #389845;
   border-radius: 10px;
-  border: 1px solid #D1A6A6;
+  border: 1px solid #389845;
   box-sizing: border-box;
   padding: 10px;
   display: flex;

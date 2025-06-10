@@ -11,4 +11,4 @@ const tagMap = {
   feedBack  : feedBackBtn
 }
 
-if (tagMap[index]) tagMap[index].style.backgroundColor = '#FFDFDF'
+if (tagMap[index]) tagMap[index].style.backgroundColor = '#5ab868'

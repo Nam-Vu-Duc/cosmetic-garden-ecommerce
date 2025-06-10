@@ -37,15 +37,6 @@ async function getEmployee() {
     if (input.value === employeeInfo.gender) input.checked = true
   })
 
-  storesInfo.forEach((element, index) => {
-    const option = document.createElement('option')
-    option.value = element.code
-    option.textContent = element.name
-    if (element.code === employeeInfo.storeCode) option.selected = true
-    
-    document.querySelector('select#store').appendChild(option)
-  })
-
   document.querySelector('input#date').value = formatDate(employeeInfo.createdAt)
 
   return employeeInfo

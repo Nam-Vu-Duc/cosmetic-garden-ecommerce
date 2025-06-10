@@ -20,17 +20,6 @@ async function getStore() {
   document.querySelector('input#details').value = storeInfo.details
   document.querySelector('input#total').value   = formatNumber(storeInfo.revenue) 
 
-  employeesInfo.forEach((employee) => {
-    const tr = document.createElement('tr')
-    tr.innerHTML = `
-      <td>${employee._id}</td>
-      <td>${employee.name}</td>
-      <td>${employee.storeName.name}</td>
-      <td><a href="/admin/all-employees/employee/${employee._id}">Xem</a></td>
-    `
-    document.querySelector('table#table-2').querySelector('tbody').appendChild(tr)
-  })
-
   return storeInfo
 }
 

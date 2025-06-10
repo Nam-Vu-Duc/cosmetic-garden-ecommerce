@@ -6,6 +6,7 @@ const brand = require('../../models/brandModel')
 const employee = require('../../models/employeeModel')
 const purchase = require('../../models/purchaseModel')
 const supplier = require('../../models/supplierModel')
+const notification = require('../../models/notificationModel')
 
 class homeController {
   async show(req, res, next) {
@@ -21,7 +22,6 @@ class homeController {
       const matchStage = {}
       const userInfo = await employee.findOne({ _id: req.cookies.uid }).lean()
       if (!userInfo) throw new Error('User not found')
-      if (userInfo.role !== 'admin') matchStage.storeCode = userInfo.storeCode
 
       if (req.body.startDate && req.body.endDate) {
         matchStage.createdAt = {
@@ -177,6 +177,43 @@ class homeController {
       if (!userInfo) throw new Error('User not found')
       
       return res.json({data: userInfo})
+    } catch (error) {
+      console.log(error)
+      return res.json({error: error.message})
+    }
+  }
+  
+  async getNotification(req, res, next) {
+    try {
+      const notifications = await notification.find({receiverId: req.cookies.uid}).limit(5).lean()
+      console.log(notifications)
+      return res.json({data: notifications})
+    } catch (error) {
+      console.log(error)
+      return res.json({error: error.message})
+    }
+  }
+  
+  async setNotification(req, res, next) {
+    try {
+      const {message, type} = req.body
+
+      if (type === 'order') {
+        const employees = await employee.find({role: 'employee'}).lean()
+        const employeeIDs = employees.map(employee => employee._id)
+
+        for (const id of employeeIDs) {
+          const newNotification = new notification({
+            message   : message,
+            receiverId: id,
+            isRead    : false,
+            type      : type,
+          });
+          await newNotification.save();
+        }
+      }
+      
+      return res.json({isValid: true, message: 'Thêm thông báo thành công'})
     } catch (error) {
       console.log(error)
       return res.json({error: error.message})

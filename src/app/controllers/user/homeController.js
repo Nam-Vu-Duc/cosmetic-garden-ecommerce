@@ -80,7 +80,7 @@ class homeController {
   }
 
   async show(req, res, next) {
-    return res.render('users/home', { title: 'Bunny House - Cửa hàng mỹ phẩm chính hãng' })
+    return res.render('users/home', { title: 'Cosmetic Garden - Inspired by nature' })
   }
 
   async searchInfo(req, res, next) {

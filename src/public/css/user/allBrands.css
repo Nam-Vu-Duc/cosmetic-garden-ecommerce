@@ -23,6 +23,7 @@
     justify-content: space-around;
     height: 100px;
     padding: 10px;
+    border: 1px solid white;
     img {
       max-width: 100px;
       aspect-ratio: 1/1;
@@ -36,6 +37,9 @@
       text-decoration: none; 
       color: black;
     }
+  }
+  .brand:hover {
+    border: 1px solid #389845;
   }
   .brand.loading {
     animation: flicker 1s infinite;

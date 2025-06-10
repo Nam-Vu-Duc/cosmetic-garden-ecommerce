@@ -10,7 +10,7 @@ function validating(inputElement, rule, checkValidate, index) {
     checkValidate[index] = false
   } else {
     errorElement.innerText = ''
-    inputElement.style.border = '1px solid #D1A6A6'
+    inputElement.style.border = '1px solid #389845'
     inputElement.parentElement.style.color = 'black'
     checkValidate[index] = true
   }

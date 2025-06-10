@@ -179,7 +179,7 @@ function addToCart(productInfo) {
     // the item has not yet been added, click to add
     if (getAddToCart.style.backgroundColor === '') {
       // change button color to 'added button'
-      getAddToCart.style.backgroundColor = '#D1A6A6'
+      getAddToCart.style.backgroundColor = '#389845'
       getAddToCart.querySelector('p').style.color = 'white'
   
       // add 1 to the cartCounting and set the quantity value min = 1
@@ -199,7 +199,7 @@ function addToCart(productInfo) {
       // the item has already been added, click to remove
       // change button color to 'default button'
       getAddToCart.style.backgroundColor = ''
-      getAddToCart.querySelector('p').style.color = '#D1A6A6'
+      getAddToCart.querySelector('p').style.color = '#389845'
   
       // minus 1 from the cartCounting and reset the productQuantity to 0
       myObj.localCounting--
@@ -243,7 +243,7 @@ function checkExistedProduct(productInfo) {
   for (let i = 0; i < listProductLength.length; ++i) {
     if (myObj.productInfo[i].id === productInfo._id) {
       // change button color to 'added button'
-      getAddToCart.style.backgroundColor = '#D1A6A6'
+      getAddToCart.style.backgroundColor = '#389845'
       getAddToCart.querySelector('p').style.color = 'white'
   
       // visible the quantity div
@@ -282,7 +282,7 @@ function rateProduct() {
     rate.innerText = value
     ratingNums[index].innerText = rateList[index]
     ratingBars[index].style.width = `${value}%`
-    ratingBars[index].style.backgroundColor = '#D1A6A6'
+    ratingBars[index].style.backgroundColor = '#389845'
   })
 }
 

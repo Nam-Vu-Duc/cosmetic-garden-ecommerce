@@ -5,12 +5,12 @@
   height: 98%;
   z-index: 3;
   position: fixed;
-  background-color: #D1A6A6;
+  background-color: #5ab868;
   overflow-y: scroll;
   border-radius: 10px;
   .resize-button{
     position: relative;
-    background-color: #D1A6A6;
+    background-color: #5ab868;
     border: none;
     i {
       position: absolute;
@@ -23,7 +23,8 @@
   .admin-account{
     margin: 10px 5px 5px 5px;
     border-radius: 5px;
-    background-color: #FFDFDF;
+    background-color: white;
+    color: #389845;
     display: flex;
     align-items: center;
     gap: 5px;

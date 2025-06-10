@@ -120,7 +120,7 @@ async function getCustomers() {
           return acc
         }, {}),
         borderWidth: 1,
-        backgroundColor: '#FFDFDF'
+        backgroundColor: '#5ab868'
       }]
     }
   })
@@ -201,7 +201,7 @@ async function getOrders() {
           return acc
         }, {}),
         borderWidth: 1,
-        backgroundColor: '#FFDFDF'
+        backgroundColor: '#5ab868'
       }]
     }
   })
@@ -276,7 +276,7 @@ async function getPurchases() {
           return acc
         }, {}),
         borderWidth: 1,
-        backgroundColor: '#FFDFDF'
+        backgroundColor: '#5ab868'
       }]
     }
   })
@@ -290,11 +290,11 @@ async function getStores() {
   const table = document.createElement('table')
   table.innerHTML = `
     <thead>
-      <tr><td colspan="3">QUẢN LÝ CỬA HÀNG</td></tr>
+      <tr><td colspan="3">QUẢN LÝ ĐẠI LÝ</td></tr>
     </thead>
     <tbody>
       <tr>
-        <td>Số lượng cửa hàng</td>
+        <td>Số lượng đại lý</td>
         <td>${data.length}</td>
         <td><a href="/admin/all-stores">Chi tiết</a></td>
       </tr>
@@ -340,7 +340,7 @@ async function getSuppliers() {
           return acc
         }, {}),
         borderWidth: 1,
-        backgroundColor: '#FFDFDF'
+        backgroundColor: '#5ab868'
       }]
     }
   })

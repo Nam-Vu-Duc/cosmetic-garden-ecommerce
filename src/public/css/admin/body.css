@@ -12,36 +12,36 @@ input[type="text"], input[type="password"], input[type="date"], input[type="mont
   text-indent: 10px;
   height: 40px;
   border-radius: 5px;
-  border: 1px solid #D1A6A6;
+  border: 1px solid #389845;
   box-sizing: border-box;
 }
 input:focus {
-  outline: 1.5px solid #D1A6A6
+  outline: 1.5px solid #389845
 }
 select, option {
   width: fit-content;
   height: 40px;
-  border: 1px solid #D1A6A6;
+  border: 1px solid #389845;
   border-radius: 5px;
   padding-left: 5px;
   cursor: pointer;
 }
 select:focus {
-  outline: 1.5px solid #D1A6A6
+  outline: 1.5px solid #389845
 }
 button {
   width: fit-content; 
   height: 30px;
   background-color: white;
-  color: #D1A6A6;
-  border: 1px solid #D1A6A6;
+  color: #389845;
+  border: 1px solid #389845;
   border-radius: 5px;
   cursor: pointer;
 }
 button.loading {
   width: 50px !important;
   height: 50px !important;
-  border: 5px solid #D1A6A6 !important;
+  border: 5px solid #389845 !important;
   border-top-color: transparent !important;
   border-bottom-color: transparent !important;
   border-radius: 50% !important;
@@ -51,7 +51,7 @@ button.loading {
   animation: 1s reloader infinite linear;
 }
 button:hover {
-  background-color: #D1A6A6;
+  background-color: #389845;
   color: white;
 }
 
@@ -66,7 +66,7 @@ button:hover {
     font-size: 30px;
     text-transform: uppercase;
     font-weight: bolder;
-    border: 2px solid #D1A6A6;
+    border: 2px solid #389845;
     border-radius: 10px;
     padding: 20px;
   }
@@ -91,7 +91,7 @@ div.control-bar {
       gap: 5px;
       background-color: white;
       border-radius: 5px;
-      border: 1px solid #D1A6A6;
+      border: 1px solid #389845;
       padding: 10px;
       p {
         margin-block-start: 0;
@@ -107,7 +107,8 @@ table {
   border-spacing: 0px 10px;
   border-radius: 10px;
   thead {
-    background-color: #D1A6A6;
+    background-color: #5ab868;
+    color: white;
     height: 50px;
     font-weight: bolder;
     text-align: center;
@@ -125,15 +126,15 @@ table {
     width: fit-content; 
     height: 30px;
     background-color: white;
-    color: #D1A6A6;
-    border: 1px solid #D1A6A6;
+    color: #389845;
+    border: 1px solid #389845;
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
     padding: 5px;
   }
   a:hover {
-    background-color: #D1A6A6;
+    background-color: #389845;
     color: white;
   }
   img {
@@ -200,8 +201,8 @@ span.pagination {
     cursor: pointer;
   }
   p.current {
-    border-color: #D1A6A6;
-    background-color: #D1A6A6;
+    border-color: #389845;
+    background-color: #389845;
     color: white;
     width: 25px;
     height: 25px;

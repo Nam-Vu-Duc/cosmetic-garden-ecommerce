@@ -28,7 +28,11 @@ async function getProfile() {
 }
 
 document.querySelector('div.admin-button').querySelectorAll('a').forEach((a) => {
-  if (index === a.id) return a.style.backgroundColor = '#FFDFDF'
+  if (index === a.id) {
+    a.style.backgroundColor = 'white'
+    a.style.color = '#389845'
+  } 
+  return 
 })
 
 document.querySelector('button.resize-button').onclick = function() {

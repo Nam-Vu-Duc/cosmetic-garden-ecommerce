@@ -39,10 +39,11 @@
         cursor: pointer;
       };
       span.current {
-        background-color: #FFDFDF;
+        background-color: #5ab868;
+        color: white;
       }
       span:hover {
-        border: 1px solid #FFDFDF;
+        border: 1px solid #5ab868;
       }
     }
   }
@@ -62,6 +63,15 @@
       font-size: x-large;
       text-align: center;
       border-radius: 5px;
+    }
+    table {
+      tbody {
+        tr {
+          td:nth-child(2), td:nth-child(3) {
+            text-align: right;
+          }
+        }
+      }
     }
     form {
       width: 100%;

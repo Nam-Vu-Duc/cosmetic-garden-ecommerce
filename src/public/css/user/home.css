@@ -50,7 +50,8 @@
         animation: flicker 1s infinite;
       }
       #name {
-        background-color: #FFDFDF;
+        background-color: #389845;
+        color: white;
         padding: 5px;
         width: fit-content;
         border-radius: 5px;
@@ -72,7 +73,7 @@
   }
 }
 .flash-deal-board {
-  background: linear-gradient(168.12deg, #ffb0a4 0%, #ff6b7f 100%);
+  background: linear-gradient(168.12deg, #a8e6cf 0%, #56ab2f 100%);
   .title {
     i.fi-sr-bolt, a {
       animation: bling 1s infinite

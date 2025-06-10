@@ -15,7 +15,6 @@ class allEmployeesController {
       const skip         = (currentPage - 1) * itemsPerPage
       const userInfo     = await employee.findOne({ _id: req.cookies.uid }).lean()
       if (!userInfo) throw new Error('User not found')
-      if (userInfo.role !== 'admin') filter.storeCode = userInfo.storeCode
 
       const [data, dataSize] = await Promise.all([
         employee

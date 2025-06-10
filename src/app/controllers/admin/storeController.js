@@ -42,7 +42,7 @@ class allStoresController {
       const userInfo = await employee.findOne({ _id: req.cookies.uid }).lean()
       if (!userInfo) throw new Error()
       if (!['admin', 'manager'].includes(userInfo.role)) throw new Error()
-      return res.render('admin/all/store', { title: 'Danh sách cửa hàng', layout: 'admin' })
+      return res.render('admin/all/store', { title: 'Danh sách đại lý', layout: 'admin' })
     } catch (error) {
       return res.status(403).render('partials/denyUserAccess', { title: 'Not found', layout: 'empty' })
     }
@@ -53,25 +53,8 @@ class allStoresController {
     try {
       const storeInfo = await store.findOne({ _id: req.body.id }).lean()
       if (!storeInfo) throw new Error('Store not found')
-  
-      const employeesInfo = await employee.aggregate([
-        {
-          $match: { storeCode: storeInfo.code }
-        },
-        {
-          $lookup: {
-            from: 'stores',
-            localField: 'storeCode',
-            foreignField: 'code',
-            as: 'storeName'
-          }
-        },
-        {
-          $unwind: '$storeName'
-        }
-      ])
       
-      return res.json({storeInfo: storeInfo, employeesInfo: employeesInfo})
+      return res.json({storeInfo: storeInfo})
     } catch (error) {
       return res.json({error: error.message})
     }
@@ -104,7 +87,7 @@ class allStoresController {
   // create
   async storeCreate(req, res, next) {
     try {
-      return res.render('admin/create/store', { title: 'Thêm cửa hàng mới', layout: 'admin' })
+      return res.render('admin/create/store', { title: 'Thêm đại lý mới', layout: 'admin' })
     } catch (error) {
       return res.status(403).render('partials/denyUserAccess', { title: 'Not found', layout: 'empty' }) 
     }
@@ -115,7 +98,7 @@ class allStoresController {
       const newStore = new store(req.body)
       await newStore.save()
 
-      return res.json({message: 'Tạo cửa hàng thành công'})
+      return res.json({message: 'Tạo đại lý thành công'})
     } catch (error) {
       return res.json({error: error.message})
     }

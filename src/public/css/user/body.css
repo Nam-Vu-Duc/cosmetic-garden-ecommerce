@@ -25,11 +25,11 @@ input:not(input[type='radio']) {
   height: 40px;
   text-indent: 10px;
   border-radius: 5px;
-  border: 1px solid #D1A6A6;
+  border: 1px solid #389845;
   box-sizing: border-box;
 }
 input:focus {
-  outline: 1.5px solid #D1A6A6
+  outline: 1.5px solid #389845
 }
 div.title {
   display: flex; 
@@ -37,11 +37,11 @@ div.title {
   justify-content: center;
   gap: 5px; 
   margin-top: 10px;
-  i { color: red; font-size: 25px;}
+  i { color: #389845; font-size: 25px;}
   .main-title {
     display: inline-block;
     position: relative;
-    color: red;
+    color: #389845;
     text-decoration: none;
     font-size: 25px;
     text-transform: uppercase;
@@ -54,7 +54,7 @@ div.title {
     height: 2px;
     bottom: 0;
     left: 0;
-    background-color: red;
+    background-color: #389845;
     transform-origin: bottom right;
     transition: transform 0.25s ease-out;
   }
@@ -99,6 +99,8 @@ div.products {
     max-width: 220px;
     padding: 10px 12px;
     border-radius: 10px;
+    border: 1px solid white;
+    box-sizing: border-box;
     .loading {
       position: absolute;
       top: 0;
@@ -111,10 +113,11 @@ div.products {
       animation: flicker 1s infinite;
     }
     #price {
-      background-color: #FFDFDF;
       padding: 5px;
       width: fit-content;
       border-radius: 5px;
+      border: 1px solid #5ab868;
+      color: #5ab868;
       font-weight: bolder;
     }
     #name {
@@ -128,7 +131,12 @@ div.products {
   };
   .product:hover {
     border-radius: 10px;
+    border: 1px solid #389845;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    #price {
+      background-color: #5ab868;
+      color: white;
+    }
     img { transform: scale(1.05); }
   }
 }
@@ -143,13 +151,13 @@ div.button {
     width: 150px; 
     height: 30px;
     background-color: white;
-    color: #D1A6A6;
-    border: 1px solid #D1A6A6;
+    color: #389845;
+    border: 1px solid #389845;
     border-radius: 5px;
     cursor: pointer;
   };
   button:hover {
-    background-color: #D1A6A6;
+    background-color: #389845;
     color: white;
     border: 1px solid white ;
   }
@@ -160,11 +168,12 @@ table {
   padding: 0px 5px;
   border-radius: 10px;
   thead {
-    background-color: #D1A6A6;
+    background-color: #389845;
     height: 50px;
     font-weight: bolder;
     text-align: center;
     text-transform:capitalize;
+    color: white;
   }
   tbody {
     td {
@@ -177,15 +186,15 @@ table {
       width: fit-content; 
       height: 30px;
       background-color: white;
-      color: #D1A6A6;
-      border: 1px solid #D1A6A6;
+      color: #389845;
+      border: 1px solid #389845;
       border-radius: 5px;
       cursor: pointer;
       text-decoration: none;
       padding: 5px;
     }
     a:hover {
-      background-color: #D1A6A6;
+      background-color: #389845;
       color: white;
     }
     img {
@@ -214,15 +223,15 @@ button {
   width: fit-content; 
   height: 30px;
   background-color: white;
-  color: #D1A6A6;
-  border: 1px solid #D1A6A6;
+  color: #389845;
+  border: 1px solid #389845;
   border-radius: 5px;
   cursor: pointer;
 }
 button.loading {
   width: 50px !important;
   height: 50px !important;
-  border: 5px solid #D1A6A6 !important;
+  border: 5px solid #389845 !important;
   border-top-color: transparent !important;
   border-bottom-color: transparent !important;
   border-radius: 50% !important;
@@ -232,6 +241,6 @@ button.loading {
   animation: 1s reloader infinite linear;
 }
 button:hover {
-  background-color: #D1A6A6;
+  background-color: #389845;
   color: white;
 }

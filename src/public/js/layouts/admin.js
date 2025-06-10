@@ -12,8 +12,16 @@ setInterval(async function () {
   })
 }, 30000) // Send a ping every 30 seconds
 
-socket.on('order', () => {
+socket.on('order', async function() {
   pushNotification('Bạn có đơn hàng mới')
+  await fetch('/admin/all/data/notification', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      message: 'New order',
+      type: 'order'
+    })
+  })
 })
 
 socket.on('account', () => {

@@ -1,5 +1,4 @@
 const scrollTop   = document.querySelector('div.scroll-to-top-icon')
-const contact     = document.querySelector('div.contact-icon')
 const dropup      = document.querySelector('div.dropup')
 const chat        = document.querySelector('div.chat-icon')
 const AIchat      = document.querySelector('div.chatbot-icon')
@@ -46,9 +45,6 @@ window.addEventListener('scroll', function() {
 })
 scrollTop.onclick = function() {
   window.scrollTo({top: 0, behavior: "smooth"})
-}
-contact.onclick = function() {
-  dropup.style.display === 'none' ? dropup.style.display = 'block' : dropup.style.display = 'none'
 }
 
 async function getChatData() {

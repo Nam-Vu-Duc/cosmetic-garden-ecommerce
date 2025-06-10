@@ -21,13 +21,6 @@ async function getFilter() {
     option.textContent = element.name
     document.querySelector('select#role').appendChild(option)
   })
-  
-  json.store.forEach((element, index) => {
-    const option = document.createElement('option')
-    option.value = element.code
-    option.textContent = element.name
-    document.querySelector('select#storeCode').appendChild(option)
-  })
 }
 
 async function getEmployees(sortOptions, filterOptions, currentPage) {

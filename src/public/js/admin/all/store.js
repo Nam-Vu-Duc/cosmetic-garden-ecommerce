@@ -38,7 +38,7 @@ async function getStores(sortOptions, filterOptions, currentPage) {
   const data = json.data
   dataSize.size = json.data_size
 
-  document.querySelector('div.board-title').querySelector('p').textContent = 'Cửa hàng: ' + dataSize.size
+  document.querySelector('div.board-title').querySelector('p').textContent = 'đại lý: ' + dataSize.size
 
   window.setTimeout(function() {
     tbody.querySelectorAll('tr').forEach((tr, index) => {

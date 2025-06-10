@@ -45,7 +45,7 @@
           width: 80%;
           height: 40px;
           border-radius: 5px;
-          border: 1px solid #D1A6A6;
+          border: 1px solid #389845;
           text-indent: 10px;
           padding-block: 0px;
         };
@@ -68,7 +68,7 @@
         button {
           width: 80%;
           height: 40px;
-          background-color: #D1A6A6;
+          background-color: #389845;
           color: white;
           border: 1px solid white;
           border-radius: 5px;
@@ -76,9 +76,9 @@
         };
         button:hover {
           background-color: white;
-          color:  #D1A6A6;
+          color:  #389845;
           border: 1px solid white ;
-          border-color: #D1A6A6;
+          border-color: #389845;
         }
       } 
       .sign-in {
@@ -121,7 +121,7 @@
       left: auto;
       width: 30px;
       height: 30px;
-      background: linear-gradient(to bottom right, #FFDFDF 0%, #FFDFDF 50%, #D1A6A6 50%, #D1A6A6 100%)
+      background: linear-gradient(to bottom right, #e5e5e5 0%, #e5e5e5 50%, #389845 50%, #389845 100%)
     }
   }
 }
