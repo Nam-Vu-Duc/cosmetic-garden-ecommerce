@@ -12,7 +12,7 @@
   border-radius: 50%;
   border: 1px solid #5ab868;
   padding: 10px;
-  .noti-quantity {
+  .unread-quantity {
     position: absolute;
     z-index: 1000;
     top: 0;

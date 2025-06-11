@@ -116,7 +116,6 @@ class allCustomersController {
         address: req.body.address ,
         gender : req.body.gender  ,
       })
-  
       return res.json({message: 'Cập nhật thông tin thành công'})
     } catch (error) {
       return res.json({error: error.message})

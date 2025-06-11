@@ -215,10 +215,10 @@ function submitOrder() {
         })
       })
       if (!response.ok) throw new Error(`Response status: ${response.status}`)
-      const {error, id} = await response.json()
+      const {id, error} = await response.json()
       if (error) throw Error(error)
   
-      socket.emit('order')
+      socket.emit('order', { id: id})
       const orderSuccessfullyMessage = document.createElement('div')
       orderSuccessfullyMessage.setAttribute('class', 'order-successfully-message')
       orderSuccessfullyMessage.innerHTML = `

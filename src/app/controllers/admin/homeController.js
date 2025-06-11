@@ -185,8 +185,7 @@ class homeController {
   
   async getNotification(req, res, next) {
     try {
-      const notifications = await notification.find({receiverId: req.cookies.uid}).limit(5).lean()
-      console.log(notifications)
+      const notifications = await notification.find({receiverId: req.cookies.uid}).lean()
       return res.json({data: notifications})
     } catch (error) {
       console.log(error)
@@ -214,6 +213,30 @@ class homeController {
       }
       
       return res.json({isValid: true, message: 'Thêm thông báo thành công'})
+    } catch (error) {
+      console.log(error)
+      return res.json({error: error.message})
+    }
+  }
+  
+  async updateNotification(req, res, next) {
+    try {
+      await notification.updateOne({ _id: req.body.id }, {
+        isRead: true
+      })
+      return res.json({message: 'Cập nhật thông tin thành công'})
+    } catch (error) {
+      console.log(error)
+      return res.json({error: error.message})
+    }
+  }
+  
+  async updateAllNotifications(req, res, next) {
+    try {
+      await notification.updateMany({ receiverId: req.cookies.uid, isRead: false }, {
+        isRead: true
+      })
+      return res.json({message: 'Cập nhật thông tin thành công'})
     } catch (error) {
       console.log(error)
       return res.json({error: error.message})
