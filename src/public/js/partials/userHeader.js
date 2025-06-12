@@ -114,11 +114,6 @@ avatar.onclick = function() {
   avatarMenu.style.display === 'none' ? avatarMenu.style.display = '': avatarMenu.style.display = 'none'
 }
 
-responsiveMenu.onclick = function() {
-  if (menu.style.display === 'none') menu.style.display = 'flex' 
-  else menu.style.display = 'none'
-}
-
 checkUser()
 updateCartCount()
 setDisplay(width, menu)

@@ -1,10 +1,10 @@
-header {
+headerBottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 70px;
   position: fixed;
-  top: 0;
+  bottom: 0;
   width: 100%;
   background-color: white;
   z-index: 999;
@@ -19,7 +19,7 @@ header {
     img { width: 40px; height: 40px }
   };
   .menu {
-    /* display: flex; */
+    display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
@@ -28,9 +28,9 @@ header {
   }
   #search-input {
     position: absolute;
-    top: 75px;
-    width: 90%;
-    height: 80px;
+    bottom: 75px;
+    width: 95%;
+    height: 50px;
     left: 50%;
     transform: translateX(-50%);
     border-style: none;
@@ -40,8 +40,8 @@ header {
   }
   #search-products {
     position: absolute;
-    top: 160px;
-    width: 90%;
+    bottom: 130px;
+    width: 95%;
     height: 300px;
     left: 50%;
     transform: translateX(-50%);
@@ -56,15 +56,16 @@ header {
       background-color: white;
       border-radius: 10px;
       padding: 10px;
-      height: 50px;
+      height: 75px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
       cursor: pointer;
       a {
         text-decoration: none;
         color: #575757;
+        width: 85% !important;
       }
+      p { width: 15% !important;}
       img { width: 40px; height: 40px;}
     }
   }
@@ -112,7 +113,7 @@ header {
     border-radius: 5px;
     width: max-content;
     right: 20px;
-    top: 60px;
+    bottom: 75px;
     z-index: 5;
     padding: 5px;
     gap: 5px;
@@ -165,7 +166,7 @@ header {
     height: 100%;
     ul {
       position: absolute;
-      top: 100%;
+      bottom: 100%;
       left: 0;
       width: 100%;
       border-radius: 5px;
@@ -203,12 +204,11 @@ header {
     }
     ul > li > ul {
       position: absolute;
-      top: 0;
+      bottom: 0;
       width: calc(100% - 210px);
       left: 210px;
       display: grid;
       justify-content: start;
-      grid-template-columns: auto auto auto;
     }
     img {
       width: 40px;
@@ -246,13 +246,4 @@ header {
       }
     }
   };
-}
-header.scroll {
-  margin-top: 5px;
-  top: 5px;
-  left: 0; 
-  right: 0; 
-  margin: auto;
-  width: 95%;
-  border-radius: 10px;
 }

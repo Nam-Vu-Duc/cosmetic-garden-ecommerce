@@ -181,8 +181,8 @@ function submitOrder() {
     try {
       preloader.classList.remove('inactive')
 
-      const getProductInfo  = JSON.parse(localStorage.getItem('product_cart_count')) || {}
-      if (!getProductInfo.productInfo) throw Error('Giỏ hàng của bạn đang trống')  
+      const getProductInfo = JSON.parse(localStorage.getItem('product_cart_count')) || {}
+      if (getProductInfo.productInfo.length === 0) throw Error('Giỏ hàng của bạn đang trống')  
   
       const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value
       const code          = document.querySelector('input[name="voucher-code"]').value
@@ -236,7 +236,7 @@ function submitOrder() {
     catch (error) {
       preloader.classList.add('inactive')
       console.log(error)
-      return pushNotification(error)
+      return pushNotification(error.error)
     }
   }
 }
