@@ -21,7 +21,6 @@ main {
 }
 input:not(input[type='radio']) {
   width: 100%;
-  font-family: 'Roboto', sans-serif;
   height: 40px;
   text-indent: 10px;
   border-radius: 5px;
@@ -243,12 +242,4 @@ button.loading {
 button:hover {
   background-color: #389845;
   color: white;
-}
-@media screen and (max-width: 800px) {
-  header { display: none !important;}
-  main { 
-    margin-top: 0 !important;
-    margin-bottom: 80px !important;
-  }
-  headerBottom { display: flex !important;}
 }

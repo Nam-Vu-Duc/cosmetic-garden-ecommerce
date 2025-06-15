@@ -29,13 +29,12 @@ class allChatsController {
       const uid = req.cookies.uid
       const empInfo = await emp.findOne({ _id: uid }).lean()
       if (!empInfo) throw new Error()
-      if (empInfo.role !== 'admin') throw new Error()
     
       const [chats, totalChat] = await Promise.all([
         chat.aggregate([
           {
             $lookup: {
-              from: "users",  // The collection to join (table2)
+              from: "employees",  // The collection to join (table2)
               let: { userIdStr: "$userId" },  // Define a variable for userId
               pipeline: [
                 {
@@ -56,10 +55,10 @@ class allChatsController {
             $sort: { updatedAt: -1 }
           }
         ]),
-        user.find().countDocuments(),
+        emp.find().countDocuments(),
       ])
   
-      return res.render('admin/all/chat', { title: 'Danh sách chat', layout: 'admin', uid, chats, totalChat })
+      return res.render('admin/all/chat', { title: 'Chat', layout: 'admin', uid, chats, totalChat })
       
     } catch (error) {
       return res.status(403).render('partials/denyUserAccess', { title: 'Not found', layout: 'empty' })

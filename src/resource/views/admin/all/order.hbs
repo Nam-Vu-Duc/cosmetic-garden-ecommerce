@@ -6,7 +6,7 @@
   <div class="control-bar">
     <div class="filter-and-create">
       <div class="sort">
-        <label>Sắp xếp theo:</label>
+        <label>Sắp xếp:</label>
         <select id="createdAt" class="filter-btn">
           <option value="">Ngày đặt hàng</option>
           <option value="-1">Ngày mới</option>
@@ -21,20 +21,20 @@
       </div>
 
       <div class="filter">
-        <label>Lọc theo:</label>
+        <label>Lọc:</label>
         <select id="status" class="filter-btn">
           <option value="">Trạng thái đơn</option>
         </select>
 
         <select id="paymentMethod" class="filter-btn">
-          <option value="">Phương thức thanh toán</option>
+          <option value="">Thanh toán</option>
         </select>
 
         <select id="storeCode" class="filter-btn">
-          <option value="">đại lý</option>
+          <option value="">Đại lý</option>
         </select>
       </div>
-      <button id="clear-filter" style="display: none">Xoá bộ lọc</button>
+      <button id="clear-sort-filter" style="display: none">Xoá bộ lọc</button>
 
       <a href="/admin/all-orders/order/create" class="create-btn" id="create-btn">
         <i class="fi fi-rr-plus"></i>

@@ -1,6 +1,10 @@
 const checkDay = {message: ''}
 const index    = new URL(window.location).pathname.split('/').find(el => el.includes('all')) || []
 
+if (window.innerWidth <= 800) {
+  document.querySelector('div.admin-sidebar-container').classList.add('small')
+}
+
 async function getProfile() {
   const response = await fetch('/admin/all/data/user')
   const json = await response.json()

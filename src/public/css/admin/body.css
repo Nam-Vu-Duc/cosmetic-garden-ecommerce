@@ -69,6 +69,8 @@ button:hover {
     border: 2px solid #389845;
     border-radius: 10px;
     padding: 20px;
+    margin-block-start: 0;
+    margin-block-end: 0;
   }
 }
 div.control-bar {
@@ -93,6 +95,7 @@ div.control-bar {
       border-radius: 5px;
       border: 1px solid #389845;
       padding: 10px;
+      box-sizing: border-box;
       p {
         margin-block-start: 0;
         margin-block-end: 0;
@@ -144,7 +147,7 @@ table {
   }
 }
 div.table {
-  /* overflow-x: auto; */
+  overflow-x: auto;
   margin-top: 20px;
   background-color: #F0F0F0;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 8px 0 rgba(0, 0, 0, 0.19);
@@ -313,25 +316,4 @@ span.pagination {
       }
     }
   }
-}
-@media screen and (max-width: 700px) {
-  main {margin-left: 70px;}
-  .admin-all-products-container { 
-    .board-title {
-      p { font-size: 25px;}
-    }
-    tbody, thead {
-      td:nth-child(1) { display: none;}
-      td:nth-child(2) { display: none;}
-      td:nth-child(3) {
-        border-top-left-radius: 10px;
-        border-bottom-left-radius: 10px;
-      }
-      td:nth-child(4) { display: none;}
-      td:nth-child(5) { display: none;}
-    }
-    .modal-content {
-      width: 80% !important;
-    }
-  } 
 }

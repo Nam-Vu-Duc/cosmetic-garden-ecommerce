@@ -1,0 +1,24 @@
+@media screen and (max-width: 800px) {
+  header { display: none !important;}
+  main { 
+    margin-top: 0 !important;
+    margin-bottom: 80px !important;
+    .main-title {font-size: 20px !important}
+  }
+  headerBottom { display: flex !important;}
+}
+
+/* profile */
+@media screen and (max-width: 800px) {
+  .profile-container {
+    flex-direction: column;
+    .sidebar-menu, .content {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    table {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+}

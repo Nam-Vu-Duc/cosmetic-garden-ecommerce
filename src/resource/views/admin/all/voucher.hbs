@@ -6,11 +6,11 @@
   <div class="control-bar">
     <div class="filter-and-create">
       <div class="sort">
-        <label>Sắp xếp theo:</label>
+        <label>Sắp xếp:</label>
         <select id="discount" class="filter-btn">
-          <option value="">Giá trị chiết khấu</option>
-          <option value="1">Giá trị chiết khấu tăng</option>
-          <option value="-1">Giá trị chiết khấu giảm</option>
+          <option value="">Chiết khấu</option>
+          <option value="1">Chiết khấu tăng</option>
+          <option value="-1">Chiết khấu giảm</option>
         </select>
         <select id="startDate" class="filter-btn">
           <option value="">Ngày tạo</option>
@@ -25,7 +25,7 @@
       </div>
 
       <div class="filter">
-        <label>Lọc theo:</label>
+        <label>Lọc:</label>
         <select id="status" class="filter-btn">
           <option value="">Tình trạng</option>
           <option value="active">Còn hạn</option>
@@ -35,8 +35,7 @@
           <option value="">Hạng thành viên</option>
         </select>
       </div>
-
-      <button id="clear-filter" style="display: none">Xoá bộ lọc</button>
+      <button id="clear-sort-filter" style="display: none">Xoá bộ lọc</button>
 
       <a href="/admin/all-vouchers/voucher/create" class="create-btn" id="create-btn">
         <i class="fi fi-rr-plus"></i>

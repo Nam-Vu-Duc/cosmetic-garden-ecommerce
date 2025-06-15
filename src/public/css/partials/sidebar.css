@@ -75,14 +75,3 @@
     i { padding-left: 0 }
   }
 }
-@media screen and (max-width: 700px) {
-  .admin-sidebar-container {
-    width: 70px;
-    p { display: none }
-    .admin-button .sidebar-button {
-      padding-left: 0;
-      justify-content: center;
-      i { padding-left: 0 }
-    }
-  }
-}

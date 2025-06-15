@@ -29,7 +29,7 @@ async function getDeletedProducts(sortOptions, filterOptions, currentPage) {
   const data = json.data
   dataSize.size = json.data_size
 
-  document.querySelector('div.board-title').querySelector('p').textContent = 'Sản phẩm đã xoá: ' + dataSize.size
+  document.querySelector('div.board-title').querySelector('p').textContent = 'Đã xoá: ' + dataSize.size
 
   window.setTimeout(function() {
     tbody.querySelectorAll('tr').forEach((tr, index) => {

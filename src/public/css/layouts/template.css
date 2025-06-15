@@ -1,6 +1,6 @@
 body {
   background-color:#e5e5e5;
-  font-family: helvetica, arial, sans-serif
+  font-family: 'Quicksand', sans-serif;
 }
 body::-webkit-scrollbar {width: 10px;}
 body::-webkit-scrollbar-track {background: #ffffff; }

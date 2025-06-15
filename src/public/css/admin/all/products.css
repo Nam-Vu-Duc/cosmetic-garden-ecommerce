@@ -10,3 +10,17 @@ table {
     box-sizing: border-box;
   }
 }
+.board-title {
+  display: flex;
+  justify-content: start;
+  gap: 5px;
+}
+p.trash {
+  font-size: 15px !important;
+  padding: 10px !important;
+  border: none;
+  a {
+    text-decoration: none;
+    color: black;
+  }
+}

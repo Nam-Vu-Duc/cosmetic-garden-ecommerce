@@ -1,7 +1,12 @@
 async function sortAndFilter(getDataFunction, sortOptions, filterOptions, currentPage) {
-  const sortButton = document.querySelector('div.sort').querySelectorAll('select')
+  const sortButton    = document.querySelector('div.sort').querySelectorAll('select')
+  const filterButton  = document.querySelector('div.filter').querySelectorAll('select')
+  const clearButton   = document.querySelector('button#clear-sort-filter')
+  const searchInput   = document.querySelector('input#search-input')
+  
   sortButton.forEach((button) => {
     button.onchange = function () {
+      button.selectedIndex === 0 ? clearButton.style.display = 'none' : clearButton.style.display = ''
       const sortType = button.id
       const sortValue = parseInt(button.value)
       sortOptions[sortType] = sortValue
@@ -10,9 +15,9 @@ async function sortAndFilter(getDataFunction, sortOptions, filterOptions, curren
     }
   }) 
   
-  const filterButton = document.querySelector('div.filter').querySelectorAll('select')
   filterButton.forEach((button) => {
     button.onchange = function () {
+      button.selectedIndex === 0 ? clearButton.style.display = 'none' : clearButton.style.display = ''
       const filterType = button.id
       const filterValue = button.value
       filterOptions[filterType] = filterValue
@@ -21,12 +26,24 @@ async function sortAndFilter(getDataFunction, sortOptions, filterOptions, curren
     }
   }) 
 
-  const searchInput = document.querySelector('input#search-input')
   searchInput.addEventListener('keypress', function(e) {
+    if (searchInput.value.trim() === '') return
     if (e.key === "Enter") {
       filterOptions['name'] = { $regex: searchInput.value.trim(), $options: 'i'}
+      clearButton.style.display = ''
       // if (!filterValue) delete filterOptions[filterType]
       getDataFunction(sortOptions, filterOptions, currentPage)
     }
+  })
+
+  clearButton.addEventListener('click', function() {
+    sortButton.forEach((button) => button.selectedIndex = 0) 
+    filterButton.forEach((button) => button.selectedIndex = 0) 
+    searchInput.value = ''
+    clearButton.style.display = 'none'
+    sortOptions = {}
+    filterOptions = {}
+    currentPage = 1
+    getDataFunction(sortOptions, filterOptions, currentPage)
   })
 }
