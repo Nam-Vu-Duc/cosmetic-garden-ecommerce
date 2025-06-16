@@ -7,19 +7,16 @@ const sendBtn     = document.querySelector('div.send-btn')
 const form        = document.querySelector('form.input-form')
 const chatList    = document.querySelector('div.chat-list').querySelectorAll('div.item')
 const chatId      = {id: ''}
-const adminId     = {id: ''}
+const senderId    = {id: ''}
 
 getUser()
 
 async function getUser() {
   try {
-    const response = await fetch('/admin/all-chats/data/user')
+    const response = await fetch('/admin/all-chats-emp/data/user')
     if (!response.ok) throw new Error(`Response status: ${response.status}`)
     const json = await response.json()
     if (json.error) return pushNotification(error)
-
-    adminId.id = json.message
-    socket.emit('joinRoom', {id: adminId.id, room: 'admin-room'})
   } catch (error) {
     console.error("Error fetching chat data:", error)
   }
@@ -156,7 +153,6 @@ input.addEventListener("keypress", function(event) {
 })
 
 socket.on('chat-message', (id, msg, room) => {
-  console.log('new message')
   const ul = chatContent.querySelector('ul')
   appendMessage(ul, msg, id, adminId.id)
   reOrderChatSidebar(id, room)

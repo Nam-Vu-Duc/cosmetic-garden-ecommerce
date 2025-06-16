@@ -156,7 +156,6 @@ input.addEventListener("keypress", function(event) {
 })
 
 socket.on('chat-message', (id, msg, room) => {
-  console.log('new message')
   const ul = chatContent.querySelector('ul')
   appendMessage(ul, msg, id, adminId.id)
   reOrderChatSidebar(id, room)
