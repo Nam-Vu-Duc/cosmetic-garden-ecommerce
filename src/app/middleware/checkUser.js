@@ -2,7 +2,7 @@ const user = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 const dbConnect = require('../middleware/mongoose')
 
-module.exports = async function checkUser(req, res, next) {
+async function checkUser(req, res, next) {
   try {
     await dbConnect()
     const rt = req.cookies.rt
@@ -22,3 +22,5 @@ module.exports = async function checkUser(req, res, next) {
     return res.status(403).render('partials/denyUserAccess', { title: 'Not found', layout: 'empty' })
   }
 }
+
+module.exports = checkUser

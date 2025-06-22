@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router()
 const employeeController = require('../../app/controllers/admin/employeeController')
+const employeePermission = require('../../app/middleware/checkPermission').employeeClass
 
-router.get('/'                  , employeeController.allEmployees)
+router.get('/'                  , employeePermission.read   , employeeController.allEmployees)
+router.get('/employee/create'   , employeePermission.create , employeeController.employeeCreate)
+router.get('/employee/:id'      , employeePermission.update , employeeController.employeeInfo)
 
-router.get('/employee/create'   , employeeController.employeeCreate)
 router.post('/employee/created' , employeeController.employeeCreated)
-
-router.get('/employee/:id'      , employeeController.employeeInfo)
 router.put('/employee/updated'  , employeeController.employeeUpdate)
 
 router.post('/data/filter'      , employeeController.getFilter)

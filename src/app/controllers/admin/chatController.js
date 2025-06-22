@@ -27,9 +27,6 @@ class allChatsController {
   async allChats(req, res, next) {
     try {
       const uid = req.cookies.uid
-      const empInfo = await emp.findOne({ _id: uid }).lean()
-      if (!empInfo) throw new Error()
-      if (empInfo.role !== 'admin') throw new Error()
     
       const [chats, totalChat] = await Promise.all([
         chat.aggregate([

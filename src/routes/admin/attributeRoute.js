@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const attributeController = require('../../app/controllers/admin/attributeController')
+const attributePermission = require('../../app/middleware/checkPermission').attributeClass
 
-router.get('/', attributeController.show)
+router.get('/', attributePermission.read, attributeController.show)
 
 router.get('/data/membership'     , attributeController.getMembership)
 router.get('/data/order-status'   , attributeController.getOrderStatus)

@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router()
 const storeController = require('../../app/controllers/admin/storeController')
+const storePermission = require('../../app/middleware/checkPermission').storeClass
 
-router.get('/'               , storeController.allStores)
+router.get('/'               , storePermission.read   , storeController.allStores)
+router.get('/store/create'   , storePermission.create , storeController.storeCreate)
+router.get('/store/:id'      , storePermission.update , storeController.storeInfo)
 
-router.get('/store/create'   , storeController.storeCreate)
 router.post('/store/created' , storeController.storeCreated)
-
-router.get('/store/:id'      , storeController.storeInfo)
 router.put('/store/updated'  , storeController.storeUpdate)
 
 router.post('/data/stores'   , storeController.getStores)

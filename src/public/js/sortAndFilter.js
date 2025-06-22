@@ -21,6 +21,7 @@ async function sortAndFilter(getDataFunction, sortOptions, filterOptions, curren
       const filterType = button.id
       const filterValue = button.value
       filterOptions[filterType] = filterValue
+      console.log(filterOptions)
       if (!filterValue) delete filterOptions[filterType]
       getDataFunction(sortOptions, filterOptions, currentPage)
     }

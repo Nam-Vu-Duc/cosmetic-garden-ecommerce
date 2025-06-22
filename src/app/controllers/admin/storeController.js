@@ -39,9 +39,6 @@ class allStoresController {
 
   async allStores(req, res, next) {
     try {
-      const userInfo = await employee.findOne({ _id: req.cookies.uid }).lean()
-      if (!userInfo) throw new Error()
-      if (!['admin', 'manager'].includes(userInfo.role)) throw new Error()
       return res.render('admin/all/store', { title: 'Danh sách đại lý', layout: 'admin' })
     } catch (error) {
       return res.status(403).render('partials/denyUserAccess', { title: 'Not found', layout: 'empty' })

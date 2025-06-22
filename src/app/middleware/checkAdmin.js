@@ -1,8 +1,9 @@
 const emp = require('../models/employeeModel')
+const position = require('../models/positionModel')
 const jwt = require('jsonwebtoken')
 const dbConnect = require('../middleware/mongoose')
 
-module.exports = async function checkAdmin(req, res, next) {
+async function checkAdmin(req, res, next) {
   try {
     await dbConnect()
     const rt = req.cookies.rt
@@ -13,8 +14,11 @@ module.exports = async function checkAdmin(req, res, next) {
       if (!decodedRefreshToken) throw new Error('error decoded refresh token')
       
       const empInfo = await emp.findOne({ _id: uid })
+      const positions = await position.find().lean()
+      const positionCodes = positions.map(positions => positions.code)
+
       if (!empInfo) throw new Error('error')
-      if (!['admin', 'manager', 'employee'].includes(empInfo.role)) throw new Error('error')
+      if (!positionCodes.includes(empInfo.role)) throw new Error('error')
       next()
     } else {
       throw new Error('error')
@@ -23,3 +27,5 @@ module.exports = async function checkAdmin(req, res, next) {
     return res.status(403).render('partials/denyUserAccess', { title: 'Not found', layout: 'empty' })
   }
 }
+
+module.exports = checkAdmin

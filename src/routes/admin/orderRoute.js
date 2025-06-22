@@ -1,13 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const orderController = require('../../app/controllers/admin/orderController')
+const permission = require('../../app/middleware/checkPermission')
+const orderPermission = require('../../app/middleware/checkPermission').orderClass
 
-router.get('/'                    , orderController.allOrders)
+router.get('/'                    , orderPermission.read   , orderController.allOrders)
+router.get('/order/create'        , orderPermission.create , orderController.orderCreate)
+router.get('/order/:id'           , orderPermission.update , orderController.orderInfo)
 
-router.get('/order/create'        , orderController.orderCreate)
 router.post('/order/created'      , orderController.orderCreated)
-
-router.get('/order/:id'           , orderController.orderInfo)
 router.put('/order/updated'       , orderController.orderUpdate)
 
 router.post('/data/orders'        , orderController.getOrders)

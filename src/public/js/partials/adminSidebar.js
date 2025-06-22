@@ -5,23 +5,14 @@ if (window.innerWidth <= 800) {
   document.querySelector('div.admin-sidebar-container').classList.add('small')
 }
 
+const buttons = document.querySelector('div.admin-button')
+
 async function getProfile() {
   const response = await fetch('/admin/all/data/user')
   const json = await response.json()
   if (json.error) return pushNotification(error)
   
-  const data =json.data
-
-  if (data.role === 'manager') {
-    document.querySelector('a#all-chats').remove()
-  }
-
-  if (data.role === 'employee') {
-    document.querySelector('a#all-chats').remove()
-    document.querySelector('a#all-stores').remove()
-    document.querySelector('a#all-employees').remove()
-    document.querySelector('a#all-attributes').remove()
-  }
+  const data = json.data
 
   const currentTime = new Date().getHours()
   if      (currentTime <= 9) checkDay.message  = 'buổi sáng'

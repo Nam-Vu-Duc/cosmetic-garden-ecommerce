@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router()
 const supplierController = require('../../app/controllers/admin/supplierController')
+const supplierPermission = require('../../app/middleware/checkPermission').supplierClass
 
-router.get('/'                  , supplierController.allSuppliers)
+router.get('/'                  , supplierPermission.read   , supplierController.allSuppliers)
+router.get('/supplier/create'   , supplierPermission.create , supplierController.supplierCreate)
+router.get('/supplier/:id'      , supplierPermission.update , supplierController.supplierInfo)
 
-router.get('/supplier/create'   , supplierController.supplierCreate)
 router.post('/supplier/created' , supplierController.supplierCreated)
-
-router.get('/supplier/:id'      , supplierController.supplierInfo)
 router.put('/supplier/updated'  , supplierController.supplierUpdate)
 
 router.post('/data/suppliers'   , supplierController.getSuppliers)

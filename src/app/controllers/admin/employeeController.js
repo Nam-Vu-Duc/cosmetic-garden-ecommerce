@@ -49,9 +49,6 @@ class allEmployeesController {
 
   async allEmployees(req, res, next) {
     try {
-      const userInfo = await employee.findOne({ _id: req.cookies.uid }).lean()
-      if (!userInfo) throw new Error()
-      if (!['admin', 'manager'].includes(userInfo.role)) throw new Error()
       return res.render('admin/all/employee', { title: 'Danh sách nhân sự', layout: 'admin' })
     } catch (error) {
       return res.status(403).render('partials/denyUserAccess', { title: 'Not found', layout: 'empty' })
@@ -144,7 +141,6 @@ class allEmployeesController {
         name      : req.body.name,
         phone     : req.body.phone,
         address   : req.body.address,
-        storeCode : req.body.storeCode
       })
       await newEmp.save()
       

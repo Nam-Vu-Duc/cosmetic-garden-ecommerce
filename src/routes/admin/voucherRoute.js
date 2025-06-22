@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router()
 const voucherController = require('../../app/controllers/admin/voucherController')
+const voucherPermission = require('../../app/middleware/checkPermission').voucherClass
 
-router.get('/'                 , voucherController.allVouchers)
+router.get('/'                 , voucherPermission.read   , voucherController.allVouchers)
+router.get('/voucher/create'   , voucherPermission.create , voucherController.voucherCreate)
+router.get('/voucher/:id'      , voucherPermission.update , voucherController.voucherInfo)
 
-router.get('/voucher/create'   , voucherController.voucherCreate)
 router.post('/voucher/created' , voucherController.voucherCreated)
-
-router.get('/voucher/:id'      , voucherController.voucherInfo)
 router.put('/voucher/updated'  , voucherController.voucherUpdate)
 
 router.post('/data/filter'     , voucherController.getFilter)

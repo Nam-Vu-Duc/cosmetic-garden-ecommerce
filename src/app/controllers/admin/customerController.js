@@ -1,4 +1,5 @@
 require('dotenv').config()
+const employee = require('../../models/employeeModel')
 const user = require('../../models/userModel')
 const chat = require('../../models/chatModel')
 const aiChat = require('../../models/aiChatModel')

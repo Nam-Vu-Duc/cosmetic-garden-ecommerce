@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const homeController = require('../../app/controllers/admin/homeController')
+const homePermission = require('../../app/middleware/checkPermission').homeClass
 
-router.get('/', homeController.show)
+router.get('/', homePermission.read, homeController.show)
 
 router.post('/data/finance'             , homeController.getFinance)
 router.get('/data/brands'               , homeController.getBrands)

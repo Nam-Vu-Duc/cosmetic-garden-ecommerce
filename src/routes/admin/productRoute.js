@@ -1,14 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const productController = require('../../app/controllers/admin/productController')
+const productPermission = require('../../app/middleware/checkPermission').productClass
 
-router.get('/'                       , productController.allProducts)
-router.get('/trash'                  , productController.trash)
+router.get('/'                       , productPermission.read   , productController.allProducts)
+router.get('/trash'                  , productPermission.read   , productController.trash)
+router.get('/product/create'         , productPermission.create , productController.createProduct)
+router.get('/product/:id'            , productPermission.update , productController.productInfo)
 
-router.get('/product/create'         , productController.createProduct)
 router.post('/product/created'       , productController.productCreated)
-
-router.get('/product/:id'            , productController.productInfo)
 router.put('/product/updated'        , productController.productUpdated)
 
 router.delete('/product/soft-delete' , productController.softDelete)

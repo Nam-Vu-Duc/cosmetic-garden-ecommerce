@@ -6,7 +6,7 @@ const user = require('../../models/userModel')
 class homeController {
   async getVouchers(req, res, next) {
     try {
-      const data = await voucher.find({ status: 'active' }).lean()
+      const data = await voucher.find({ status: 'active', endDate: { $gte: new Date() } }).lean()
       return res.json({data: data})
     } catch (error) {
       return res.json({error: error.message})

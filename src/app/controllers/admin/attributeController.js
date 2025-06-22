@@ -3,14 +3,10 @@ const orderStatus = require('../../models/orderStatusModel')
 const paymentMethod = require('../../models/paymentMethodModel')
 const position = require('../../models/positionModel')
 const productStatus = require('../../models/productStatusModel')
-const employee = require('../../models/employeeModel')
 
 class attributeController {
   async show(req, res, next) {
     try {
-      const userInfo = await employee.findOne({ _id: req.cookies.uid }).lean()
-      if (!userInfo) throw new Error()
-      if (!['admin', 'manager'].includes(userInfo.role)) throw new Error()
       return res.render('admin/attribute', { title: 'Chỉnh sửa thuộc tính', layout: 'admin' })
     } catch (error) {
       return res.status(403).render('partials/denyUserAccess', { title: 'Not found', layout: 'empty' })

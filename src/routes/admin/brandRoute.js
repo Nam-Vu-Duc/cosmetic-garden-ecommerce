@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router()
 const brandController = require('../../app/controllers/admin/brandController')
+const brandPermission = require('../../app/middleware/checkPermission').brandClass
 
-router.get('/'              , brandController.allBrands)
+router.get('/'              , brandPermission.read   , brandController.allBrands)
+router.get('/brand/create'  , brandPermission.create , brandController.brandCreate)
+router.get('/brand/:id'     , brandPermission.update , brandController.brandInfo)
 
-router.get('/brand/create'  , brandController.brandCreate)
 router.post('/brand/created', brandController.brandCreated)
-
-router.get('/brand/:id'     , brandController.brandInfo)
 router.put('/brand/updated' , brandController.brandUpdate)
 
 router.post('/data/brands'  , brandController.getBrands)
