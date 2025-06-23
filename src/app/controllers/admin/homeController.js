@@ -1,3 +1,4 @@
+require('dotenv').config()
 const product = require('../../models/productModel')
 const user = require('../../models/userModel')
 const order = require('../../models/orderModel')
@@ -195,21 +196,18 @@ class homeController {
   
   async setNotification(req, res, next) {
     try {
-      const {message, type} = req.body
+      const {message, type, userId} = req.body
 
-      if (type === 'order') {
-        const employees = await employee.find({role: 'employee'}).lean()
-        const employeeIDs = employees.map(employee => employee._id)
+      if (type === 'message') {
+        const userInfo = await user.findOne({_id: userId}).lean()
 
-        for (const id of employeeIDs) {
-          const newNotification = new notification({
-            message   : message,
-            receiverId: id,
-            isRead    : false,
-            type      : type,
-          });
-          await newNotification.save();
-        }
+        const newNotification = new notification({
+          message   : `${userInfo.name}: ${message}`,
+          receiverId: process.env.ADMIN_ID,
+          isRead    : false,
+          type      : type,
+        });
+        await newNotification.save()
       }
       
       return res.json({isValid: true, message: 'Thêm thông báo thành công'})

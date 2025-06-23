@@ -231,6 +231,15 @@ function submitOrder() {
       `
       document.body.appendChild(orderSuccessfullyMessage)
       preloader.classList.add('inactive')
+
+      await fetch('/data/notification', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          message: `Bạn có đơn hàng mới: ${id}`,
+          type: 'order'
+        })
+      })
       return
     }
     catch (error) {

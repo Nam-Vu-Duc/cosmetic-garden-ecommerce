@@ -2,6 +2,8 @@ const product = require('../../models/productModel')
 const voucher = require('../../models/voucherModel')
 const brand = require('../../models/brandModel')
 const user = require('../../models/userModel')
+const notification = require('../../models/notificationModel')
+const employee = require('../../models/employeeModel')
 
 class homeController {
   async getVouchers(req, res, next) {
@@ -94,6 +96,44 @@ class homeController {
       }).lean()
       return res.json({data: data})
     } catch (error) {
+      return res.json({error: error.message})
+    }
+  }
+  
+  async setNotification(req, res, next) {
+    try {
+      const {message, type, userId} = req.body
+
+      if (type === 'order') {
+        const employees = await employee.find({role: 'employee'}).lean()
+        const employeeIDs = employees.map(employee => employee._id)
+
+        for (const id of employeeIDs) {
+          const newNotification = new notification({
+            message   : message,
+            receiverId: id,
+            isRead    : false,
+            type      : type,
+          });
+          await newNotification.save();
+        }
+      }
+
+      if (type === 'message') {
+        const userInfo = await user.findOne({_id: userId}).lean()
+
+        const newNotification = new notification({
+          message   : `${userInfo.name}: ${message}`,
+          receiverId: process.env.ADMIN_ID,
+          isRead    : false,
+          type      : type,
+        });
+        await newNotification.save()
+      }
+      
+      return res.json({isValid: true, message: 'Thêm thông báo thành công'})
+    } catch (error) {
+      console.log(error)
       return res.json({error: error.message})
     }
   }

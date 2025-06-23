@@ -12,16 +12,37 @@ setInterval(async function () {
   })
 }, 30000) // Send a ping every 30 seconds
 
-socket.on('order', () => {
-  pushNotification('Bạn có đơn hàng mới')
+
+async function checkRole() {
+  try {
+    const response = await fetch('/admin/all/data/notification', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        message: `Bạn có đơn hàng mới: ${id}`,
+        type: 'order'
+      })
+    })
+    const {data, error} = await response.json()
+    if (error) throw new Error('error')
+    return data.role
+  } catch (error) {
+
+  }
+}
+
+socket.on('order', async function() {
+  const role = await checkRole()
+  if (role === 'employee') pushNotification('Bạn có tin nhắn mới')
 })
 
 socket.on('account', () => {
   pushNotification('Bạn có khách hàng mới')
 })
 
-socket.on('privateMessage', () => {
-  pushNotification('Bạn có tin nhắn mới')
+socket.on('chat-message', async function() {
+  const role = await checkRole()
+  if (role === 'chat') pushNotification('Bạn có tin nhắn mới')
 })
 
 socket.on('privateMessageEmp', () => {

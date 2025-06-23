@@ -10,5 +10,6 @@ router.post('/data/order-products'      , homeController.getOrderProducts)
 router.post('/data/brands'              , homeController.getBrands)
 router.get('/data/user'                 , homeController.getUsers)
 router.post('/data/search'              , homeController.searchInfo)
+router.post('/data/notification'        , homeController.setNotification)
 
 module.exports = router

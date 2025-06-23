@@ -3,32 +3,16 @@ const notificationBody = document.querySelector('div.notification-box')
 const readAllIcon = notificationBody.querySelector('i.fi.fi-rr-progress-complete')
 
 socket.on('order', async function(id) {
-  await fetch('/admin/all/data/notification', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      message: `Bạn có đơn hàng mới: ${id}`,
-      type: 'order'
-    })
-  })
+  getNotification()
+})
+
+socket.on('chat-message', async function(id, msg, room) {
   getNotification()
 })
 
 notificationIcon.onclick = function() {
   notificationBody.style.display = notificationBody.style.display === 'none' ? 'block' : 'none'
 }
-
-socket.on('privateMessage', async function(id) {
-  await fetch('/admin/all/data/notification', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      message: `Bạn có tin nhắn mới: ${id}`,
-      type: 'order'
-    })
-  })
-  getNotification()
-})
 
 readAllIcon.onclick = async function() {
   const response = await fetch('/admin/all/update/all-notifications', {
