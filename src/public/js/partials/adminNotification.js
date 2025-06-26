@@ -6,10 +6,6 @@ socket.on('order', async function(id) {
   getNotification()
 })
 
-socket.on('chat-message', async function(id, msg, room) {
-  getNotification()
-})
-
 notificationIcon.onclick = function() {
   notificationBody.style.display = notificationBody.style.display === 'none' ? 'block' : 'none'
 }

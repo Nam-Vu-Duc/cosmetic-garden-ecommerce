@@ -186,7 +186,7 @@ class homeController {
   
   async getNotification(req, res, next) {
     try {
-      const notifications = await notification.find({receiverId: req.cookies.uid}).lean()
+      const notifications = await notification.find({receiverId: req.cookies.uid}).sort({updatedAt: -1}).lean()
       return res.json({data: notifications})
     } catch (error) {
       console.log(error)

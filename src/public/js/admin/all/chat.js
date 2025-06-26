@@ -6,20 +6,24 @@ const chatSearch  = document.querySelector('input.chat-search')
 const sendBtn     = document.querySelector('div.send-btn')
 const form        = document.querySelector('form.input-form')
 const chatList    = document.querySelector('div.chat-list').querySelectorAll('div.item')
-const chatId      = {id: ''}
+const userChatId  = {id: ''}
 const adminId     = {id: ''}
 
 getUser()
+
+chatList.forEach(chat => {
+  const time = chat.querySelector('div.time').textContent
+  chat.querySelector('div.time').textContent = formatDate(time)
+})
 
 async function getUser() {
   try {
     const response = await fetch('/admin/all-chats/data/user')
     if (!response.ok) throw new Error(`Response status: ${response.status}`)
-    const json = await response.json()
-    if (json.error) return pushNotification(error)
+    const {message, error} = await response.json()
+    if (error) return pushNotification(error)
 
-    adminId.id = json.message
-    socket.emit('joinRoom', {id: adminId.id, room: 'admin-room'})
+    adminId.id = message
   } catch (error) {
     console.error("Error fetching chat data:", error)
   }
@@ -29,12 +33,10 @@ async function getChatData(adminId, userId, userName, chatContent) {
   try {
     const response = await fetch(`/admin/all-chats/${userId}`)
     if (!response.ok) throw new Error(`Response status: ${response.status}`)
-    const json = await response.json()
-    if (json.error) return pushNotification(error)
+    const {data, userStatus, chatId, error} = await response.json()
+    if (error) return pushNotification(error)
 
-    const messages = json.data
-    const userStatus = json.userStatus
-    chatId.id = json.chatId
+    userChatId.id = chatId 
     
     const chatHeader = document.querySelector('div.chat-body').querySelector('div.chat-header')
     chatHeader.querySelector('div.name').textContent = userName
@@ -45,7 +47,7 @@ async function getChatData(adminId, userId, userName, chatContent) {
     chatContent.replaceChildren()
     chatContent.appendChild(ul)
 
-    messages.forEach((message) => {
+    data.forEach((message) => {
       appendMessage(ul, message.content, message.senderId, adminId)
     })
   } catch (error) {
@@ -64,37 +66,20 @@ async function appendMessage(ul, msg, senderId, adminId) {
   const chat = document.createElement('li')
   chat.textContent = msg
 
-  if (senderId === adminId) {
-    chat.setAttribute('class', 'right-content')
-  } 
+  if (senderId === adminId) chat.setAttribute('class', 'right-content')
 
   ul.appendChild(chat)
   chatContent.scrollTo(0, chatContent.scrollHeight)
 }
 
-async function updateLastMessage(id) {
-  const response = await fetch('/admin/all-chats/get-last-message', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({userId: id})
-  })
-  if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const json = await response.json()
-  if (json.error) return pushNotification(error)
-
-  const lastMessage = json.lastMessage
-  return lastMessage
-}
-
-async function reOrderChatSidebar(id, room) {
+async function reOrderChatSidebar(id, msg, room) {
   for (const chat of chatList) {
     if (chat.id === room) { 
       const parent = chat.parentElement
       if (parent) parent.prepend(chat)
 
-      const lastMessage = await updateLastMessage(room)
       const lastMessageElement = chat.querySelector('div.last-message')
-      lastMessageElement.textContent = lastMessage
+      lastMessageElement.textContent = msg
       if (id !== adminId.id) lastMessageElement.style.fontWeight = 'bold'
 
       break // Stop loop after finding the chat
@@ -133,7 +118,7 @@ sendBtn.onclick = async function() {
     const response = await fetch('/admin/all-chats/create', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({value: input.value, chatId: chatId.id})
+      body: JSON.stringify({value: input.value, chatId: userChatId.id})
     })
     if (!response.ok) throw new Error(`Response status: ${response.status}`)
     input.value = ''
@@ -158,5 +143,5 @@ input.addEventListener("keypress", function(event) {
 socket.on('chat-message', (id, msg, room) => {
   const ul = chatContent.querySelector('ul')
   appendMessage(ul, msg, id, adminId.id)
-  reOrderChatSidebar(id, room)
+  reOrderChatSidebar(id, msg, room)
 })

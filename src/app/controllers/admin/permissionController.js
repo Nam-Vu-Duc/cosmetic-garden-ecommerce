@@ -24,7 +24,7 @@ const chatEmpPermission = {
 }
 const customerPermission = {
   CREATE: ['admin', 'manager', 'employee'],
-  READ  : ['admin', 'manager', 'employee'],
+  READ  : ['admin', 'manager', 'employee', 'chat'],
   UPDATE: ['admin', 'manager', 'employee'],
   DELETE: ['admin', 'manager']
 }

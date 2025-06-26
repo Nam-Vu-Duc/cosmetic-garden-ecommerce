@@ -116,6 +116,7 @@ header {
     z-index: 5;
     padding: 5px;
     gap: 5px;
+    border: 1px solid #5ab868;
     a {
       padding: 10px;
       display: flex; 

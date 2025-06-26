@@ -23,9 +23,8 @@ const order = new Schema({
   totalOrderPrice    : { type: Number , default: 0 },
   totalNewOrderPrice : { type: Number , default: 0 },
   paymentMethod      : { type: String , default: '' },
-  status             : { type: String , default: 'preparing' },
+  status             : { type: String , default: 'pending' },
   isRated            : { type: Boolean, default: false},
-  storeCode          : { type: String , default: 'bunny-house-thanh-xuan' },
   voucherCode        : { type: String , default: '' },
   deletedAt          : { type: Date   , default: null }
 }, { timestamps: true })

@@ -59,6 +59,7 @@ class allChatsController {
       return res.render('admin/all/chat', { title: 'Danh sách chat', layout: 'admin', uid, chats, totalChat })
       
     } catch (error) {
+      console.log(error)
       return res.status(403).render('partials/denyUserAccess', { title: 'Not found', layout: 'empty' })
     }
   }
@@ -93,6 +94,7 @@ class allChatsController {
         updatedAt: new Date(),
         lastMessage: req.body.value
       })
+      console.log('save successfully')
       await newMessage.save()
       return res.json({message: 'save successfully'})
 

@@ -139,7 +139,9 @@ class allOrderController {
           name    : customerInfo.name,
           phone   : customerInfo.phone,
           address : customerInfo.address,
-          note    : `note: ${customerInfo.note}, link bill: ${result.secure_url}`
+          note    : `${customerInfo.note}, 
+                    link bill: ${result.secure_url}
+                    `
         },
         voucherCode: code,
         totalOrderPrice: totalOrderPrice,
@@ -147,28 +149,6 @@ class allOrderController {
         paymentMethod: paymentMethod
       })
       await newOrder.save()
-  
-      const bulkOps = finalProductInfo.map(({ id, quantity }) => ({
-        updateOne: {
-          filter: { _id: id },
-          update: { $inc: { quantity: -quantity, saleNumber: quantity }}, 
-          upsert: true,
-        },
-      }))
-      await product.bulkWrite(bulkOps)
-  
-      await store.updateOne({ _id: '671600cc147dd8bae142bbb5' }, {
-        $inc: { revenue: totalOrderPrice }
-      })
-  
-      if(customerInfo.userId !== 'guest') {
-        await user.updateOne({ _id: customerInfo.userId }, {
-          $inc: { 
-            revenue: totalOrderPrice,
-            quantity: 1
-          }
-        })
-      }
   
       return res.json({id: newOrder._id})
     } catch (error) {

@@ -65,7 +65,7 @@ async function getUser() {
     </div>
     
     <div class="form-group">
-      <label for="address">Số lượng đơn hàng hoàn thành</label>
+      <label for="address">Số lượng đơn hàng</label>
       <input type="text" name="quantity" value="${data.quantity}" disabled>
     </div>
     
@@ -151,24 +151,28 @@ async function getOrders() {
   const thead = document.createElement('thead')
   thead.innerHTML = `
     <tr>
-      <td style="width: 25%">Người Nhận</td>
+      <td style="width: 10%">STT</td>
+      <td style="width: 15%">Người Nhận</td>
       <td style="width: 25%">Tổng Tiền</td>
       <td style="width: 20%">Ngày</td>
-      <td style="width: 15%">Tình Trạng</td>
-      <td style="width: 15%"></td>
+      <td style="width: 20%">Tình Trạng</td>
+      <td style="width: 10%"></td>
     </tr>
   `
 
   const tbody = document.createElement('tbody')
+  let index = 1
   data.forEach((order) => {
     const tr = document.createElement('tr')
     tr.innerHTML = `
-      <td>${order.customerInfo.name}</td>
-      <td>${formatNumber(order.totalNewOrderPrice)}</td>
-      <td>${formatDate(order.createdAt)}</td>
-      <td>${order.orderStatus.name}</td>
-      <td><a href="/all-orders/order/${order._id}">Chi Tiết</a></td>
+      <td style="text-align:center" >${index}</td>
+      <td style="text-align:left"   >${order.customerInfo.name}</td>
+      <td style="text-align:right"  >${formatNumber(order.totalOrderPrice)}</td>
+      <td style="text-align:right"  >${formatDate(order.createdAt)}</td>
+      <td style="text-align:left"   >${order.orderStatus.name}</td>
+      <td style="text-align:center" ><a href="/all-orders/order/rate/${order._id}">Chi Tiết</a></td>
     `
+    index++
     tbody.appendChild(tr)
   })
 
@@ -199,24 +203,28 @@ async function getDoneOrders() {
   const thead = document.createElement('thead')
   thead.innerHTML = `
     <tr>
-      <td style="width: 25%">Người Nhận</td>
+      <td style="width: 10%">STT</td>
+      <td style="width: 15%">Người Nhận</td>
       <td style="width: 25%">Tổng Tiền</td>
       <td style="width: 20%">Ngày</td>
-      <td style="width: 15%">Tình Trạng</td>
-      <td style="width: 15%"></td>
+      <td style="width: 20%">Tình Trạng</td>
+      <td style="width: 10%"></td>
     </tr>
   `
 
   const tbody = document.createElement('tbody')
+  let index = 1
   data.forEach((order) => {
     const tr = document.createElement('tr')
     tr.innerHTML = `
-      <td>${order.customerInfo.name}</td>
-      <td>${formatNumber(order.totalOrderPrice)}</td>
-      <td>${formatDate(order.createdAt)}</td>
-      <td>${order.orderStatus.name}</td>
-      <td><a href="/all-orders/order/rate/${order._id}">Chi Tiết</a></td>
+      <td style="text-align:center" >${index}</td>
+      <td style="text-align:left"   >${order.customerInfo.name}</td>
+      <td style="text-align:right"  >${formatNumber(order.totalOrderPrice)}</td>
+      <td style="text-align:right"  >${formatDate(order.createdAt)}</td>
+      <td style="text-align:left"   >${order.orderStatus.name}</td>
+      <td style="text-align:center" ><a href="/all-orders/order/rate/${order._id}">Chi Tiết</a></td>
     `
+    index++
     tbody.appendChild(tr)
   })
 

@@ -136,6 +136,7 @@ submitButton.onclick = async function() {
     const password = document.querySelector('input[name="password"]').value
     const confirmPassword = document.querySelector('input[name="confirm-password"]').value
 
+    if (password.trim() === '') return pushNotification('Mật khẩu đang trống')
     if (password !== confirmPassword) return pushNotification('Mật khẩu không khớp')
 
     const {isSuccessful, message} = await creatingAccount(email, name, password)

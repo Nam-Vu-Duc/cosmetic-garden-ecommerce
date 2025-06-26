@@ -137,6 +137,7 @@ submitButton.onclick = async function() {
     const password  = document.querySelector('input[name="password"]').value
     const confirmPassword = document.querySelector('input[name="confirm-password"]').value
 
+    if (password.trim() === '') return pushNotification('Mật khẩu đang trống')
     if (confirmPassword != password) return pushNotification('Mật khẩu không trùng khớp')
 
     const isSuccessful = await resettingPassword(email, password)

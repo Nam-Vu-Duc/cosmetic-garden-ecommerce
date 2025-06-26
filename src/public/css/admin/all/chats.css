@@ -61,10 +61,11 @@
         }
         .name { font-size: large; font-weight: bolder }
         .last-message { font-size: smaller }
+        .time { margin-top: 5px; font-size: smaller; color: #9FACBC;}
       }
       .item.active {
-        background-color: #5ab868;
-        color: white;
+        background-color: #e5e5e5;
+        color: #389845;
       }
       .item:hover {
         filter: brightness(80%)

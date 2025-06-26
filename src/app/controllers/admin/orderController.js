@@ -111,10 +111,32 @@ class allOrdersController {
         paymentMethod : req.body.paymentMethod
       })
 
+      if (req.body.status === 'preparing') {
+        const orderInfo = await order.findOne({ _id: req.body.id }).lean()
+        const userId = orderInfo.customerInfo.userId
+
+        const bulkOps = orderInfo.products.map(({ id, quantity }) => ({
+          updateOne: {
+            filter: { _id: id }, 
+            update: { $inc: { quantity: -quantity, saleNumber: quantity }}, 
+            upsert: true,
+          },
+        }))
+        await product.bulkWrite(bulkOps)
+    
+        if(userId !== 'guest') {
+          await user.updateOne({ _id: userId }, {
+            $inc: { 
+              revenue: orderInfo.totalNewOrderPrice,
+              quantity: 1
+            }
+          })
+        }
+      }
+
       if (req.body.status === 'cancel') {
         const orderInfo = await order.findOne({ _id: req.body.id }).lean()
         const userId = orderInfo.customerInfo.userId
-        const storeCode = orderInfo.storeCode
   
         // update product quantity
         const productInfo = orderInfo.products.map(product => ({id: product.id, quantity: product.quantity}))
@@ -127,10 +149,6 @@ class allOrdersController {
         }))
         await product.bulkWrite(bulkOps)
   
-        await store.updateOne({ code: storeCode }, {
-          $inc: { revenue: -orderInfo.totalOrderPrice }
-        })
-  
         if(userId !== 'guest') {
           await user.updateOne({ _id: userId }, {
             $inc: { 
@@ -142,10 +160,12 @@ class allOrdersController {
       }
 
       if (req.body.status === 'done') {
+        const orderInfo = await order.findOne({ _id: req.body.id }).lean()
+        const userId = orderInfo.customerInfo.userId
+        
         const silver  = 1000000
         const gold    = 2000000
         const diamond = 4000000
-        const userId = orderInfo.customerInfo.userId
 
         if(userId !== 'guest') {
           const userInfo = await user.findOne({ _id: userId }).lean()
@@ -267,35 +287,11 @@ class allOrdersController {
           note    : note
         },
         paymentMethod     : paymentMethod,
-        storeId           : storeId,
         createdAt         : orderDate,
         totalOrderPrice   : totalOrderPrice,
         totalNewOrderPrice: totalOrderPrice
       });
       await newOrder.save()
-
-      const productInfo = productId.map((id, index) => ({id: id, quantity: productQuantity[index]}))
-      const bulkOps = productInfo.map(({ id, quantity }) => ({
-        updateOne: {
-          filter: { _id: id },
-          update: { $inc: { quantity: -quantity, saleNumber: quantity }}, 
-          upsert: true,
-        },
-      }))
-      await product.bulkWrite(bulkOps)
-  
-      await store.updateOne({ _id: storeId }, {
-        $inc: { revenue: totalOrderPrice }
-      })
-  
-      if(userId !== 'guest') {
-        await user.updateOne({ _id: userId }, {
-          $inc: { 
-            revenue: totalOrderPrice,
-            quantity: 1
-          }
-        })
-      }
   
       return res.json({message: 'Tạo đơn hàng mới thành công'})
     } catch (error) {

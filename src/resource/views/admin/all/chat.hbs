@@ -6,9 +6,10 @@
       {{#each chats}}
         <div class="item" id="{{this.userInfo._id}}">
           <img src="https://cosmeticgarden.vn/wp-content/uploads/2024/12/logo-xanh-gradient.png" alt="loading">
-          <div>
+          <div class="info">
             <div class="name">{{this.userInfo.name}}</div>
             <div class="last-message">{{this.lastMessage}}</div>
+            <div class="time">{{this.updatedAt}}</div>
           </div>
         </div>
       {{/each}}
