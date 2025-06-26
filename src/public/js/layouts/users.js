@@ -3,7 +3,7 @@ checkUser()
 // const socket = io("http://localhost:3100/", {path: "/socket.io"})
 
 window.recommend_url = 'https://bunny-recommendation.onrender.com'
-const socket = io("https://bunny-chat.onrender.com/", {path: "/socket.io"})
+const socket = io("https://cosmetic-garden-chat.onrender.com", {path: "/socket.io"})
 
 async function checkUser() {
   const response = await fetch('/data/user')
