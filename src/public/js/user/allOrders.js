@@ -240,6 +240,15 @@ function submitOrder() {
           type: 'order'
         })
       })
+
+      getLog(
+        topic = 'purchase', 
+        value = {
+          "user_id": window.uid,
+          "timestamp": new Date(),
+          "category": id,
+        }
+      )
       return
     }
     catch (error) {
@@ -307,4 +316,12 @@ async function loadData(retriesLeft) {
 
 window.addEventListener('DOMContentLoaded', function () {
   loadData(5)
+  getLog(
+    topic = 'page-view', 
+    value = {
+      "user_id": window.uid,
+      "timestamp": new Date(),
+      "category": 'orders',
+    }
+  )
 })

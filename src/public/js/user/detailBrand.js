@@ -84,4 +84,12 @@ async function loadData(retriesLeft) {
 
 window.addEventListener('DOMContentLoaded', function () {
   loadData(5)
+  getLog(
+    topic = 'brand-view', 
+    value = {
+      "user_id": window.uid,
+      "timestamp": new Date(),
+      "category": urlSlug,
+    }
+  )
 })

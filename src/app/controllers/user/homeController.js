@@ -4,6 +4,9 @@ const brand = require('../../models/brandModel')
 const user = require('../../models/userModel')
 const notification = require('../../models/notificationModel')
 const employee = require('../../models/employeeModel')
+const kafka = require("kafkajs").Kafka
+const kafkaClient = new kafka({ brokers: ["localhost:9092"] })
+const producer = kafkaClient.producer()
 
 class homeController {
   async getVouchers(req, res, next) {
@@ -132,6 +135,22 @@ class homeController {
       }
       
       return res.json({isValid: true, message: 'Thêm thông báo thành công'})
+    } catch (error) {
+      console.log(error)
+      return res.json({error: error.message})
+    }
+  }
+  
+  async streamingKafka(req, res, next) {
+    try {
+      const { topic, value } = req.body
+
+      await producer.connect()
+      await producer.send({
+        topic: topic,
+        messages: [{ value: JSON.stringify(value) }],
+      })
+
     } catch (error) {
       console.log(error)
       return res.json({error: error.message})

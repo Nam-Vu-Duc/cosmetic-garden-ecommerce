@@ -39,6 +39,15 @@ async function checkUser() {
     const logOutButton = document.createElement('a')
     logOutButton.innerText = 'Đăng Xuất'
     logOutButton.setAttribute('href', '/log-out')
+    logOutButton.onclick = async function() {
+      getLog(
+        topic = 'sign-out', 
+        value = {
+          "user_id": window.uid,
+          "timestamp": new Date(),
+        }
+      )
+    }
     avatarMenu.appendChild(logOutButton)
   } 
   else {

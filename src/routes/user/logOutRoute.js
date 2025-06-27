@@ -14,6 +14,7 @@ router.get('/', async function(req, res) {
   await user.updateOne({_id: req.cookies.uid}, {
     isActive: false
   })
+  
   res.redirect('/authentication/sign-in')
 })
 

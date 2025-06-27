@@ -175,7 +175,7 @@ function decreaseQuantity(productInfo) {
 }
 
 function addToCart(productInfo) {
-  getAddToCart.onclick = function () {
+  getAddToCart.onclick = async function() {
     // the item has not yet been added, click to add
     if (getAddToCart.style.backgroundColor === '') {
       // change button color to 'added button'
@@ -195,6 +195,16 @@ function addToCart(productInfo) {
   
       // store new added product to localStorage
       myObj.productInfo.push(newProductInfo)
+
+      // push event log to kafka
+      getLog(
+        topic = 'add-to-cart', 
+        value = {
+          "user_id": window.uid,
+          "timestamp": new Date(),
+          "category": urlSlug,
+        }
+      )
     } else {
       // the item has already been added, click to remove
       // change button color to 'default button'
@@ -214,6 +224,15 @@ function addToCart(productInfo) {
           break
         }
       }
+
+      getLog(
+        topic = 'remove-from-cart', 
+        value = {
+          "user_id": window.uid,
+          "timestamp": new Date(),
+          "category": urlSlug,
+        }
+      )
     }
   
     localStorage.setItem('product_cart_count', JSON.stringify(myObj));
@@ -317,4 +336,12 @@ async function loadData(retriesLeft) {
 
 window.addEventListener('DOMContentLoaded', function () {
   loadData(5)
+  getLog(
+    topic = 'product-view', 
+    value = {
+      "user_id": window.uid,
+      "timestamp": new Date(),
+      "category": urlSlug,
+    }
+  )
 })

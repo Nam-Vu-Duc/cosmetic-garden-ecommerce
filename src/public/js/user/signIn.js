@@ -16,7 +16,7 @@ async function checkingAccount() {
     })
     
     if (!response.ok) throw new Error(`Response status: ${response.status}`)
-    const {isValid, message} = await response.json()
+    const {isValid, uid, message} = await response.json()
 
     document.querySelector('button').classList.remove('loading')
     if (!isValid) {
@@ -25,7 +25,17 @@ async function checkingAccount() {
       return 
     } 
     document.querySelector('p.wrong-info').textContent = ''
-    pushNotification(message)
+    pushNotification(message) 
+
+    window.isLoggedIn = true
+
+    getLog(
+      topic = 'sign-in', 
+      value = {
+        "user_id": uid,
+        "timestamp": new Date(),
+      }
+    )
 
     setTimeout(() => {
       const path = window.location.origin

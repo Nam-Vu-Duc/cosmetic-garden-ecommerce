@@ -321,4 +321,12 @@ async function loadData(retriesLeft) {
 
 window.addEventListener('DOMContentLoaded', function () {
   loadData(5)
+  getLog(
+    topic = 'page-view', 
+    value = {
+      "user_id": window.uid,
+      "timestamp": new Date(),
+      "category": 'profile',
+    }
+  )
 })

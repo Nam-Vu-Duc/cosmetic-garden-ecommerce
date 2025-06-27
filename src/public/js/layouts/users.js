@@ -12,6 +12,7 @@ async function checkUser() {
 
   window.isLoggedIn = message
   window.uid = uid
+  console.log(window.uid)
 }
 
 setInterval(async function () {

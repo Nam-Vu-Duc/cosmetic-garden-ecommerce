@@ -45,7 +45,7 @@ class loginController {
             secure: true,
           })
 
-          if (getUser.role === 'user') return res.json({isValid: true, message: 'Đăng nhập thành công'})
+          if (getUser.role === 'user') return res.json({isValid: true, uid: userId, message: 'Đăng nhập thành công'})
 
         } else {
           return res.json({isValid: false, message: 'Mật khẩu không đúng'})

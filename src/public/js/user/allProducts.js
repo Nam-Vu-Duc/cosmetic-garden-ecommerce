@@ -10,8 +10,6 @@ const sortOptions      = {}
 const filterOptions    = { deletedAt: null, [urlSlug[0]]: urlSlug[1] }
 const currentPage      = { page: 1 }
 
-console.log(urlSlug)
-
 const titles = {
   'flash-sale': 'Dòng sản phẩm đang sale',
   'hot': 'Dòng sản phẩm đang hot',
@@ -240,4 +238,12 @@ async function loadData(retriesLeft) {
 
 window.addEventListener('DOMContentLoaded', function () {
   loadData(5)
+  getLog(
+    topic = 'page-view', 
+    value = {
+      "user_id": window.uid,
+      "timestamp": new Date(),
+      "category": urlSlug[1],
+    }
+  )
 })

@@ -8,10 +8,7 @@ const methodOverride = require('method-override')
 const app = express()
 const route = require('./routes')
 const db = require('./config/db')
-const Handlebars = require('handlebars')
-const { format } = require('date-fns')
 const { createServer } = require("http")
-const { Server } = require('socket.io')
 const server = createServer(app)
 const port = process.env.PORT
 

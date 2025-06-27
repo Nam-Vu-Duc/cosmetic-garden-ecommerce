@@ -66,3 +66,14 @@ submitButton.onclick = async function () {
   }
   submitButton.classList.remove('loading')
 }
+
+window.addEventListener('DOMContentLoaded', function () {
+  getLog(
+    topic = 'page-view', 
+    value = {
+      "user_id": window.uid,
+      "timestamp": new Date(),
+      "category": 'order-checking',
+    }
+  )
+})
