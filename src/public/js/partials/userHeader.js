@@ -41,10 +41,11 @@ async function checkUser() {
     logOutButton.setAttribute('href', '/log-out')
     logOutButton.onclick = async function() {
       getLog(
-        topic = 'sign-out', 
+        topic = 'auth-update', 
         value = {
-          "user_id": window.uid,
-          "timestamp": new Date(),
+          "user_id"     : window.uid,
+          "update_type" : 'logout',
+          "timestamp"   : new Date(),
         }
       )
     }

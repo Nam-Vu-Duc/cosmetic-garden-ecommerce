@@ -58,9 +58,9 @@ window.addEventListener('DOMContentLoaded', function () {
   getLog(
     topic = 'page-view', 
     value = {
-      "user_id": window.uid,
-      "timestamp": new Date(),
-      "category": 'brands',
+      "user_id"   : window.uid,
+      "page_type" : 'brands',
+      "timestamp" : new Date(),
     }
   )
 })

@@ -244,9 +244,9 @@ function submitOrder() {
       getLog(
         topic = 'purchase', 
         value = {
-          "user_id": window.uid,
-          "timestamp": new Date(),
-          "category": id,
+          "user_id"   : window.uid,
+          "order_id"  : id,
+          "timestamp" : new Date(),
         }
       )
       return
@@ -319,9 +319,9 @@ window.addEventListener('DOMContentLoaded', function () {
   getLog(
     topic = 'page-view', 
     value = {
-      "user_id": window.uid,
-      "timestamp": new Date(),
-      "category": 'orders',
+      "user_id"   : window.uid,
+      "page_type" : 'orders',
+      "timestamp" : new Date(),
     }
   )
 })

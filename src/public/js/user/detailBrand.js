@@ -87,9 +87,9 @@ window.addEventListener('DOMContentLoaded', function () {
   getLog(
     topic = 'brand-view', 
     value = {
-      "user_id": window.uid,
-      "timestamp": new Date(),
-      "category": urlSlug,
+      "user_id"   : window.uid,
+      "brand_id"  : urlSlug,
+      "timestamp" : new Date(),
     }
   )
 })

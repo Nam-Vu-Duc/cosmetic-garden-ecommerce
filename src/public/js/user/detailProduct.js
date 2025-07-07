@@ -198,11 +198,12 @@ function addToCart(productInfo) {
 
       // push event log to kafka
       getLog(
-        topic = 'add-to-cart', 
+        topic = 'cart-update', 
         value = {
-          "user_id": window.uid,
-          "timestamp": new Date(),
-          "category": urlSlug,
+          "user_id"     : window.uid,
+          "product_id"  : urlSlug,
+          "update_type" : 'add',
+          "timestamp"   : new Date(),
         }
       )
     } else {
@@ -226,11 +227,12 @@ function addToCart(productInfo) {
       }
 
       getLog(
-        topic = 'remove-from-cart', 
+        topic = 'cart-update', 
         value = {
-          "user_id": window.uid,
-          "timestamp": new Date(),
-          "category": urlSlug,
+          "user_id"     : window.uid,
+          "product_id"  : urlSlug,
+          "update_type" : 'remove',
+          "timestamp"   : new Date(),
         }
       )
     }
@@ -253,7 +255,17 @@ function buyNow(productInfo) {
       }
   
       myObj.productInfo.push(newProductInfo)
-      localStorage.setItem('product_cart_count', JSON.stringify(myObj));
+      localStorage.setItem('product_cart_count', JSON.stringify(myObj))
+
+      getLog(
+        topic = 'cart-update', 
+        value = {
+          "user_id"     : window.uid,
+          "product_id"  : urlSlug,
+          "update_type" : 'add',
+          "timestamp"   : new Date(),
+        }
+      )
     } else {}
   }
 }
@@ -339,9 +351,9 @@ window.addEventListener('DOMContentLoaded', function () {
   getLog(
     topic = 'product-view', 
     value = {
-      "user_id": window.uid,
-      "timestamp": new Date(),
-      "category": urlSlug,
+      "user_id"   : window.uid,
+      "product_id": urlSlug,
+      "timestamp" : new Date(),
     }
   )
 })

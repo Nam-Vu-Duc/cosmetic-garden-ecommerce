@@ -30,10 +30,11 @@ async function checkingAccount() {
     window.isLoggedIn = true
 
     getLog(
-      topic = 'sign-in', 
+      topic = 'auth-update', 
       value = {
-        "user_id": uid,
-        "timestamp": new Date(),
+        "user_id"     : uid,
+        "update_type" : 'login',
+        "timestamp"   : new Date(),
       }
     )
 

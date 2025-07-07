@@ -1,8 +1,7 @@
 checkUser()
-// window.recommend_url = 'http://localhost:8000'
 // const socket = io("http://localhost:3100/", {path: "/socket.io"})
 
-window.recommend_url = 'https://bunny-recommendation.onrender.com'
+window.recommend_url = 'https://cosmetic-garden-recommendation.onrender.com'
 const socket = io("https://cosmetic-garden-chat.onrender.com", {path: "/socket.io"})
 
 async function checkUser() {
@@ -12,7 +11,6 @@ async function checkUser() {
 
   window.isLoggedIn = message
   window.uid = uid
-  console.log(window.uid)
 }
 
 setInterval(async function () {

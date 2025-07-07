@@ -1,4 +1,4 @@
-window.recommend_url = 'https://bunny-recommendation.onrender.com'
+window.recommend_url = 'https://cosmetic-garden-recommendation.onrender.com'
 const socket = io("https://cosmetic-garden-chat.onrender.com", { path: "/socket.io" })
 
 setInterval(async () => {
