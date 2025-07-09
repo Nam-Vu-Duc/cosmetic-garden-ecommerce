@@ -158,18 +158,6 @@ async function getBrands() {
   }
 }
 
-window.addEventListener('DOMContentLoaded', function () {
-  loadData(5)
-  getLog(
-    topic = 'page-view', 
-    value = {
-      "user_id"   : window.uid,
-      "page_type" : 'home',
-      "timestamp" : new Date(),
-    }
-  )
-})
-
 async function loadData(retriesLeft) {
   try {
     await getVouchers()
@@ -195,3 +183,16 @@ async function loadData(retriesLeft) {
     }
   }
 }
+
+loadData(5)
+
+setTimeout(() => {
+  getLog(
+    topic = 'page-view', 
+    value = {
+      "user_id"   : window.uid,
+      "page_type" : 'home',
+      "timestamp" : new Date(),
+    }
+  )
+}, 1000);

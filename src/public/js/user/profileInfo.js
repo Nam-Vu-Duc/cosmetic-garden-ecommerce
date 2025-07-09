@@ -319,8 +319,9 @@ async function loadData(retriesLeft) {
   }
 }
 
-window.addEventListener('DOMContentLoaded', function () {
-  loadData(5)
+loadData(5)
+
+setTimeout(() => {
   getLog(
     topic = 'page-view', 
     value = {
@@ -329,4 +330,4 @@ window.addEventListener('DOMContentLoaded', function () {
       "timestamp" : new Date(),
     }
   )
-})
+}, 1000)

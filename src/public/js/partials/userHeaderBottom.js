@@ -92,7 +92,6 @@ searchInputBottom.oninput = async function(event) {
 }
 
 avatarBottom.onclick = function() {
-  console.log('123')
   avatarMenuBottom.style.display === 'none' ? avatarMenuBottom.style.display = '': avatarMenuBottom.style.display = 'none'
 }
 

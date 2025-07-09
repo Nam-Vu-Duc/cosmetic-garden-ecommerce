@@ -258,6 +258,25 @@ function submitOrder() {
   }
 }
 
+async function loadData(retriesLeft) {
+  try {
+    updateTableBody()
+    displayProcess()
+    submitOrder()
+  } catch (err) {
+    if (retriesLeft > 1) {
+      console.error(`Retrying... Attempts left: ${retriesLeft - 1}`)
+      pushNotification('Error loading data. Retrying...')
+      window.setTimeout(async function() {
+        loadData(retriesLeft - 1)
+      }, 2000)
+    } else {
+      console.error("Failed to fetch products after multiple attempts:", err)
+      pushNotification(`Error loading data: ${err}. Please try again later`)
+    }
+  }
+}
+
 document.querySelector('input#img').addEventListener('change', function () {
   const file = img.files[0]; // Get the selected file
   const reader = new FileReader()
@@ -295,27 +314,9 @@ checkOutOfOrderProduct()
 
 checkUser()
 
-async function loadData(retriesLeft) {
-  try {
-    updateTableBody()
-    displayProcess()
-    submitOrder()
-  } catch (err) {
-    if (retriesLeft > 1) {
-      console.error(`Retrying... Attempts left: ${retriesLeft - 1}`)
-      pushNotification('Error loading data. Retrying...')
-      window.setTimeout(async function() {
-        loadData(retriesLeft - 1)
-      }, 2000)
-    } else {
-      console.error("Failed to fetch products after multiple attempts:", err)
-      pushNotification(`Error loading data: ${err}. Please try again later`)
-    }
-  }
-}
+loadData(5)
 
-window.addEventListener('DOMContentLoaded', function () {
-  loadData(5)
+setTimeout(() => {
   getLog(
     topic = 'page-view', 
     value = {
@@ -324,4 +325,4 @@ window.addEventListener('DOMContentLoaded', function () {
       "timestamp" : new Date(),
     }
   )
-})
+}, 1000)

@@ -169,6 +169,4 @@ async function loadData(retriesLeft) {
   }
 }
 
-window.addEventListener('DOMContentLoaded', function () {
-  loadData(5)
-})
+loadData(5)
