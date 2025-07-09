@@ -76,7 +76,7 @@ function route(app) {
 
   // keep-alive
   app.use('/keep', function handler(req, res) {
-    res.status(200).json({ message: 'vercel ping' })
+    res.status(200).render('partials/denyUserAccess', { title: 'Not found', layout: 'empty' })
   })
   
   // all
