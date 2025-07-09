@@ -13,8 +13,6 @@ async function checkUser() {
   window.uid = uid
 }
 
-console.log('as')
-
 setInterval(async function () {
   socket.emit('heartbeat', { message: 'user ping' })
   await fetch(window.recommend_url, {

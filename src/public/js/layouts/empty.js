@@ -1,8 +1,6 @@
 window.recommend_url = 'https://cosmetic-garden-recommendation.onrender.com'
 const socket = io("https://cosmetic-garden-chat.onrender.com", {path: "/socket.io"})
 
-console.log('as')
-
 setInterval(async function () {
   socket.emit('heartbeat', { message: 'user ping' })
   await fetch(window.recommend_url, {

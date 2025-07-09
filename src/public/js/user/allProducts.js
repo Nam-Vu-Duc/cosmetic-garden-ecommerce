@@ -95,7 +95,6 @@ async function getProducts(products, sortOptions, filterOptions, currentPage) {
   products.forEach((product, index) => {
     product.querySelector('div.loading').style.display = ''
   })
-  console.log('1')
 
   const response = await fetch('/all-products/data/products', {
     method: 'POST',
@@ -104,7 +103,6 @@ async function getProducts(products, sortOptions, filterOptions, currentPage) {
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
   const {data, data_size} = await response.json()
-  console.log('2')
 
   window.setTimeout(function() {
     products.forEach((product, index) => {
