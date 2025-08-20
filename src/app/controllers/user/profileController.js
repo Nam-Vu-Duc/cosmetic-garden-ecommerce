@@ -1,15 +1,17 @@
 const user = require('../../models/userModel')
 const order = require('../../models/orderModel')
 const memberShip = require('../../models/memberModel')
+const voucher = require('../../models/voucherModel')
+const userVoucher = require('../../models/userVoucherModel')
 const orderStatus = require('../../models/orderStatusModel')
 const checkForHexRegExp = require('../../middleware/checkForHexRegExp')
 
 class profileController {
   async getUser(req, res, next) {
     try {
-      const userId = req.body.id 
+      const userId = req.cookies.uid 
       const userInfo = await user.findOne({ _id: userId }).lean()
-      if (!userId) return res.json({error: error})
+      if (!userId) throw Error()
   
       const userMemberShip = await memberShip.findOne({ code: userInfo.memberCode })
   
@@ -22,9 +24,9 @@ class profileController {
 
   async getOrders(req, res, next) {
     try {
-      const userId = req.body.id 
+      const userId = req.cookies.uid 
       const userInfo = await user.findOne({ _id: userId }).lean()
-      if (!userInfo) return res.json({error: error})
+      if (!userInfo) throw Error()
   
       const orderInfo = await order.aggregate([
         {
@@ -43,9 +45,12 @@ class profileController {
             path: "$orderStatus", 
             preserveNullAndEmptyArrays: true  // Keep orders even if status not found
           }
+        },
+        {
+          $sort: {createdAt: -1}
         }
       ])
-      if (!orderInfo) return res.json({data: {}})
+      if (!orderInfo) return res.json({data: []})
   
       return res.json({data: orderInfo})
       
@@ -56,9 +61,9 @@ class profileController {
 
   async getDoneOrders(req, res, next) {
     try {
-      const userId = req.body.id 
+      const userId = req.cookies.uid 
       const userInfo = await user.findOne({ _id: userId }).lean()
-      if (!userInfo) return res.json({data: {}})
+      if (!userInfo) throw Error()
   
       // const orderInfo = await order.find({ 'customerInfo.userId': userId, status: 'done' }).lean()
       const orderInfo = await order.aggregate([
@@ -78,9 +83,12 @@ class profileController {
             path: "$orderStatus", 
             preserveNullAndEmptyArrays: true  // Keep orders even if status not found
           }
+        },
+        {
+          $sort: {createdAt: -1}
         }
       ])
-      if (!orderInfo) return res.json({data: {}})
+      if (!orderInfo) return res.json({data: []})
   
       return res.json({data: orderInfo})
       
@@ -89,9 +97,41 @@ class profileController {
     }
   }
 
+  async getVouchers(req, res, next) {
+    try {
+      const userId = req.cookies.uid 
+      const userInfo = await user.findOne({ _id: userId }).lean()
+      if (!userInfo) throw Error()
+  
+      const vouchers = await voucher.find({ memberCode: userInfo.memberCode }).sort({ endDate: -1 }).lean()
+      if (!vouchers) return res.json({data: []})
+  
+      return res.json({data: vouchers})
+      
+    } catch (error) {
+      return res.json({error: error})
+    }
+  }
+
+  async getUserVouchers(req, res, next) {
+    try {
+      const userId = req.cookies.uid 
+      const userInfo = await user.findOne({ _id: userId }).lean()
+      if (!userInfo) throw Error()
+  
+      const userVouchers = await userVoucher.find({ userId: userId }).sort({ endDate: -1 }).lean()
+      if (!userVouchers) return res.json({data: []})
+  
+      return res.json({data: userVouchers})
+      
+    } catch (error) {
+      return res.json({error: error})
+    }
+  }
+
   async profileInfo(req, res, next) {
     try {
-      const userId = req.params.id || null
+      const userId = req.cookies.uid || null
       if (!userId) return res.render('partials/denyUserAccess', { title: 'Not found', layout: 'empty' })
   
       const userInfo = await user.findOne({ _id: userId }).lean()
@@ -111,6 +151,7 @@ class profileController {
         phone   : req.body.phone,
         gender  : req.body.gender,
         address : req.body.address,
+        dob     : req.body.dob
       })
   
       return res.json({isValid: true, message: 'Cập nhật thông tin thành công'})

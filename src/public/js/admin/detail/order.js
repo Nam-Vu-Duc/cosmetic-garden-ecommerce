@@ -20,7 +20,6 @@ async function getOrder() {
   document.querySelector('input#phone').value   = orderInfo.customerInfo.phone
   document.querySelector('input#address').value = orderInfo.customerInfo.address
   document.querySelector('input#note').value    = orderInfo.customerInfo.note
-  document.querySelector('input#store').value   = orderInfo.store.name
 
   orderStatuses.forEach((element, index) => {
     const option = document.createElement('option')

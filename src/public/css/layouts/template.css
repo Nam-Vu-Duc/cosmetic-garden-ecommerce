@@ -32,13 +32,117 @@ body::-webkit-scrollbar-thumb:hover {background: gray;}
   opacity: 0;
   pointer-events: none;
 }
+input[type="text"], input[type="password"], input[type="date"], input[type="month"], input[type="number"] {
+  font-family: 'Roboto', sans-serif;
+  width: 100%;
+  text-indent: 10px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #389845;
+  box-sizing: border-box;
+}
+input:disabled {
+  cursor: not-allowed;
+}
+input:focus {
+  outline: 1.5px solid #389845
+}
+input[type="text"], input[type="date"] {
+  width: 80%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+input[type="text"]:focus, input[type="date"]:focus {
+  border-color: #389845;
+  box-shadow: 0 0 5px rgba(56, 152, 69, 0.3);
+  outline: none;
+}
+input[type="radio"] {
+  margin-right: 6px;
+  cursor: pointer;
+}
+input:not(input[type='radio'], input[type='checkbox']) {
+  width: 100%;
+  height: 40px;
+  text-indent: 10px;
+  border-radius: 5px;
+  border: 1px solid #389845;
+  box-sizing: border-box;
+}
+select {
+  height: 40px;
+  border: 1px solid #389845;
+  border-radius: 8px;
+  padding: 0 30px 0 10px;
+  background: #fff url("data:image/svg+xml;utf8,<svg fill='%23389845' height='24' viewBox='0 0 24 24' width='24'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 8px center;
+  background-size: 16px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  appearance: none;  
+  width: 100px;
+}
+select:focus {
+  border-color: #2a6c32;
+  outline: 1.5px solid #389845;
+  box-shadow: 0 0 5px rgba(56,152,69,0.4);
+}
+button {
+  width: fit-content; 
+  height: 30px; 
+  background-color: white; 
+  color: #389845; 
+  border: 1px solid #389845; 
+  border-radius: 5px; 
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+button:hover {
+  background-color: #389845;
+  color: white;
+  box-shadow: 0 2px 6px rgba(56, 152, 69, 0.4);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(56, 152, 69, 0.3);
+}
+button.loading {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+}
+
+button.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px;
+  border: 3px solid #389845;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: reloader 1s infinite linear;
+}
+div.submit-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 0;
+}
 div.notification {
   position: fixed;
-  opacity: 0;
+  top: 20px;
   left: 50%;
   transform: translate(-50%);
   height: fit-content;
-  width: 300px;
+  width: min(90%, 300px);
   z-index: 9999;
   background-color: white;
   color: #389845;
@@ -49,57 +153,86 @@ div.notification {
   display: flex;
   align-items: center;
   justify-content: center;
-  animation-name: notification;
-  animation-duration: 3s;
-  animation-timing-function: linear
+  opacity: 0;
+  animation: notification 3s linear forwards;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
+button:focus-visible {
+  outline: 2px solid #389845;
+  outline-offset: 2px;
+}
+
 div.modal {
   display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 2; /* Sit on top */
+  position: fixed;
+  z-index: 9999; /* High so it's always on top */
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
+  width: 100%;
+  height: 100%;
+  overflow: auto; 
   background-color: rgba(0, 0, 0, 0.4);
+
   .modal-content {
-    background-color: #fefefe;
+    background-color: #fff;
     border: 1px solid #888;
-    width: 50%; /* Could be more or less, depending on screen size */
-    border-radius: 5px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
     .container {
-      padding: 16px;
+      padding: 20px;
       text-align: center;
     }
+
     .cancelbtn {
       background-color: #ccc;
       color: black;
-      width: 25%;
     }
+
     .deletebtn {
       background-color: #f44336;
-      color: black;
-      width: 25%;
+      color: white;
+    }
+
+    .cancelbtn:hover {
+      background-color: #b3b3b3;
+    }
+
+    .deletebtn:hover {
+      background-color: #d32f2f;
     }
   }
 }
+
 div.clearfix::after {
   content: "";
   clear: both;
   display: table;
-} 
+}
 
 @keyframes notification {
-  0%    {opacity: 0; top: 0}
-  25%   {opacity: 1; top: 5%}
-  50%   {opacity: 1; top: 5%}
-  75%   {opacity: 1; top: 5%}
-  100%  {opacity: 0; top: 0}
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -30px);
+  }
+  10% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  90% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -30px);
+  }
 }
 @keyframes reloader {
   to { transform: rotate(360deg); }
@@ -108,4 +241,8 @@ div.clearfix::after {
   0% { background-color: #eeeeee; }
   50% { background-color: #ffffff; }
   100% { background-color: #eeeeee; }
+}
+@keyframes reloader {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

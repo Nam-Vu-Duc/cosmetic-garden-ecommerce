@@ -1,6 +1,7 @@
 const store = require('../../models/storeModel')
 const employee = require('../../models/employeeModel')
 const checkForHexRegExp = require('../../middleware/checkForHexRegExp')
+const { ObjectId } = require('mongodb')
 
 class allStoresController {
   // all
@@ -11,6 +12,10 @@ class allStoresController {
       const filter       = req.body.filter
       const itemsPerPage = 10
       const skip         = (currentPage - 1) * itemsPerPage
+
+      if (filter['_id']) {
+        filter['_id'] = ObjectId.createFromHexString(filter['_id'])
+      }
 
       const userInfo = await employee.findOne({ _id: req.cookies.uid }).lean()
       if (!userInfo) throw new Error('User not found')

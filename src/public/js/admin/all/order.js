@@ -28,13 +28,6 @@ async function getFilter() {
     option.textContent = element.name
     document.querySelector('select#paymentMethod').appendChild(option)
   })
-  
-  json.store.forEach((element, index) => {
-    const option = document.createElement('option')
-    option.value = element.code
-    option.textContent = element.name
-    document.querySelector('select#storeCode').appendChild(option)
-  })
 }
 
 async function getOrders(sortOptions, filterOptions, currentPage) {
@@ -54,7 +47,7 @@ async function getOrders(sortOptions, filterOptions, currentPage) {
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
   const json = await response.json()
-  if (json.error) return pushNotification(error)
+  if (json.error) return pushNotification(json.error)
     
   const data = json.data
   dataSize.size = json.data_size
@@ -76,7 +69,7 @@ async function getOrders(sortOptions, filterOptions, currentPage) {
         <td>${item.customerInfo.name}</td>
         <td>${formatNumber(item.totalNewOrderPrice)}</td>
         <td>${formatDate(item.createdAt)}</td>
-        <td><a href="/admin/all-orders/order/${item._id}">Xem</a></td>
+        <td><a target="_blank" rel="noopener noreferrer" href="/admin/all-orders/order/${item._id}">Xem</a></td>
       `
       tbody.appendChild(newTr)
       productIndex++
@@ -89,14 +82,8 @@ async function getOrders(sortOptions, filterOptions, currentPage) {
 window.addEventListener('DOMContentLoaded', async function loadData() {
   try {
     await getFilter()
-    await new Promise(r => setTimeout(r, 500))
-
     await getOrders(sortOptions, filterOptions, currentPage.page)
-    await new Promise(r => setTimeout(r, 500))
-
     await sortAndFilter(getOrders, sortOptions, filterOptions, currentPage.page)
-    await new Promise(r => setTimeout(r, 500))
-    
     await exportJs()
   } catch (error) {
     console.error('Error loading data:', error)

@@ -2,11 +2,14 @@ require('dotenv').config()
 const employee = require('../../models/employeeModel')
 const user = require('../../models/userModel')
 const chat = require('../../models/chatModel')
-const aiChat = require('../../models/aiChatModel')
 const order = require('../../models/orderModel')
 const member = require('../../models/memberModel')
 const bcrypt = require('bcryptjs')
 const checkForHexRegExp = require('../../middleware/checkForHexRegExp')
+const kafka = require("kafkajs").Kafka
+const kafkaClient = new kafka({ brokers: ["localhost:9092"] })
+const producer = kafkaClient.producer()
+const { ObjectId } = require('mongodb')
 
 class allCustomersController {
   // all
@@ -17,6 +20,10 @@ class allCustomersController {
       const filter       = req.body.filter
       const itemsPerPage = 10
       const skip         = (currentPage - 1) * itemsPerPage
+
+      if (filter['_id']) {
+        filter['_id'] = ObjectId.createFromHexString(filter['_id'])
+      }
   
       const [data, dataSize] = await Promise.all([
         user
@@ -111,12 +118,34 @@ class allCustomersController {
 
   async customerUpdate(req, res, next) {
     try {
-      await user.updateOne({ _id: req.body.id }, {
-        name   : req.body.name    ,
-        phone  : req.body.phone   ,
-        address: req.body.address ,
-        gender : req.body.gender  ,
-      })
+      const updatedUser = await user.findOneAndUpdate(
+        { _id: req.body.id }, 
+        {
+          $set: {
+            name   : req.body.name    ,
+            phone  : req.body.phone   ,
+            address: req.body.address ,
+            gender : req.body.gender  ,
+            dob    : req.body.dob
+          }
+        },
+        {new: true}
+      )
+
+      // try {
+      //   await producer.connect()
+      //   await producer.send({
+      //     topic: 'update',
+      //     messages: [{ value: JSON.stringify({
+      //       topic_type: 'customer',
+      //       emp_id: req.cookies.uid,
+      //       body: updatedUser
+      //     })}],
+      //   })
+      // } catch (error) {
+      //   console.log(error)
+      // }
+
       return res.json({message: 'Cập nhật thông tin thành công'})
     } catch (error) {
       return res.json({error: error.message})
@@ -147,7 +176,8 @@ class allCustomersController {
         role    : 'user',
         name    : req.body.name,
         phone   : req.body.phone,
-        address : req.body.address
+        address : req.body.address,
+        dob     : req.body.dob
       })
       const savedUser = await newUser.save()
 
@@ -158,10 +188,19 @@ class allCustomersController {
       })
       await newChat.save()
 
-      const newAIChat = new aiChat({
-        userId: savedUser._id
-      })
-      await newAIChat.save()
+      // try {
+      //   await producer.connect()
+      //   await producer.send({
+      //     topic: 'create',
+      //     messages: [{ value: JSON.stringify({
+      //       topic_type: 'customer',
+      //       emp_id: req.cookies.uid,
+      //       body: savedUser
+      //     })}],
+      //   })
+      // } catch (error) {
+      //   console.log(error)
+      // }
       
       return res.json({isValid: true, message: 'Tạo tài khoản thành công'})
     } catch (error) {

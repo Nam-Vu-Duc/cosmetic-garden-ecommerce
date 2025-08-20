@@ -26,7 +26,7 @@ class attributeController {
 
   async getOrderStatus(req, res, next) {
     try {
-      const orderStatuses = await orderStatus.find().lean()
+      const orderStatuses = await orderStatus.find().sort({name: 1}).lean()
       return res.json({data: orderStatuses})
     } catch (error) {
       console.log(error)

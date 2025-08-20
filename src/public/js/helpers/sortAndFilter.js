@@ -1,6 +1,6 @@
 async function sortAndFilter(getDataFunction, sortOptions, filterOptions, currentPage) {
-  const sortButton    = document.querySelector('div.sort').querySelectorAll('select')
-  const filterButton  = document.querySelector('div.filter').querySelectorAll('select')
+  const sortButton    = document?.querySelector('div.sort')?.querySelectorAll('select') ?? []
+  const filterButton  = document?.querySelector('div.filter')?.querySelectorAll('select') ?? []
   const clearButton   = document.querySelector('button#clear-sort-filter')
   const searchInput   = document.querySelector('input#search-input')
   
@@ -21,7 +21,6 @@ async function sortAndFilter(getDataFunction, sortOptions, filterOptions, curren
       const filterType = button.id
       const filterValue = button.value
       filterOptions[filterType] = filterValue
-      console.log(filterOptions)
       if (!filterValue) delete filterOptions[filterType]
       getDataFunction(sortOptions, filterOptions, currentPage)
     }
@@ -30,9 +29,8 @@ async function sortAndFilter(getDataFunction, sortOptions, filterOptions, curren
   searchInput.addEventListener('keypress', function(e) {
     if (searchInput.value.trim() === '') return
     if (e.key === "Enter") {
-      filterOptions['name'] = { $regex: searchInput.value.trim(), $options: 'i'}
+      filterOptions['_id'] = searchInput.value.trim()
       clearButton.style.display = ''
-      // if (!filterValue) delete filterOptions[filterType]
       getDataFunction(sortOptions, filterOptions, currentPage)
     }
   })

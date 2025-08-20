@@ -6,7 +6,10 @@ const orderStatus = require('../../models/orderStatusModel')
 const paymentMethod = require('../../models/paymentMethodModel')
 const checkForHexRegExp = require('../../middleware/checkForHexRegExp')
 const employee = require('../../models/employeeModel')
-const objectId = require('mongoose').Types.ObjectId
+const { ObjectId } = require('mongodb')
+const kafka = require("kafkajs").Kafka
+const kafkaClient = new kafka({ brokers: ["localhost:9092"] })
+const producer = kafkaClient.producer()
 
 class allOrdersController {
   // all
@@ -19,7 +22,13 @@ class allOrdersController {
       const skip         = (currentPage - 1) * itemsPerPage
       const userInfo     = await employee.findOne({ _id: req.cookies.uid }).lean()
       if (!userInfo) throw new Error('User not found')
-  
+
+      if (filter['_id']) {
+        filter['_id'] = ObjectId.createFromHexString(filter['_id'])
+      }
+
+      console.log(filter)
+
       const [data, dataSize] = await Promise.all([
         order
           .find(filter)
@@ -41,12 +50,11 @@ class allOrdersController {
   async getFilter(req, res, next) {
     try {
       const [orderStatuses, paymentMethods, stores] = await Promise.all([
-        orderStatus.find().lean(),
+        orderStatus.find().sort({name: 1}).lean(),
         paymentMethod.find().lean(),
-        store.find().lean()
       ]) 
   
-      return res.json({ orderStatus: orderStatuses, paymentMethod: paymentMethods, store: stores })
+      return res.json({ orderStatus: orderStatuses, paymentMethod: paymentMethods})
     } catch (error) {
       return res.json({error: error.message})
     }
@@ -64,24 +72,9 @@ class allOrdersController {
   async getOrder(req, res, next) {
     try {
       const [orderInfo, orderStatuses, paymentMethods] = await Promise.all([
-        order.aggregate([
-          {
-            $match: { _id: new objectId(req.body.id) }
-          },
-          {
-            $lookup: {
-              from: 'stores',
-              localField: 'storeCode',
-              foreignField: 'code',
-              as: 'store'
-            }
-          },
-          {
-            $unwind: '$store'
-          },
-        ]),
-        orderStatus.find({}).lean(),
-        paymentMethod.find({}).lean()
+        order.find({ _id: req.body.id }).lean(),
+        orderStatus.find().sort({name: 1}).lean(),
+        paymentMethod.find().lean()
       ])
       if (!orderInfo) throw new Error('Order not found')
   
@@ -106,10 +99,14 @@ class allOrdersController {
 
   async orderUpdate(req, res, next) {
     try {
-      await order.updateOne({ _id: req.body.id }, { 
-        status        : req.body.status,
-        paymentMethod : req.body.paymentMethod
-      })
+      const updatedOrder = await order.findOneAndUpdate(
+        { _id: req.body.id }, 
+        { 
+          status        : req.body.status,
+          paymentMethod : req.body.paymentMethod
+        },
+        {new: true}
+      )
 
       if (req.body.status === 'preparing') {
         const orderInfo = await order.findOne({ _id: req.body.id }).lean()
@@ -186,6 +183,20 @@ class allOrdersController {
           }
         }
       }
+
+      // try {
+      //   await producer.connect()
+      //   await producer.send({
+      //     topic: 'update',
+      //     messages: [{ value: JSON.stringify({
+      //       topic_type: 'order',
+      //       emp_id: req.cookies.uid,
+      //       body: updatedOrder
+      //     })}],
+      //   })
+      // } catch (error) {
+      //   console.log(error)
+      // }
   
       return res.json({message: 'Cập nhật thông tin thành công'})
     } catch (error) {
@@ -250,7 +261,6 @@ class allOrdersController {
         userId,
         paymentMethod,
         note,
-        storeId,
         productId, 
         productName,
         productImg,
@@ -291,8 +301,22 @@ class allOrdersController {
         totalOrderPrice   : totalOrderPrice,
         totalNewOrderPrice: totalOrderPrice
       });
-      await newOrder.save()
-  
+      const savedOrder = await newOrder.save()
+
+      // try {
+      //   await producer.connect()
+      //   await producer.send({
+      //     topic: 'create',
+      //     messages: [{ value: JSON.stringify({
+      //       topic_type: 'order',
+      //       emp_id: req.cookies.uid,
+      //       body: savedOrder
+      //     })}],
+      //   })
+      // } catch (error) {
+      //   console.log(error)
+      // }
+      
       return res.json({message: 'Tạo đơn hàng mới thành công'})
     } catch (error) {
       return res.json({error: error.message})

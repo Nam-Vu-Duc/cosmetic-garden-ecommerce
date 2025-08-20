@@ -145,11 +145,11 @@ class homeController {
     try {
       const { topic, value } = req.body
 
-      await producer.connect()
-      await producer.send({
-        topic: topic,
-        messages: [{ value: JSON.stringify(value) }],
-      })
+      // await producer.connect()
+      // await producer.send({
+      //   topic: topic,
+      //   messages: [{ value: JSON.stringify(value) }],
+      // })
 
     } catch (error) {
       console.log(error)

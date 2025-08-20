@@ -4,6 +4,10 @@ const brand = require('../../models/brandModel')
 const productStatus = require('../../models/productStatusModel')
 const cloudinary = require('cloudinary').v2
 const checkForHexRegExp = require('../../middleware/checkForHexRegExp')
+const kafka = require("kafkajs").Kafka
+const kafkaClient = new kafka({ brokers: ["localhost:9092"] })
+const producer = kafkaClient.producer()
+const { ObjectId } = require('mongodb')
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -20,6 +24,10 @@ class allProductsController {
       const filter       = req.body.filter
       const itemsPerPage = 10
       const skip         = (currentPage - 1) * itemsPerPage
+
+      if (filter['_id']) {
+        filter['_id'] = ObjectId.createFromHexString(filter['_id'])
+      }
   
       const [data, dataSize] = await Promise.all([
         product
@@ -118,21 +126,41 @@ class allProductsController {
         return parseInt(number.replace(/\./g, ''))
       }
   
-      await product.updateOne({ _id: req.body.id }, {
-        categories    : req.body.categories,
-        skincare      : req.body.skincare,
-        makeup        : req.body.makeup,
-        brand         : req.body.brand,
-        name          : req.body.name,
-        purchasePrice : deFormatNumber(req.body.purchasePrice),
-        oldPrice      : deFormatNumber(req.body.oldPrice),
-        price         : deFormatNumber(req.body.price),
-        description   : req.body.description,
-        details       : req.body.details,
-        guide         : req.body.guide,
-        quantity      : req.body.quantity,
-        status        : req.body.status,
-      })
+      const updatedProduct = await product.findOneAndUpdate(
+        { _id: req.body.id },
+        {
+          $set: {
+            categories    : req.body.categories,
+            skincare      : req.body.skincare,
+            makeup        : req.body.makeup,
+            brand         : req.body.brand,
+            name          : req.body.name,
+            purchasePrice : deFormatNumber(req.body.purchasePrice),
+            oldPrice      : deFormatNumber(req.body.oldPrice),
+            price         : deFormatNumber(req.body.price),
+            description   : req.body.description,
+            details       : req.body.details,
+            guide         : req.body.guide,
+            quantity      : req.body.quantity,
+            status        : req.body.status,
+          }
+        },
+        { new: true }
+      )
+
+      // try {
+      //   await producer.connect()
+      //   await producer.send({
+      //     topic: 'update',
+      //     messages: [{ value: JSON.stringify({
+      //       topic_type: 'product',
+      //       emp_id: req.cookies.uid,
+      //       body: updatedProduct
+      //     })}],
+      //   })
+      // } catch (error) {
+      //   console.log(error)
+      // }
   
       return res.json({message: 'Cập nhật thông tin thành công'})
     } catch (error) {
@@ -204,9 +232,22 @@ class allProductsController {
         'img.path'  : result.secure_url,
         'img.filename' : result.public_id
       })
-  
-      await newProduct.save()
-  
+      const savedProduct = await newProduct.save()
+
+      // try {
+      //   await producer.connect()
+      //   await producer.send({
+      //     topic: 'create',
+      //     messages: [{ value: JSON.stringify({
+      //       topic_type: 'product',
+      //       emp_id: req.cookies.uid,
+      //       body: savedProduct
+      //     })}],
+      //   })
+      // } catch (error) {
+      //   console.log(error)
+      // }
+
       return res.json({isValid: true, message: 'Tạo sản phẩn mới thành công'})
     } catch (error) {
       return res.json({error: error.message})

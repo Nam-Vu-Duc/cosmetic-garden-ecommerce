@@ -40,7 +40,9 @@
         <span class="new-price-value"></span>
       </div>
     </div>
-    
+
+    <div><span class="form-message"></span></div>
+
     <div class="button"><button class="voucher-button">Áp dụng</button></div>
   </div>
 
@@ -78,17 +80,15 @@
 
     <div class="form-group">
       <input type="radio" id="cash" name="paymentMethod" value="cash" checked>
-      <label for="cash">Trả Tiền Mặt</label><br>
+      <label for="cash">Thanh toán khi nhận hàng</label><br>
 
-      <input type="radio" id="cashless" name="paymentMethod" value="transfer">
-      <label for="cashless">Chuyển Khoản</label>
+      <input type="radio" id="e-wallet" name="paymentMethod" value="e-wallet">
+      <label for="e-wallet">Ví điện tử Momo</label><br>
+
+      <input type="radio" id="transfer" name="paymentMethod" value="transfer">
+      <label for="transfer">Chuyển Khoản</label>
 
       <div class="bank-account">
-        {{!-- <div class="bank-info">
-          <span>19037654462013</span>
-          <span>Techcombank</span>
-          <span>Đặng Quỳnh Ly</span>
-        </div> --}}
         <img src="https://res.cloudinary.com/bunny-store/image/upload/v1711070720/web-img/fc4c4fd10517a949f006_ndjvt6.png" alt="loading" loading="lazy">
         <div class="form-group">
           <label>Sau khi chuyển khoản xong mọi người chụp bill gửi cho mình nha</label>
@@ -98,7 +98,7 @@
     </div>
   </div>
 
-  <div class="button"><button class="submit-button">Hoàn tất đặt hàng</button></div>
+  <div class="button"><button class="submit-button" style="display: none;">Hoàn tất đặt hàng</button></div>
   <div class="button"><button class="next-button">Tiếp tục</button></div>
 </div>
 

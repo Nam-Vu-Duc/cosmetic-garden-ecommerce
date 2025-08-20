@@ -1,4 +1,5 @@
 importLinkCss('/css/layouts/signIn.css')
+import { permissions, menuConfig } from '../helpers/permission.js'
 
 async function checkingAccount() {
   document.querySelector('button').classList.add('loading')
@@ -14,9 +15,7 @@ async function checkingAccount() {
     })
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const json = await response.json()
-  const isValid = json.isValid
-  const message = json.message
+  const {isValid, message, role} = await response.json()
 
   document.querySelector('button').classList.remove('loading')
   
@@ -24,13 +23,30 @@ async function checkingAccount() {
     document.querySelector('p.wrong-info').textContent = message
     document.querySelector('p.wrong-info').style.color = 'red'
     return 
-  } 
+  }
+  
+  if (!role) {
+    pushNotification('Something went wrong. Please try again!')
+    return
+  }
+
   document.querySelector('p.wrong-info').textContent = ''
   pushNotification(message)
 
+  function getRedirectUrlByRole(role) {
+    for (const item of menuConfig) {
+      if (permissions[item.permission].includes(role)) {
+        return item.href
+      }
+    }
+    return "/403" // fallback if no permission
+  }
+
+  const redirectUrl = getRedirectUrlByRole(role)
+
   setTimeout(() => {
     const path = window.location.origin
-    window.location.replace(path + '/admin/all')
+    window.location.replace(path + redirectUrl)
   }, 1000)
   
   return

@@ -14,17 +14,18 @@ async function getCustomer() {
 
   document.title = customerInfo.name
 
-  document.querySelector('input#id').value       = customerInfo._id
-  document.querySelector('input#name').value     = customerInfo.name
-  document.querySelector('input#email').value    = customerInfo.email
-  document.querySelector('input#phone').value    = customerInfo.phone
-  document.querySelector('input#address').value  = customerInfo.address
+  document.querySelector('input#id').value       = customerInfo._id || ''
+  document.querySelector('input#name').value     = customerInfo.name || ''
+  document.querySelector('input#email').value    = customerInfo.email || ''
+  document.querySelector('input#phone').value    = customerInfo.phone || ''
+  document.querySelector('input#address').value  = customerInfo.address || ''
+  document.querySelector('input#dob').value      = customerInfo.dob === null ? null : customerInfo.dob.split('T')[0] 
   document.querySelectorAll('input[name="gender"]').forEach((input) => {
     if (input.value === customerInfo.gender) input.checked = true
   })
-  document.querySelector('input#quantity').value = customerInfo.quantity
-  document.querySelector('input#revenue').value  = formatNumber(customerInfo.revenue)
-  document.querySelector('input#member').value   = memberInfo.name
+  document.querySelector('input#quantity').value = customerInfo.quantity || ''
+  document.querySelector('input#revenue').value  = formatNumber(customerInfo.revenue) || ''
+  document.querySelector('input#member').value   = memberInfo.name || ''
 
   let productIndex = 1
   orderInfo.forEach((order) => {
@@ -47,13 +48,17 @@ async function updateCustomer(customerInfo) {
   const name    = document.querySelector('input#name').value
   const phone   = document.querySelector('input#phone').value
   const address = document.querySelector('input#address').value
+  const dob     = document.querySelector('input#dob').value
   const gender  = document.querySelector('input[name="gender"]:checked').value
+
+  const initialDob = customerInfo.dob === null ? null : customerInfo.dob.split('T')[0] 
 
   if (
     name    === customerInfo.name    &&
     phone   === customerInfo.phone   &&
     address === customerInfo.address &&
-    gender  === customerInfo.gender
+    gender  === customerInfo.gender  &&
+    dob     === initialDob
   ) return pushNotification('Hãy cập nhật thông tin')
 
   const response = await fetch('/admin/all-customers/customer/updated', {
@@ -64,6 +69,7 @@ async function updateCustomer(customerInfo) {
       name    : name,
       phone   : phone,
       address : address,
+      dob     : dob,
       gender  : gender
     })
   })

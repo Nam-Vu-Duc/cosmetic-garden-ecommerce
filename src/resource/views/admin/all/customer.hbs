@@ -9,8 +9,8 @@
         <label>Sắp xếp:</label>
         <select id="revenue" class="filter-btn">
           <option value="">Doanh thu</option>
-          <option value="1">Doanh thu tăng</option>
-          <option value="-1">Doanh thu giảm</option>
+          <option value="1">Doanh thu tăng dần</option>
+          <option value="-1">Doanh thu giảm dần</option>
         </select>
 
         <select id="quantity" class="filter-btn">
@@ -34,7 +34,7 @@
       </div>
       <button id="clear-sort-filter" style="display: none">Xoá bộ lọc</button>
 
-      <a href="/admin/all-customers/customer/create" class="create-btn" id="create-btn">
+      <a target="_blank" rel="noopener noreferrer" href="/admin/all-customers/customer/create" class="create-btn" id="create-btn">
         <i class="fi fi-rr-plus"></i>
         <p>Thêm Khách Hàng</p>
       </a>
@@ -76,4 +76,4 @@
   <span class="pagination"></span>
 </div>
 
-<script src="/js/admin/all/customer.js"></script>
+<script type="module" src="/js/admin/all/customer.js"></script>

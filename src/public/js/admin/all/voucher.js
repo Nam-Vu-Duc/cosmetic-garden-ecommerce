@@ -62,7 +62,7 @@ async function getVouchers(sortOptions, filterOptions, currentPage) {
         <td>${item.name}</td>
         <td>${item.discount}%</td>
         <td>${formatDate(item.endDate)}</td>
-        <td><a href="/admin/all-vouchers/voucher/${item._id}">Xem</a></td>
+        <td><a target="_blank" rel="noopener noreferrer" href="/admin/all-vouchers/voucher/${item._id}">Xem</a></td>
       `
       tbody.appendChild(newTr)
       productIndex++
@@ -75,14 +75,8 @@ async function getVouchers(sortOptions, filterOptions, currentPage) {
 window.addEventListener('DOMContentLoaded', async function loadData() {
   try {
     await getFilter()
-    await new Promise(r => setTimeout(r, 500))
-    
     await getVouchers(sortOptions, filterOptions, currentPage.page)
-    await new Promise(r => setTimeout(r, 500))
-    
     await sortAndFilter(getVouchers, sortOptions, filterOptions, currentPage.page)
-    await new Promise(r => setTimeout(r, 500))
-    
     await exportJs()
   } catch (error) {
     console.error('Error loading data:', error)

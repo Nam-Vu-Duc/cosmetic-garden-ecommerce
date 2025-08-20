@@ -10,10 +10,12 @@ const user = new Schema({
   phone     : { type: String, default: '' },
   gender    : { type: String, default: '' },
   address   : { type: String, default: '' },
+  dob       : { type: Date, default: null},
   quantity  : { type: Number, default: 0 },
   revenue   : { type: Number, default: 0 },
   memberCode: { type: String, default: 'silver'},
   isActive  : { type: Boolean, default: false },
+  lastLogin : { type: Date, default: Date.now }, 
   favorites : {
     categories: {type: String, default: ''},
     skincare  : {type: String, default: ''},

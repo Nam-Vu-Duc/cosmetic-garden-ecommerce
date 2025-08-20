@@ -30,9 +30,9 @@
   table {
     text-align: center;
     tfoot {
-      background-color:#389845;
+      background-color: #5ab868;
+      color: white;
       height: 50px;
-      i { color: black }
       td:first-child {
         border-top-left-radius: 10px;
         border-bottom-left-radius: 10px;

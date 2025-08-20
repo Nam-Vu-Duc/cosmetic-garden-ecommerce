@@ -1,5 +1,48 @@
 importLinkCss('/css/layouts/signIn.css')
 
+const client = new Appwrite.Client()
+  .setEndpoint("https://syd.cloud.appwrite.io/v1")
+  .setProject("68a4957600115808485e")
+
+const account = new Appwrite.Account(client)
+const databases = new Appwrite.Databases(client)
+
+async function googleRedirect() {
+  try {
+    document.querySelector('button.google-sign-in').classList.add('loading')
+    
+    try {
+      await account.get() 
+      await account.deleteSession("current")
+      console.log("Existing session cleared")
+    } catch (err) {
+      console.log("No existing session, skipping delete")
+    }
+    
+    account.createOAuth2Session(
+      'google', 
+      'http://localhost:3000/authentication/sign-up?signup=google',
+      'http://localhost:3000/failed'
+    )
+  } catch (error) {
+    console.error('Google sign-in error:', error)
+  }
+}
+
+async function signUp(email, password, name) {
+  try {
+    const user = await account.create(
+      ID.unique(),
+      email,
+      password,
+      name
+    )
+    console.log("User created:", user)
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 const submitButton = document.querySelector('button')
 
 async function verifyingEmail(email) {
@@ -60,6 +103,12 @@ submitButton.onclick = async function() {
   submitButton.classList.add('loading')
   if (submitButton.className.includes('email')) {
     const email = document.querySelector('input#email').value
+    if (email.trim() === '') {
+      document.querySelector('p.wrong-info').textContent = 'Email không được để trống'
+      document.querySelector('p.wrong-info').style.color = 'red'
+      submitButton.classList.remove('loading')
+      return
+    }
     const {isValid, message} = await verifyingEmail(email) 
     if (!isValid) {
       document.querySelector('p.wrong-info').textContent = message
@@ -153,3 +202,46 @@ submitButton.onclick = async function() {
     return
   }
 }
+
+window.onload = async () => {
+  const params = new URLSearchParams(window.location.search)
+  const signup = params.get("signup")
+
+  if (signup === "google") {
+    try {
+      const user = await account.get()
+      pushNotification("Đang kiểm tra tài khoản")
+
+      const response = await fetch("/authentication/creating-google-account", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: user.email,
+          name: user.name
+        }),
+      })
+      if (!response.ok) throw new Error(`Response status: ${response.status}`)
+      const {isValid, message} = await response.json()
+
+      if (!isValid) {
+        document.querySelector('p.wrong-info').textContent = message
+        document.querySelector('p.wrong-info').style.color = 'red'
+        return 
+      } 
+      document.querySelector('p.wrong-info').textContent = ''
+      pushNotification(message) 
+
+      window.isLoggedIn = true
+
+      setTimeout(() => {
+        const path = window.location.origin
+        window.location.replace(path + '/home')
+      }, 1000)
+
+    } catch (err) {
+      console.error("Failed to get user:", err)
+    }
+  }
+}
+
+document.querySelector("button.google-sign-up").addEventListener("click", googleRedirect)

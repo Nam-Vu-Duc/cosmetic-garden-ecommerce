@@ -4,7 +4,6 @@
     <p class="trash"><a href="/admin/all-products/trash">Đã xoá</a></p>
   </div>
 
-
   <div class="control-bar">
     <div class="filter-and-create">
       <div class="sort">
@@ -41,7 +40,7 @@
       </div>
       <button id="clear-sort-filter" style="display: none">Xoá bộ lọc</button>
 
-      <a href="/admin/all-products/product/create" class="create-btn" id="create-btn">
+      <a target="_blank" rel="noopener noreferrer" href="/admin/all-products/product/create" class="create-btn" id="create-btn">
         <i class="fi fi-rr-plus"></i>
         <p>Thêm Sản Phẩm</p>
       </a>
@@ -98,4 +97,4 @@
 
 <form style="display: none;" name="delete-form" method="post"></form>
 
-<script src="/js/admin/all/product.js"></script>
+<script type="module" src="/js/admin/all/product.js"></script>

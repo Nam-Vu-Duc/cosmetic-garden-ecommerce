@@ -6,15 +6,16 @@
   justify-content: center;
   flex-direction: column;
   padding: 10px 0;
-  gap: 10px;
+  gap: 20px;
   .table {
     width: 95%;
     height: fit-content;
     background-color: white;
-    border-radius: 10px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     position: relative;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     .image-box {
       display: flex;
       align-items: center;
@@ -139,6 +140,7 @@
     padding: 0 15px;
     box-sizing: border-box;
     position: relative;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     h3 {
       padding: 5px;
       margin-block-start: 0;
@@ -154,7 +156,7 @@
     justify-content: center;
     padding: 5px;
     box-sizing: border-box;
-    i {color: orange;}
+    i {color: orange;};
     .rating-score {
       width: 30%;
       display: flex;
@@ -196,10 +198,18 @@
       }
       #sender {
         background-color: #5ab868;
+        color: white;
+        padding: 10px;
         border-radius: 5px;
         box-sizing: border-box;
         width: fit-content;
         font-weight: bold;
+      }
+      #rate {
+        padding: 5px;
+      }
+      i {
+        color: orange;
       }
     }
   }

@@ -1,7 +1,6 @@
 require('dotenv').config()
 const user = require('../../models/userModel')
 const chat = require('../../models/chatModel')
-const aiChat = require('../../models/aiChatModel')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const nodemailer = require("nodemailer")
@@ -9,7 +8,7 @@ const nodemailer = require("nodemailer")
 const verifyCheckingAccountCode = {}
 const verifyCreatingAccountCode = {}
 
-class loginController {  
+class authenticationController {  
   async signIn(req, res, next) {
     return res.render('users/signIn', { title: 'Đăng Nhập', layout: 'empty' })
   }
@@ -45,7 +44,7 @@ class loginController {
             secure: true,
           })
 
-          if (getUser.role === 'user') return res.json({isValid: true, uid: userId, message: 'Đăng nhập thành công'})
+          if (getUser.role === 'user') return res.json({isValid: true, message: 'Đăng nhập thành công'})
 
         } else {
           return res.json({isValid: false, message: 'Mật khẩu không đúng'})
@@ -137,13 +136,7 @@ class loginController {
         userId: savedUser._id,
         lastMessage: ''
       })
-  
-      const newAIChat = new aiChat({
-        userId: savedUser._id,
-        lastMessage: ''
-      })
       await newChat.save()
-      await newAIChat.save()
   
       return res.json({isSuccessful: true, message: 'Đăng ký tài khoản thành công'})
       
@@ -233,5 +226,68 @@ class loginController {
       return res.json({error: error})
     }
   }
+
+  async checkingGoogleAccount(req, res, next) {
+    const email = req.body.email
+    try {
+      const getUser = await user.findOne({ email: email })
+      console.log(getUser)
+      if (!getUser) return res.json({isValid: false, message: 'Email chưa đăng ký tài khoản'})
+
+      const payload = { email: getUser.email }// Payload with only essential data
+      const rt = jwt.sign(payload, 'SECRET_KEY', { expiresIn: '1d' })
+      const at = jwt.sign(payload, 'SECRET_KEY', { expiresIn: '7d' })
+      const userId = getUser._id.toString()
+      await user.updateOne({ _id: userId}, {
+        isActive: true
+      })
+
+      res.cookie('rt', rt, {
+        httpOnly: true,
+        secure: true,
+      })
+      res.cookie('at', at, {
+        httpOnly: true,
+        secure: true,
+      })
+      res.cookie('uid', userId, {
+        httpOnly: true,
+        secure: true,
+      })
+
+      return res.json({isValid: true, message: 'Đăng nhập thành công'})
+    } catch (error) {
+      return res.json({error: error})
+    }
+  }
+
+  async creatingGoogleAccount(req, res, next) {
+    try {
+      const userEmail = req.body.email  
+      const emailExist = await user.findOne({ email: userEmail})
+      if (emailExist) return res.json({isValid: false, message: 'Email đã tồn tại'})
+
+      let newUser = new user({
+        email: req.body.email,
+        // password: hashedPassword,
+        role: 'user',
+        name: req.body.name,
+      })
+      const savedUser = await newUser.save()
+  
+      const adminId = process.env.ADMIN_ID
+      const newChat = new chat({
+        adminId: adminId,
+        userId: savedUser._id,
+        lastMessage: ''
+      })
+      await newChat.save()
+  
+      return res.json({isValid: true, message: 'Đăng ký tài khoản thành công'})
+      
+    } catch (error) {
+      return res.json({error: error})
+    }
+  }
 }
-module.exports = new loginController
+module.exports = new authenticationController

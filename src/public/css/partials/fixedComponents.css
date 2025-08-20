@@ -1,4 +1,4 @@
-.scroll-to-top-icon, .contact-icon, .chat-icon, .chatbot-icon {
+.scroll-to-top-icon, .contact-icon, .chat-icon {
   display: inline-block;
   margin-left: auto;
   margin-right: 0;
@@ -11,12 +11,11 @@
   height: 50px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   animation: ring 1.5s infinite;
-  i { font-size: 50px; color: #5ab868 };
+  i { font-size: 50px; color: #389845 };
 }
-.scroll-to-top-icon {bottom: 130px}
-.chatbot-icon {bottom: 70px}
+.scroll-to-top-icon {bottom: 70px}
 .chat-icon {bottom: 10px}
-.chat-box, .ai-chat-box {
+.chat-box {
   background-color: white;
   width: 300px;
   height: 400px;
@@ -92,7 +91,7 @@
     }
     .right-content {
       float: right;
-      background-color: #5ab868;
+      background-color: #389845;
       color: white;
     }
     .left-content {
@@ -150,5 +149,5 @@
   .scroll-to-top-icon {bottom: 195px}
   .chatbot-icon {bottom: 135px}
   .chat-icon {bottom: 75px}
-  .chat-box, .ai-chat-box {bottom: 75px;}
+  .chat-box {bottom: 75px;}
 }

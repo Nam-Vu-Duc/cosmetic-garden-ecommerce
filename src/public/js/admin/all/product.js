@@ -73,12 +73,20 @@ async function getProducts(sortOptions, filterOptions, currentPage) {
         <td>${formatNumber(item.price)}</td>
         <td>${item.quantity}</td>
         <td>
-          <button><a href="/admin/all-products/product/${item._id}" class="update-button">Xem</a></button>
-          <button id="${item._id}" name="${item.name}" onclick="reply_click(this.id, this.name)">Xoá</button> 
+          <button><a target="_blank" rel="noopener noreferrer" href="/admin/all-products/product/${item._id}" class="update-button">Xem</a></button>
+          <button class="delete-btn" data-id="${item._id}" data-name="${item.name}">Xoá</button>
         </td>
       `
       tbody.appendChild(newTr)
       productIndex++
+    })
+
+    tbody.querySelectorAll(".delete-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const id = e.target.dataset.id
+        const name = e.target.dataset.name
+        reply_click(id, name)
+      })
     })
   }, 1000)
 
@@ -86,6 +94,7 @@ async function getProducts(sortOptions, filterOptions, currentPage) {
 }
 
 function reply_click(clicked_id, clicked_name) {
+  console.log('123')
   const name = clicked_name
   const message = document.querySelector('p#confirm-message')
   message.innerText = `Bạn có muốn xoá sản phẩm ${name} không ?`
@@ -106,20 +115,14 @@ deleteButton.onclick = async function () {
   pushNotification(message)
   
   if (!isValid) return
-  setTimeout(() => window.location.reload(), 3000)
+  setTimeout(() => window.location.reload(), 2000)
 }
 
 window.addEventListener('DOMContentLoaded', async function loadData() {
   try {
     await getFilter()
-    await new Promise(r => setTimeout(r, 500))
-
     await sortAndFilter(getProducts, sortOptions, filterOptions, currentPage.page)
-    await new Promise(r => setTimeout(r, 500))
-    
     await getProducts(sortOptions, filterOptions, currentPage.page)
-    await new Promise(r => setTimeout(r, 500))
-    
     await exportJs()
   } catch (error) {
     console.error('Error loading data:', error)

@@ -348,30 +348,33 @@ async function getSuppliers() {
 
 async function getAll() {
   try {
-    await getFinance()
-    await new Promise(r => setTimeout(r, 200))
+    const date = new Date();
+    const y = date.getFullYear()
+    const m = date.getMonth()
 
+    const firstDay = new Date(y, m, 1)
+    const lastDay = new Date(y, m + 1, 0)
+
+    const formatDate = (d) => {
+      const month = String(d.getMonth() + 1).padStart(2, '0')
+      const day = String(d.getDate()).padStart(2, '0')
+      return `${d.getFullYear()}-${month}-${day}`
+    };
+
+    const startDate = document.querySelector('input#start-date')
+    const endDate   = document.querySelector('input#end-date')
+
+    startDate.value =  formatDate(firstDay)
+    endDate.value   =  formatDate(lastDay)
+
+    await getFinance(firstDay, lastDay)
     await getOrders()
-    await new Promise(r => setTimeout(r, 200))
-
     await getPurchases() 
-    await new Promise(r => setTimeout(r, 200))
-
     await getCustomers()
-    await new Promise(r => setTimeout(r, 200))
-
     await getSuppliers()
-    await new Promise(r => setTimeout(r, 200))
-    
     await getProducts()
-    await new Promise(r => setTimeout(r, 200))
-
     await getBrands()
-    await new Promise(r => setTimeout(r, 200))
-
     await getStores()
-    await new Promise(r => setTimeout(r, 200))
-
     await getEmployees()    
   } catch (error) {
     console.error('Có lỗi xảy ra:', error)

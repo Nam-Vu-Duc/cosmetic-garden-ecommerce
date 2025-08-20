@@ -11,6 +11,9 @@ const db = require('./config/db')
 const { createServer } = require("http")
 const server = createServer(app)
 const port = process.env.PORT
+const cron = require('node-cron')
+const { getUsersWithBirthdayThisMonth } = require('./app/controllers/cron/createBirthdayVoucher') 
+const { setVoucherExpired } = require('./app/controllers/cron/setVoucherExpired') 
 
 db.connect()
 app.use(express.json({ limit: '50mb' }))
@@ -32,7 +35,25 @@ app.set('view engine', 'hbs')
 app.set('views', path.join(__dirname, 'resource', 'views'))
 app.set('view options', { layout: 'other' })
 
-//route 
+// cron.schedule("0 0 * * *", async () => {
+//   console.log("Running birthday voucher cron...")
+//   try {
+//     await getUsersWithBirthdayThisMonth()
+
+//     console.log("Birthday vouchers created successfully.")
+//   } catch (err) {
+//     console.error("Error creating birthday vouchers:", err)
+//   }
+// })
+
+async function main() {
+  // await getUsersWithBirthdayThisMonth()
+  await setVoucherExpired()
+  
+}
+
+// main()
+
 route(app)
 server.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);

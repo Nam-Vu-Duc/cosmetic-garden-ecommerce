@@ -84,13 +84,13 @@ async function loadData(retriesLeft) {
 
 loadData(5)
 
-setTimeout(() => {
-  getLog(
-    topic = 'brand-view', 
-    value = {
-      "user_id"   : window.uid,
-      "brand_id"  : urlSlug,
-      "timestamp" : new Date(),
-    }
-  )
-}, 1000)
+// setTimeout(() => {
+//   getLog(
+//     topic = 'brand-view', 
+//     value = {
+//       "user_id"   : window.uid,
+//       "brand_id"  : urlSlug,
+//       "timestamp" : new Date(),
+//     }
+//   )
+// }, 1000)

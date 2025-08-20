@@ -79,7 +79,7 @@ deleteButton.onclick = async function () {
   pushNotification(message)
   
   if (!isValid) return
-  setTimeout(() => window.location.reload(), 3000)
+  setTimeout(() => window.location.reload(), 2000)
 }
 
 //restore button

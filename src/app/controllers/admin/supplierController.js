@@ -1,6 +1,7 @@
 const supplier = require('../../models/supplierModel')
 const purchase = require('../../models/purchaseModel')
 const checkForHexRegExp = require('../../middleware/checkForHexRegExp')
+const { ObjectId } = require('mongodb')
 
 class allSuppliersController {
   // all
@@ -11,6 +12,10 @@ class allSuppliersController {
       const filter       = req.body.filter
       const itemsPerPage = 10
       const skip         = (currentPage - 1) * itemsPerPage
+
+      if (filter['_id']) {
+        filter['_id'] = ObjectId.createFromHexString(filter['_id'])
+      }
   
       const [data, dataSize] = await Promise.all([
         supplier

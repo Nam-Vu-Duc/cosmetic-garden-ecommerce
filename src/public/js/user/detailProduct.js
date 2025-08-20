@@ -46,7 +46,13 @@ async function getProduct() {
 
   productElement.querySelector('img').setAttribute('src', data.img.path)
   productElement.querySelector('img').setAttribute('alt', data.name)
-  productElement.querySelector('span#rate-score').textContent = formatRate(data.rate) 
+  productElement.querySelector('span#rate-score').textContent = formatRate(data.rate)
+  productElement.querySelector('p#product-rate').querySelectorAll('i').forEach((star, i) => {
+    star.style.color = 'black'
+  })
+  productElement.querySelector('p#product-rate').querySelectorAll('i').forEach((star, i) => {
+    if (i + 1 <= data.rate) star.style.color = 'orange'
+  })
   productElement.querySelector('h3#brand').textContent = data.brand
   productElement.querySelector('h1#name').textContent = data.name
   productElement.querySelector('h4#old-price').textContent = formatNumber(data.oldPrice) 
@@ -106,7 +112,7 @@ async function getRelatedProducts(productInfo) {
         product.querySelector('p#old-price').textContent = formatNumber(data[index].oldPrice) 
         product.querySelector('p#price').textContent = formatNumber(data[index].price) 
         product.querySelector('p#name').textContent = data[index].name
-        product.querySelector('span#rate-score').textContent = data[index].rateNumber
+        product.querySelector('span#rate-score').textContent = Math.round(data[index].rate * 100) / 100
         product.querySelector('p#sale-number').textContent =  'Đã bán: ' + data[index].saleNumber
         product.querySelector('div.loading').style.display = 'none'
         product.querySelectorAll('i').forEach((star, i) => {
@@ -197,15 +203,15 @@ function addToCart(productInfo) {
       myObj.productInfo.push(newProductInfo)
 
       // push event log to kafka
-      getLog(
-        topic = 'cart-update', 
-        value = {
-          "user_id"     : window.uid,
-          "product_id"  : urlSlug,
-          "update_type" : 'add',
-          "timestamp"   : new Date(),
-        }
-      )
+      // getLog(
+      //   topic = 'cart-update', 
+      //   value = {
+      //     "user_id"     : window.uid,
+      //     "product_id"  : urlSlug,
+      //     "update_type" : 'add',
+      //     "timestamp"   : new Date(),
+      //   }
+      // )
     } else {
       // the item has already been added, click to remove
       // change button color to 'default button'
@@ -226,15 +232,15 @@ function addToCart(productInfo) {
         }
       }
 
-      getLog(
-        topic = 'cart-update', 
-        value = {
-          "user_id"     : window.uid,
-          "product_id"  : urlSlug,
-          "update_type" : 'remove',
-          "timestamp"   : new Date(),
-        }
-      )
+      // getLog(
+      //   topic = 'cart-update', 
+      //   value = {
+      //     "user_id"     : window.uid,
+      //     "product_id"  : urlSlug,
+      //     "update_type" : 'remove',
+      //     "timestamp"   : new Date(),
+      //   }
+      // )
     }
   
     localStorage.setItem('product_cart_count', JSON.stringify(myObj));
@@ -257,15 +263,15 @@ function buyNow(productInfo) {
       myObj.productInfo.push(newProductInfo)
       localStorage.setItem('product_cart_count', JSON.stringify(myObj))
 
-      getLog(
-        topic = 'cart-update', 
-        value = {
-          "user_id"     : window.uid,
-          "product_id"  : urlSlug,
-          "update_type" : 'add',
-          "timestamp"   : new Date(),
-        }
-      )
+      // getLog(
+      //   topic = 'cart-update', 
+      //   value = {
+      //     "user_id"     : window.uid,
+      //     "product_id"  : urlSlug,
+      //     "update_type" : 'add',
+      //     "timestamp"   : new Date(),
+      //   }
+      // )
     } else {}
   }
 }
@@ -348,13 +354,13 @@ async function loadData(retriesLeft) {
 
 loadData(5)
 
-setTimeout(() => {
-  getLog(
-    topic = 'product-view', 
-    value = {
-      "user_id"   : window.uid,
-      "product_id": urlSlug,
-      "timestamp" : new Date(),
-    }
-  )
-}, 1000)
+// setTimeout(() => {
+//   getLog(
+//     topic = 'product-view', 
+//     value = {
+//       "user_id"   : window.uid,
+//       "product_id": urlSlug,
+//       "timestamp" : new Date(),
+//     }
+//   )
+// }, 1000)

@@ -11,8 +11,11 @@ router.post('/order/rate/updated' , allOrderController.orderRated)
 router.get('/checking'            , allOrderController.ordersChecking)
 
 router.post('/create-orders'      , allOrderController.createOrders)
+router.post('/payment'            , allOrderController.createPayment)
+router.post('/callback'           , allOrderController.paymentResult)
 
 router.post('/data/order'         , allOrderController.getOrder)
+router.post('/data/order-rated'   , allOrderController.getRatedOrder)
 router.post('/data/voucher'       , allOrderController.getVoucher)
 
 module.exports = router

@@ -3,6 +3,7 @@ const employee = require('../../models/employeeModel')
 const order = require('../../models/orderModel')
 const member = require('../../models/memberModel')
 const checkForHexRegExp = require('../../middleware/checkForHexRegExp')
+const { ObjectId } = require('mongodb')
 
 class allVouchersController {
   // all
@@ -13,6 +14,10 @@ class allVouchersController {
       const filter       = req.body.filter
       const itemsPerPage = 10
       const skip         = (currentPage - 1) * itemsPerPage
+
+      if (filter['_id']) {
+        filter['_id'] = ObjectId.createFromHexString(filter['_id'])
+      }
   
       const [data, dataSize] = await Promise.all([
         voucher

@@ -49,7 +49,7 @@ async function submitRate(data) {
     const {message} = await response.json()
 
     if (message) {
-      pushNotification('Successfully')
+      pushNotification('Đánh giá đơn thành công')
       submitBtn.innerText = 'Đã đánh giá'
       submitBtn.style.cursor = 'not-allowed'
       submitBtn.style.opacity = '0.8'
@@ -58,7 +58,7 @@ async function submitRate(data) {
 }
 
 async function getOrder() {
-  const response = await fetch('/all-orders/data/order', {
+  const response = await fetch('/all-orders/data/order-rated', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({id: urlSlug})
@@ -78,7 +78,7 @@ async function getOrder() {
   if (data.isRated) {
     submitBtn.innerText = 'Đã đánh giá'
     submitBtn.style.cursor = 'not-allowed'
-    submitBtn.style.opacity = '0.8'
+    submitBtn.style.opacity = '0.5'
   }
 
   data.products.forEach((product) => {
@@ -118,24 +118,16 @@ async function getOrder() {
 
     const input = document.createElement('input')
     input.setAttribute('type', 'text')
-    input.setAttribute('placeholder', 'Nhập đánh giá của bạn')
-    input.setAttribute('id', product.id)
-    input.setAttribute('value', '')
-    input.oninput = function(event) {
-      input.value = event.target.value
-    }
+    input.setAttribute('value', product.comment)
+    input.setAttribute('disabled', 'true')
 
     const rateStar = document.createElement('div')
     rateStar.innerHTML = `
       <div class="rate-star">
-        <i class="fi fi-ss-star"></i>
-        <i class="fi fi-ss-star"></i>
-        <i class="fi fi-ss-star"></i>
-        <i class="fi fi-ss-star"></i>
-        <i class="fi fi-ss-star"></i>
-        <span class="rate-score">0</span>
+        <span class="rate-score">${product.rate}</span>
         <span>/</span>
         <span>5</span>
+        <i class="fi fi-ss-star"></i>
       </div>
     `
 

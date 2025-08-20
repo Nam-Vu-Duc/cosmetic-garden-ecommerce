@@ -41,10 +41,10 @@ const homePermission = {
   DELETE: ['admin']
 }
 const orderPermission = {
-  CREATE: ['admin', 'manager', 'employee'],
-  READ  : ['admin', 'manager', 'employee'],
-  UPDATE: ['admin', 'manager', 'employee'],
-  DELETE: ['admin', 'manager']
+  CREATE: ['admin', 'manager', 'employee', 'merchandise'],
+  READ  : ['admin', 'manager', 'employee', 'merchandise'],
+  UPDATE: ['admin', 'manager', 'employee', 'merchandise'],
+  DELETE: ['admin', 'manager', 'merchandise']
 }
 const productPermission = {
   CREATE: ['admin', 'manager', 'employee'],
@@ -53,10 +53,10 @@ const productPermission = {
   DELETE: ['admin', 'manager']
 }
 const purchasePermission = {
-  CREATE: ['admin', 'manager', 'employee'],
-  READ  : ['admin', 'manager', 'employee'],
-  UPDATE: ['admin', 'manager', 'employee'],
-  DELETE: ['admin', 'manager']
+  CREATE: ['admin', 'manager', 'employee', 'merchandise'],
+  READ  : ['admin', 'manager', 'employee', 'merchandise'],
+  UPDATE: ['admin', 'manager', 'employee', 'merchandise'],
+  DELETE: ['admin', 'manager', 'merchandise']
 }
 const storePermission = {
   CREATE: ['admin', 'manager'],
@@ -66,8 +66,8 @@ const storePermission = {
 }
 const supplierPermission = {
   CREATE: ['admin', 'manager', 'employee'],
-  READ  : ['admin', 'manager', 'employee'],
-  UPDATE: ['admin', 'manager', 'employee'],
+  READ  : ['admin', 'manager', 'employee', 'merchandise'],
+  UPDATE: ['admin', 'manager', 'employee', 'merchandise'],
   DELETE: ['admin', 'manager']
 }
 const voucherPermission = {

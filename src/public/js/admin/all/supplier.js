@@ -59,7 +59,7 @@ async function getSuppliers(sortOptions, filterOptions, currentPage) {
         <td>${item.address}</td>
         <td>${item.quantity}</td>
         <td>${formatNumber(item.totalCost)}</td>
-        <td><a href="/admin/all-suppliers/supplier/${item._id}">Xem</a></td>
+        <td><a target="_blank" rel="noopener noreferrer" href="/admin/all-suppliers/supplier/${item._id}">Xem</a></td>
       `
       tbody.appendChild(newTr)
       productIndex++
@@ -72,11 +72,7 @@ async function getSuppliers(sortOptions, filterOptions, currentPage) {
 window.addEventListener('DOMContentLoaded', async function loadData() {
   try {
     await getSuppliers(sortOptions, filterOptions, currentPage.page)
-    await new Promise(r => setTimeout(r, 500))
-
     await sortAndFilter(getSuppliers, sortOptions, filterOptions, currentPage.page)
-    await new Promise(r => setTimeout(r, 500))
-
     await exportJs()
   } catch (error) {
     console.error('Error loading data:', error)

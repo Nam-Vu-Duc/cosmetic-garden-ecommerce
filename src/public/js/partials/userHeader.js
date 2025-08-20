@@ -33,22 +33,22 @@ async function checkUser() {
   if (window.isLoggedIn) {
     const updateProfileButton = document.createElement('a')
     updateProfileButton.innerText = 'Thông tin cá nhân'
-    updateProfileButton.setAttribute('href', `/profile/info/${window.uid}`)
+    updateProfileButton.setAttribute('href', '/profile/info')
     avatarMenu.appendChild(updateProfileButton)
   
     const logOutButton = document.createElement('a')
     logOutButton.innerText = 'Đăng Xuất'
     logOutButton.setAttribute('href', '/log-out')
-    logOutButton.onclick = async function() {
-      getLog(
-        topic = 'auth-update', 
-        value = {
-          "user_id"     : window.uid,
-          "update_type" : 'logout',
-          "timestamp"   : new Date(),
-        }
-      )
-    }
+    // logOutButton.onclick = async function() {
+    //   getLog(
+    //     topic = 'auth-update', 
+    //     value = {
+    //       "user_id"     : window.uid,
+    //       "update_type" : 'logout',
+    //       "timestamp"   : new Date(),
+    //     }
+    //   )
+    // }
     avatarMenu.appendChild(logOutButton)
   } 
   else {

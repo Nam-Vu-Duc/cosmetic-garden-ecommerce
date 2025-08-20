@@ -1,6 +1,9 @@
 const brand = require('../../models/brandModel')
 const product = require('../../models/productModel')
 const checkForHexRegExp = require('../../middleware/checkForHexRegExp')
+const kafka = require("kafkajs").Kafka
+const kafkaClient = new kafka({ brokers: ["localhost:9092"] })
+const producer = kafkaClient.producer()
 
 class allBrandsController {
   // all
@@ -11,6 +14,10 @@ class allBrandsController {
       const filter       = req.body.filter
       const itemsPerPage = 10
       const skip         = (currentPage - 1) * itemsPerPage
+
+      if (filter['_id']) {
+        filter['_id'] = ObjectId.createFromHexString(filter['_id'])
+      }
 
       const [data, dataSize] = await Promise.all([
         brand

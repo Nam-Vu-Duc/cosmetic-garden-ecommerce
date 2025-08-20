@@ -116,7 +116,8 @@ header {
     z-index: 5;
     padding: 5px;
     gap: 5px;
-    border: 1px solid #5ab868;
+    border: 1px solid #389845;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     a {
       padding: 10px;
       display: flex; 
@@ -131,11 +132,12 @@ header {
     };
     a:hover { 
       color: white;
-      background-color: #5ab868;
+      background-color: #389845;
       i { color: white } 
     }
   }
-  .header-title, .dropdown-title {
+  .header-title, 
+  .dropdown-title {
     display: flex; 
     gap: 10px; 
     align-items: center; 
@@ -143,17 +145,38 @@ header {
     height: 100%;
     margin-top: 0;
     cursor: pointer;
-    a, p {
-      text-decoration: none;
-      font-weight: bolder;
-      color: #575757;
-      font-size: medium;
-      cursor: pointer;
-      width: 100%;
-      padding: 15px;
-      box-sizing: border-box;
-      border-radius: 10px;
-    }
+  }
+
+  .header-title a, 
+  .header-title p,
+  .dropdown-title a, 
+  .dropdown-title p {
+    text-decoration: none;
+    font-weight: bolder;
+    color: #575757;
+    font-size: medium;
+    cursor: pointer;
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    transition: 
+      color 0.2s ease-in, 
+      background-color 0.2s ease-in, 
+      transform 0.2s ease-in, 
+      opacity 0.2s ease-in;
+  }
+
+  /* 👇 Hover effect */
+  .header-title a:hover, 
+  .header-title p:hover,
+  .dropdown-title a:hover, 
+  .dropdown-title p:hover {
+    color: white;
+    background-color: #389845;
+    transform: translateY(-5px); /* smooth movement */
+    opacity: 0.9; /* optional fade */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
   .header-title:hover, .dropdown-title:hover {
     a, p {
@@ -200,6 +223,7 @@ header {
     span:hover {
       color: white;
       background-color: #389845;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
       i, a { color: white } 
     }
     ul > li > ul {
@@ -210,11 +234,14 @@ header {
       display: grid;
       justify-content: start;
       grid-template-columns: auto auto auto;
-    }
-    img {
-      width: 40px;
-      aspect-ratio: 1/1;
-      border-radius: 50%;
+      img {
+        width: 40px;
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+      }
+      a:hover { 
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
     }
     a {
       display: flex; 

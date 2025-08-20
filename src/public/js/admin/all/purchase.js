@@ -6,23 +6,6 @@ const filterOptions = {}
 const currentPage   = { page: 1 }
 const dataSize      = { size: 0 }
 
-async function getFilter() {
-  const response = await fetch('/admin/all-purchases/data/filter', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-  })
-  if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const json = await response.json()
-  if (json.error) return pushNotification(error)
-
-  json.store.forEach((element, index) => {
-    const option = document.createElement('option')
-    option.value = element.code
-    option.textContent = element.name
-    document.querySelector('select#storeCode').appendChild(option)
-  })
-}
-
 async function getPurchases(sortOptions, filterOptions, currentPage) {
   tbody.querySelectorAll('tr').forEach((tr, index) => {
     tr.querySelector('td:nth-child(1)').textContent = ''
@@ -62,7 +45,7 @@ async function getPurchases(sortOptions, filterOptions, currentPage) {
         <td>${formatDate(item.purchaseDate)}</td>
         <td>${item.totalProducts}</td>
         <td>${formatNumber(item.totalPurchasePrice)}</td>
-        <td><a href="/admin/all-purchases/purchase/${item._id}">Xem</a></td>
+        <td><a target="_blank" rel="noopener noreferrer" href="/admin/all-purchases/purchase/${item._id}">Xem</a></td>
       `
       tbody.appendChild(newTr)
       productIndex++
@@ -74,15 +57,8 @@ async function getPurchases(sortOptions, filterOptions, currentPage) {
 
 window.addEventListener('DOMContentLoaded', async function loadData() {
   try {
-    await getFilter()
-    await new Promise(r => setTimeout(r, 500))
-
     await getPurchases(sortOptions, filterOptions, currentPage.page)
-    await new Promise(r => setTimeout(r, 500))
-
     await sortAndFilter(getPurchases, sortOptions, filterOptions, currentPage.page)
-    await new Promise(r => setTimeout(r, 500))
-
     await exportJs()
   } catch (error) {
     console.error('Error loading data:', error)
