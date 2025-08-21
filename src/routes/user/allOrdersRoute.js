@@ -12,7 +12,11 @@ router.get('/checking'            , allOrderController.ordersChecking)
 
 router.post('/create-orders'      , allOrderController.createOrders)
 router.post('/payment'            , allOrderController.createPayment)
-router.post('/callback'           , allOrderController.paymentResult)
+
+// For user redirect (GET request with query params)
+router.get('/callback', allOrderController.paymentResult)
+// For server-to-server notification (IPN, POST request with JSON body)
+router.post('/callback', allOrderController.paymentResult)
 
 router.post('/data/order'         , allOrderController.getOrder)
 router.post('/data/order-rated'   , allOrderController.getRatedOrder)

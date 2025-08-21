@@ -235,26 +235,43 @@ function submitOrder() {
       if (!paymentMethod) throw Error('Hãy chọn phương thức thanh toán nha')
       if (paymentMethod === 'transfer' & !imgPath.path) throw Error('Hãy up bill chuyển khoản lên nha')
         
-      const response = await fetch('/all-orders/create-orders', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          productInfo   : productIds,
-          paymentMethod : paymentMethod,
-          userId        : userId.id || 'guest',
-          code          : code,
-          name          : name,
-          phone         : phone,
-          address       : address,
-          note          : note,
-          img           : imgPath.path,
-        })
-      })
-      if (!response.ok) throw new Error(`Response status: ${response.status}`)
-      const {id, voucher_id , error} = await response.json()
-      if (error) throw Error(error)
-  
+      // const response = await fetch('/all-orders/create-orders', {
+      //   method: 'POST',
+      //   headers: {'Content-Type': 'application/json'},
+      //   body: JSON.stringify({
+      //     productInfo   : productIds,
+      //     paymentMethod : paymentMethod,
+      //     userId        : userId.id || 'guest',
+      //     code          : code,
+      //     name          : name,
+      //     phone         : phone,
+      //     address       : address,
+      //     note          : note,
+      //     img           : imgPath.path,
+      //   })
+      // })
+      // if (!response.ok) throw new Error(`Response status: ${response.status}`)
+      // const {id, voucher_id , payUrl, error} = await response.json()
+      // if (error) throw Error(error)
+
+      const payUrl = '123'
+      const id = '123'
+
+      if (payUrl) {
+        socket.emit('order', { id: id})
+        const momoPaymentMessage = document.createElement('div')
+        momoPaymentMessage.setAttribute('class', 'order-successfully-message')
+        momoPaymentMessage.innerHTML = `
+          <h3>Đơn hàng của bạn đã được tạo thành công, hãy bấm vào đây để tiến hành thanh toán qua momo nha</h3>
+          <a class="momo-pay-btn" href="${payUrl}">Tiến hành thanh toán</a>
+        `
+        document.body.appendChild(momoPaymentMessage)
+        preloader.classList.add('inactive')
+        return
+      }
+
       socket.emit('order', { id: id})
+
       const orderSuccessfullyMessage = document.createElement('div')
       orderSuccessfullyMessage.setAttribute('class', 'order-successfully-message')
       orderSuccessfullyMessage.innerHTML = `

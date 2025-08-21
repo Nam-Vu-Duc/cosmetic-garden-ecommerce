@@ -4,11 +4,16 @@ async function createAttribute(id, rowIndex) {
   const row = document.querySelector(`div.${id}`).querySelector('table').rows[rowIndex]
   const code = row.querySelector('input#code').value
   const name = row.querySelector('input#name').value
+  const wage = deFormatNumber(row.querySelector('input#wage')?.value)
+
+  if (code === '' || name === '' || wage === '') {
+    return pushNotification('Vui lòng điền đầy đủ thông tin.')
+  }
   
   const response = await fetch(`/admin/all-attributes/create/${id}`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({code: code, name: name})
+    body: JSON.stringify({code: code, name: name, wage: wage})
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
   const {error, message} = await response.json()
@@ -18,6 +23,9 @@ async function createAttribute(id, rowIndex) {
 
   row.querySelector('input#code').disabled = true
   row.querySelector('input#name').disabled = true
+  const wageInput = row.querySelector('input#wage')
+  if (wageInput) wageInput.disabled = true
+
   row.querySelector('td:last-child').innerHTML = `
     <button id="${id}" onclick="updateAttribute(this.id, this.parentElement.parentElement.rowIndex)"><i class="fi fi-rr-refresh"></i></button>
     <button id="${id}" onclick="deleteAttribute(this.id, this.parentElement.parentElement.rowIndex)"><i class="fi fi-tr-trash-slash"></i></button>
@@ -55,10 +63,16 @@ async function updateAttribute(id, rowIndex) {
     button.addEventListener('click', async function() {
       const code = row.querySelector('input#code').value
       const name = row.querySelector('input#name').value
+      const wage = deFormatNumber(row.querySelector('input#wage')?.value)
+
+      if (code === '' || name === '' || wage === '') {
+        return pushNotification('Vui lòng điền đầy đủ thông tin.')
+      }
+
       const response = await fetch(`/admin/all-attributes/update/${id}`, {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({code: code, name: name})
+        body: JSON.stringify({code: code, name: name, wage: wage})
       })
 
       if (!response.ok) throw new Error(`Response status: ${response.status}`)
@@ -68,14 +82,23 @@ async function updateAttribute(id, rowIndex) {
       pushNotification(message)
 
       row.querySelector('input#name').disabled = true
+      const wageInput = row.querySelector('input#wage')
+      if (wageInput) wageInput.disabled = true
+
       row.querySelector('input#name').parentElement.querySelector('button').remove()
     })
     
     row.querySelector('input#name').disabled = false
+    const wageInput = row.querySelector('input#wage')
+    if (wageInput) wageInput.disabled = false
+
     row.querySelector('input#name').parentElement.appendChild(button)
 
   } else {
     row.querySelector('input#name').disabled = true
+    const wageInput = row.querySelector('input#wage')
+    if (wageInput) wageInput.disabled = true
+
     row.querySelector('input#name').parentElement.querySelector('button').remove()
   }
 }
@@ -87,18 +110,32 @@ function deleteRow(id, rowIndex) {
 function addRow(id) {
   const tbody = document.querySelector(`div.${id}`).querySelector('tbody')
   const tr = document.createElement('tr')
+  if (id === 'position') {
+    tr.innerHTML = `
+      <td><input type="text" id="code" placeholder="Nhập mã"></td>
+      <td><input type="text" id="wage" placeholder="Nhập lương"></td>
+      <td><input type="text" id="name" placeholder="Nhập tên"></td>
+      <td data-id="${id}">
+        <button id="create">
+          <i class="fi fi-rr-check"></i>
+        </button>
+        <button id="delete" onclick="deleteRow(this.parentElement.dataset.id, this.parentElement.parentElement.rowIndex)"><i class="fi fi-rr-cross-small"></i></button>
+      </td>
+    `
+  } else {
+    tr.innerHTML = `
+      <td><input type="text" id="code" placeholder="Nhập mã"></td>
+      <td><input type="text" id="name" placeholder="Nhập tên"></td>
+      <td data-id="${id}">
+        <button id="create">
+          <i class="fi fi-rr-check"></i>
+        </button>
+        <button id="delete" onclick="deleteRow(this.parentElement.dataset.id, this.parentElement.parentElement.rowIndex)"><i class="fi fi-rr-cross-small"></i></button>
+      </td>
+    `
+  }
   tbody.appendChild(tr)
-  tr.innerHTML = `
-    <td><input type="text" id="code" placeholder="Nhập mã"></td>
-    <td><input type="text" id="name" placeholder="Nhập tên"></td>
-    <td data-id="${id}">
-      <button id="create">
-        <i class="fi fi-rr-check"></i>
-      </button>
-      <button id="delete" onclick="deleteRow(this.parentElement.dataset.id, this.parentElement.parentElement.rowIndex)"><i class="fi fi-rr-cross-small"></i></button>
-    </td>
-  `
-  
+ 
   tr.querySelector("td[data-id]").querySelector('button#create').addEventListener("click", function () {
     createAttribute(this.parentElement.dataset.id, this.parentElement.parentElement.rowIndex)
   })
@@ -235,19 +272,21 @@ async function getPosition() {
   table.innerHTML = `
     <table>
       <thead>
-        <tr><td colspan="3">VỊ TRÍ CÔNG VIỆC</td></tr>
+        <tr><td colspan="4">VỊ TRÍ CÔNG VIỆC</td></tr>
       </thead>
       <thead>
         <tr>
-          <td>Mã</td>
-          <td>Tên</td>
-          <td>Thao tác</td>
+          <td style="width: 23%;">Mã</td>
+          <td style="width: 30%;">Lương</td>
+          <td style="width: 30%;">Tên</td>
+          <td style="width: 17%;">Thao tác</td>
         </tr>
       <tbody>
         ${data.map(item => 
           `
             <tr>
               <td><input type="text" id="code" value="${item.code}" disabled></td>
+              <td><input type="text" id="wage" value="${formatNumber(item.wage)}" disabled></td>
               <td><input type="text" id="name" value="${item.name}" disabled></td>
               <td>
                 <button id="position" onclick="updateAttribute(this.id, this.parentElement.parentElement.rowIndex)"><i class="fi fi-rr-refresh"></i></button>

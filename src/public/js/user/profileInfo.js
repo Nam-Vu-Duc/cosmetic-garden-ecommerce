@@ -63,7 +63,7 @@ async function getUser() {
 
     <div class="form-group">
       <label for="dob">Ngày sinh</label>
-      <input type="date" name="dob" value="${data.dob.split('T')[0]}">
+      <input type="date" name="dob" value="${data.dob?.split('T')[0] || null}">
     </div>
 
     <div class="form-group">
@@ -349,67 +349,73 @@ async function getUserVouchers() {
   content.appendChild(div)
 }
 
-
 async function resetPassword() {
-  const p = document.createElement('p')
-  p.textContent = 'Đổi mật khẩu'
+  try {
+    const p = document.createElement('p')
+    p.textContent = 'Đổi mật khẩu'
+  
+    const form = document.createElement('form')
+    form.innerHTML = `
+      <div class="form-group">
+        <label for="oldPassword">Mật khẩu cũ</label>
+        <input type="password" name="oldPassword">
+      </div>
+  
+      <div class="form-group">
+        <label for="newPassword">Mật khẩu mới</label>
+        <input type="password" name="newPassword">
+      </div>
+  
+      <div class="form-group">
+        <label for="confirmPassword">Xác nhận mật khẩu mới</label>
+        <input type="password" name="confirmPassword">
+      </div>
+    `
+  
+    const submitButton = document.createElement('div')
+    submitButton.classList.add('submit-button')
+  
+    const button = document.createElement('button')
+    button.type = 'submit'
+    button.textContent = 'Cập Nhật'
+    button.onclick = async function updateUser() {
+      const oldPassword = document.querySelector('input[name="oldPassword"]').value
+      const newPassword = document.querySelector('input[name="newPassword"]').value
+      const confirmPassword = document.querySelector('input[name="confirmPassword"]').value
+  
+      if (newPassword !== confirmPassword) return pushNotification('Mật khẩu mới không khớp')
+      if (newPassword.length < 6) return pushNotification('Mật khẩu mới phải có ít nhất 6 ký tự')
 
-  const form = document.createElement('form')
-  form.innerHTML = `
-    <div class="form-group">
-      <label for="oldPassword">Mật khẩu cũ</label>
-      <input type="password" name="oldPassword">
-    </div>
-
-    <div class="form-group">
-      <label for="newPassword">Mật khẩu mới</label>
-      <input type="password" name="newPassword">
-    </div>
-
-    <div class="form-group">
-      <label for="confirmPassword">Xác nhận mật khẩu mới</label>
-      <input type="password" name="confirmPassword">
-    </div>
-  `
-
-  const submitButton = document.createElement('div')
-  submitButton.classList.add('submit-button')
-
-  const button = document.createElement('button')
-  button.type = 'submit'
-  button.textContent = 'Cập Nhật'
-  button.onclick = async function updateUser() {
-    const oldPassword = document.querySelector('input[name="oldPassword"]').value
-    const newPassword = document.querySelector('input[name="newPassword"]').value
-    const confirmPassword = document.querySelector('input[name="confirmPassword"]').value
-
-    if (newPassword !== confirmPassword) return pushNotification('Mật khẩu mới không khớp')
-    if (newPassword.length < 6) return pushNotification('Mật khẩu mới phải có ít nhất 6 ký tự')
-
-    const response = await fetch('/profile/updated', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        oldPassword : oldPassword,
-        newPassword : newPassword
+      console.log('123')
+  
+      const response = await fetch('/profile/password-updated', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          oldPassword : oldPassword,
+          newPassword : newPassword
+        })
       })
-    })
-
-    if (!response.ok) throw new Error(`Response status: ${response.status}`)
-    const {isValid, message} = await response.json()
-    pushNotification(message)
-
-    if (!isValid) return
-    setTimeout(() => window.location.reload(), 3000)
+  
+      if (!response.ok) throw new Error(`Response status: ${response.status}`)
+      const {isValid, message} = await response.json()
+      pushNotification(message)
+  
+      if (!isValid) return
+      setTimeout(() => window.location.reload(), 3000)
+    }
+    submitButton.appendChild(button)
+  
+    const div = document.createElement('div')
+    div.appendChild(p)
+    div.appendChild(form)
+    div.appendChild(submitButton)
+  
+    content.appendChild(div)
+  } catch (error) {
+    console.error("Error updating password:", error)
+    pushNotification(`Error updating password: ${error}. Please try again later`)
   }
-  submitButton.appendChild(button)
-
-  const div = document.createElement('div')
-  div.appendChild(p)
-  div.appendChild(form)
-  div.appendChild(submitButton)
-
-  content.appendChild(div)
 }
 
 async function getFeedback() {

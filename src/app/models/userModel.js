@@ -13,7 +13,7 @@ const user = new Schema({
   dob       : { type: Date, default: null},
   quantity  : { type: Number, default: 0 },
   revenue   : { type: Number, default: 0 },
-  memberCode: { type: String, default: 'silver'},
+  memberCode: { type: String, default: 'bronze'},
   isActive  : { type: Boolean, default: false },
   lastLogin : { type: Date, default: Date.now }, 
   favorites : {

@@ -8,6 +8,8 @@ const employee = require('../../models/employeeModel')
 const purchase = require('../../models/purchaseModel')
 const supplier = require('../../models/supplierModel')
 const notification = require('../../models/notificationModel')
+const orderStatus = require('../../models/orderStatusModel')
+const member = require('../../models/memberModel')
 
 class homeController {
   async show(req, res, next) {
@@ -101,8 +103,17 @@ class homeController {
 
   async getCustomers(req, res, next) {
     try {
-      const customers = await user.find().lean()
-      return res.json({data: customers})
+      const matchStage = {}
+      if (req.body.startDate && req.body.endDate) {
+        matchStage.createdAt = {
+          $gte: new Date(req.body.startDate),
+          $lte: new Date(req.body.endDate),
+        }
+      }
+
+      const customers = await user.find(matchStage).lean()
+      const members = await member.find().lean()
+      return res.json({data: customers, members: members})
     } catch (error) {
       console.log(error)
       return res.json({error: error.message})
@@ -121,8 +132,17 @@ class homeController {
 
   async getOrders(req, res, next) {
     try {
-      const orders = await order.find().lean()
-      return res.json({data: orders})
+      const matchStage = {}
+      if (req.body.startDate && req.body.endDate) {
+        matchStage.createdAt = {
+          $gte: new Date(req.body.startDate),
+          $lte: new Date(req.body.endDate),
+        }
+      }
+
+      const orders = await order.find(matchStage).lean()
+      const status = await orderStatus.find().lean()
+      return res.json({data: orders, status: status})
     } catch (error) {
       console.log(error)
       return res.json({error: error.message})
@@ -141,7 +161,15 @@ class homeController {
 
   async getPurchases(req, res, next) {
     try {
-      const purchases = await purchase.find().lean()
+      const matchStage = {}
+      if (req.body.startDate && req.body.endDate) {
+        matchStage.createdAt = {
+          $gte: new Date(req.body.startDate),
+          $lte: new Date(req.body.endDate),
+        }
+      }
+      
+      const purchases = await purchase.find(matchStage).lean()
       return res.json({data: purchases})
     } catch (error) {
       console.log(error)

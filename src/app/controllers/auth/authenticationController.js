@@ -101,6 +101,19 @@ class authenticationController {
       return res.json({error: error})
     }
   }
+  
+  async verifyCreatingGoogleEmail(req, res, next) {
+    try {
+      const userEmail  = req.body.email  
+      const emailExist = await user.findOne({ email: userEmail})
+      if (emailExist) return res.json({isValid: false, message: 'Email đã đăng ký tài khoản'})
+
+      return res.json({isValid: true, message: 'Kiểm tra email thành công'})
+
+    } catch (error) {
+      return res.json({error: error})
+    }
+  }
 
   async verifyCreatingCode(req, res, next) {
     try {

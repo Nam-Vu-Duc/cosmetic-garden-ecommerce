@@ -147,7 +147,8 @@ class attributeController {
   async updatePosition(req, res, next) {
     try {
       await position.updateOne({ code: req.body.code}, {
-        name: req.body.name
+        name: req.body.name,
+        wage: req.body.wage
       })
       return res.json({message: 'Cập nhật thành công'})
     } catch (error) {

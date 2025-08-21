@@ -5,6 +5,7 @@ const store = require('../../models/storeModel')
 const product = require('../../models/productModel')
 const comment = require('../../models/commentModel')
 const orderStatus = require('../../models/orderStatusModel')
+const paymentMethod = require('../../models/paymentMethodModel')
 const voucher = require('../../models/voucherModel')
 const userVoucher = require('../../models/userVoucherModel')
 const checkForHexRegExp = require('../../middleware/checkForHexRegExp')
@@ -28,7 +29,9 @@ class allOrderController {
       if (!orderInfo) return res.json({message: 'order not found'})
       
       const status = await orderStatus.findOne({ code: orderInfo.status })
-      return res.json({data: orderInfo, status: status})
+      const method = await paymentMethod.findOne({ code: orderInfo.paymentMethod })
+
+      return res.json({data: orderInfo, status: status, method: method})
 
     } catch (error) {
       return res.json({error: error})
@@ -217,6 +220,90 @@ class allOrderController {
 
       await newOrder.save()
 
+      if (paymentMethod === 'e-wallet') {
+        const accessKey = process.env.MOMO_ACCESS_KEY
+        const secretKey = process.env.MOMO_SECRET_KEY
+        const orderInfo = 'pay with MoMo'
+        const partnerCode = 'MOMO'
+        const redirectUrl = 'http://localhost:3000/all-orders/callback'
+        const ipnUrl = 'http://localhost:3000/all-orders/callback'
+        const requestType = "payWithMethod"
+        const amount = totalNewOrderPrice
+        const orderId = newOrder._id.toString()
+        const requestId = orderId
+        const extraData = ''
+        const orderGroupId = ''
+        const autoCapture = true
+        const lang = 'vi'
+
+        const rawSignature =
+          "accessKey=" + accessKey +
+          "&amount=" + amount +
+          "&extraData=" + extraData +
+          "&ipnUrl=" + ipnUrl +
+          "&orderId=" + orderId +
+          "&orderInfo=" + orderInfo +
+          "&partnerCode=" + partnerCode +
+          "&redirectUrl=" + redirectUrl +
+          "&requestId=" + requestId +
+          "&requestType=" + requestType
+
+        const signature = crypto.createHmac('sha256', secretKey)
+          .update(rawSignature)
+          .digest('hex')
+
+        const requestBody = JSON.stringify({
+          partnerCode,
+          partnerName: "Test",
+          storeId: "MomoTestStore",
+          requestId,
+          amount,
+          orderId,
+          orderInfo,
+          redirectUrl,
+          ipnUrl,
+          lang,
+          requestType,
+          autoCapture,
+          extraData,
+          orderGroupId,
+          signature
+        })
+
+        const options = {
+          hostname: 'test-payment.momo.vn',
+          port: 443,
+          path: '/v2/gateway/api/create',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(requestBody)
+          }
+        }
+
+        const momoResponse = await new Promise((resolve, reject) => {
+          const momoReq = https.request(options, momoRes => {
+            let data = ''
+            momoRes.on('data', chunk => {
+              data += chunk
+            })
+            momoRes.on('end', () => {
+              try {
+                resolve(JSON.parse(data))
+              } catch (err) {
+                reject(err)
+              }
+            })
+          })
+
+          momoReq.on('error', reject)
+          momoReq.write(requestBody)
+          momoReq.end()
+        })
+
+        return res.json({ payUrl: momoResponse.payUrl })
+      }
+
       // try {
       //   await producer.connect()
       //   await producer.send({
@@ -253,101 +340,7 @@ class allOrderController {
 
   async createPayment(req, res, next) {
     try {
-      const accessKey = process.env.MOMO_ACCESS_KEY
-      const secretKey = process.env.MOMO_SECRET_KEY
-      const orderInfo = 'pay with MoMo'
-      const partnerCode = 'MOMO'
-      const redirectUrl = 'https://d87f2f51e094.ngrok-free.app/'
-      const ipnUrl = 'https://d87f2f51e094.ngrok-free.app/callback'
-      const requestType = "payWithMethod"
-      const amount = '1000'
-      const orderId = partnerCode + new Date().getTime()
-      const requestId = orderId
-      const extraData = ''
-      const orderGroupId = ''
-      const autoCapture = true
-      const lang = 'vi'
-
-      // build raw signature string
-      const rawSignature =
-        "accessKey=" + accessKey +
-        "&amount=" + amount +
-        "&extraData=" + extraData +
-        "&ipnUrl=" + ipnUrl +
-        "&orderId=" + orderId +
-        "&orderInfo=" + orderInfo +
-        "&partnerCode=" + partnerCode +
-        "&redirectUrl=" + redirectUrl +
-        "&requestId=" + requestId +
-        "&requestType=" + requestType
-
-      console.log("--------------------RAW SIGNATURE----------------")
-      console.log(rawSignature)
-
-      // sign with HMAC SHA256
-      const signature = crypto.createHmac('sha256', secretKey)
-        .update(rawSignature)
-        .digest('hex')
-
-      console.log("--------------------SIGNATURE----------------")
-      console.log(signature)
-
-      // body for MoMo API
-      const requestBody = JSON.stringify({
-        partnerCode,
-        partnerName: "Test",
-        storeId: "MomoTestStore",
-        requestId,
-        amount,
-        orderId,
-        orderInfo,
-        redirectUrl,
-        ipnUrl,
-        lang,
-        requestType,
-        autoCapture,
-        extraData,
-        orderGroupId,
-        signature
-      })
-
-      // HTTPS request options
-      const options = {
-        hostname: 'test-payment.momo.vn',
-        port: 443,
-        path: '/v2/gateway/api/create',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(requestBody)
-        }
-      }
-
-      // make HTTPS call
-      const momoResponse = await new Promise((resolve, reject) => {
-        const momoReq = https.request(options, momoRes => {
-          let data = ''
-          momoRes.on('data', chunk => {
-            data += chunk
-          })
-          momoRes.on('end', () => {
-            try {
-              resolve(JSON.parse(data))
-            } catch (err) {
-              reject(err)
-            }
-          })
-        })
-
-        momoReq.on('error', reject)
-        momoReq.write(requestBody)
-        momoReq.end()
-      })
-
-      console.log("MoMo response:", momoResponse)
-
-      // send response back to client
-      return res.json(momoResponse)
+      
 
     } catch (error) {
       console.error(error)
@@ -356,10 +349,17 @@ class allOrderController {
   }
 
   async paymentResult(req, res, next) {
-    console.log('callback:')
-    console.log(req.body)
+    const orderId = req.query.orderId
+    const result = req.query.resultCode
 
-    return res.status(200).json(req.body)
+    console.log(orderId)
+    console.log(result)
+
+    await order.updateOne({ _id: orderId}, {
+      status: 'payment_success'
+    })
+
+    return res.redirect(`/all-orders/order/${orderId}`)
   }
 
   async rateOrder(req, res, next) {

@@ -9,7 +9,7 @@ const databases = new Appwrite.Databases(client)
 
 async function googleRedirect() {
   try {
-    document.querySelector('button.google-sign-in').classList.add('loading')
+    document.querySelector('button.google-sign-up').classList.add('loading')
     
     try {
       await account.get() 
@@ -26,20 +26,6 @@ async function googleRedirect() {
     )
   } catch (error) {
     console.error('Google sign-in error:', error)
-  }
-}
-
-async function signUp(email, password, name) {
-  try {
-    const user = await account.create(
-      ID.unique(),
-      email,
-      password,
-      name
-    )
-    console.log("User created:", user)
-  } catch (err) {
-    console.error(err)
   }
 }
 
@@ -185,8 +171,14 @@ submitButton.onclick = async function() {
     const password = document.querySelector('input[name="password"]').value
     const confirmPassword = document.querySelector('input[name="confirm-password"]').value
 
-    if (password.trim() === '') return pushNotification('Mật khẩu đang trống')
-    if (password !== confirmPassword) return pushNotification('Mật khẩu không khớp')
+    if (password.trim() === '') {
+      submitButton.classList.remove('loading')
+      return pushNotification('Mật khẩu đang trống')
+    }
+    if (password !== confirmPassword) {
+      submitButton.classList.remove('loading')
+      return pushNotification('Mật khẩu không khớp')
+    }
 
     const {isSuccessful, message} = await creatingAccount(email, name, password)
     if (isSuccessful) {
@@ -212,12 +204,11 @@ window.onload = async () => {
       const user = await account.get()
       pushNotification("Đang kiểm tra tài khoản")
 
-      const response = await fetch("/authentication/creating-google-account", {
+      const response = await fetch("/authentication/sign-up/verifying-google-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: user.email,
-          name: user.name
         }),
       })
       if (!response.ok) throw new Error(`Response status: ${response.status}`)
@@ -228,16 +219,36 @@ window.onload = async () => {
         document.querySelector('p.wrong-info').style.color = 'red'
         return 
       } 
-      document.querySelector('p.wrong-info').textContent = ''
-      pushNotification(message) 
 
-      window.isLoggedIn = true
+      document.querySelector('input[name="email"]').value = user.email
+      document.querySelector('input[name="email"]').disabled = true
 
-      setTimeout(() => {
-        const path = window.location.origin
-        window.location.replace(path + '/home')
-      }, 1000)
+      const name = document.createElement('input')
+      name.type  = 'text'
+      name.value = user.name
+      name.name  = 'name'
 
+      const password = document.createElement('input')
+      password.type  = 'password'
+      password.placeholder = 'Nhập mật khẩu mới'
+      password.name  = 'password'
+
+      const confirmPassword = document.createElement('input')
+      confirmPassword.type  = 'password'
+      confirmPassword.placeholder = 'Xác nhận mật khẩu'
+      confirmPassword.name  = 'confirm-password'
+
+      document.querySelector('div[class="form-group name"]').style.display = ''
+      document.querySelector('div[class="form-group name"]').appendChild(name)
+
+      document.querySelector('div[class="form-group password"]').style.display = ''
+      document.querySelector('div[class="form-group password"]').appendChild(password)
+      
+      document.querySelector('div[class="form-group confirm-password"]').style.display = ''
+      document.querySelector('div[class="form-group confirm-password"]').appendChild(confirmPassword)
+
+      submitButton.innerText = 'Xác nhận'
+      submitButton.className = 'submit-password'
     } catch (err) {
       console.error("Failed to get user:", err)
     }

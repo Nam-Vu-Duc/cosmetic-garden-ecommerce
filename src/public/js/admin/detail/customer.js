@@ -61,6 +61,7 @@ async function updateCustomer(customerInfo) {
     dob     === initialDob
   ) return pushNotification('Hãy cập nhật thông tin')
 
+  document.querySelector('button[type="submit"]').classList.add('loading')
   const response = await fetch('/admin/all-customers/customer/updated', {
     method: 'PUT',
     headers: {'Content-Type': 'application/json'},
@@ -75,9 +76,14 @@ async function updateCustomer(customerInfo) {
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
   const {error, message} = await response.json()
-  if (error) return pushNotification(error)
-  pushNotification(message)
 
+  if (error) {
+    document.querySelector('button[type="submit"]').classList.remove('loading')
+    pushNotification(error)
+    return
+  }  
+
+  pushNotification(message)
   setTimeout(() => window.location.reload(), 3000)
 }
 

@@ -1,15 +1,6 @@
 importLinkCss('/css/admin/home.css')
 
-async function getFinance(startDate, endDate) {
-  const fetchBody = {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      startDate: startDate,
-      endDate: endDate
-    })
-  }
-
+async function getFinance(fetchBody) {
   const response = await fetch('/admin/all/data/finance', fetchBody)
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
   const {revenue, cost, wage} = await response.json()
@@ -23,22 +14,18 @@ async function getFinance(startDate, endDate) {
       <tr>
         <td>Doanh thu</td>
         <td>${formatNumber(revenue)}</td>
-        <td><a href="/admin/all-brands">Chi tiết</a></td>
       </tr>
       <tr>
         <td>Chi phí hàng hoá</td>
         <td>${formatNumber(cost)}</td>
-        <td><a href="/admin/all-brands">Chi tiết</a></td>
       </tr>
       <tr>
         <td>Chi phí lương</td>
         <td>${formatNumber(wage)}</td>
-        <td><a href="/admin/all-brands">Chi tiết</a></td>
       </tr>
       <tr>
         <td>Lợi nhuận</td>
         <td>${formatNumber(revenue-cost-wage)}</td>
-        <td><a href="/admin/all-brands">Chi tiết</a></td>
       </tr>
     </tbody>
   `
@@ -72,10 +59,10 @@ async function getBrands() {
   document.querySelector('div.brand').appendChild(table)
 }
 
-async function getCustomers() {
-  const response = await fetch('/admin/all/data/customers')
+async function getCustomers(fetchBody) {
+  const response = await fetch('/admin/all/data/customers', fetchBody)
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const {data} = await response.json()
+  const {data, members} = await response.json()
 
   const table = document.createElement('table')
   table.innerHTML = `
@@ -88,27 +75,44 @@ async function getCustomers() {
         <td>${data.length}</td>
         <td><a href="/admin/all-customers">Chi tiết</a></td>
       </tr>
-      <tr>
-        <td>Hạng bạc</td>
-        <td>${data.filter(user => user.memberCode === 'silver').length}</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>Hạng vàng</td>
-        <td>${data.filter(user => user.memberCode === 'gold').length}</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>Hạng kim cương</td>
-        <td>${data.filter(user => user.memberCode === 'diamond').length}</td>
-        <td></td>
-      </tr>
     </tbody>
   `
 
-  document.querySelector('div.customer').appendChild(table)
+  const customerDiv = document.querySelector('div.customer')
+  const oldTable = customerDiv.querySelector("table")
 
-  new Chart(customer, {
+  if (oldTable) oldTable.remove()
+  customerDiv.appendChild(table)
+
+  const customerMembershipCtx = document.getElementById("customer-membership")
+  Chart.getChart(customerMembershipCtx)?.destroy()
+  new Chart(customerMembershipCtx, {
+    type: 'pie',
+    options: {
+      plugins: {
+        legend: {
+          display: false
+        },
+        title: {
+          display: true,
+          text: 'HẠNG THÀNH VIÊN'
+        }
+      }
+    },
+    data: {
+      labels: Array.from(members.map((member) => member.name)),
+      datasets: [{
+        data: members.map((member) => {
+          return data.filter((user) => user.memberCode === member.code).length
+        }),
+        borderWidth: 1,
+      }]
+    }
+  })
+
+  const customerCtx = document.getElementById("customer")
+  Chart.getChart(customerCtx)?.destroy()
+  new Chart(customerCtx, {
     type: 'bar',
     data: {
       labels: Array.from(new Set(data.map(user => formatDate(user.createdAt)))),
@@ -148,10 +152,10 @@ async function getEmployees() {
   document.querySelector('div.employee').appendChild(table)
 }
 
-async function getOrders() {
-  const response = await fetch('/admin/all/data/orders')
+async function getOrders(fetchBody) {
+  const response = await fetch('/admin/all/data/orders', fetchBody)
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const {data} = await response.json()
+  const {data, status} = await response.json()
 
   const table = document.createElement('table')
   table.innerHTML = `
@@ -164,37 +168,59 @@ async function getOrders() {
         <td>${data.length}</td>
         <td><a href="/admin/all-orders">Chi tiết</a></td>
       </tr>
-      <tr>
-        <td>Đang chuẩn bị</td>
-        <td>${data.filter(order => order.status === 'preparing').length}</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>Đang giao</td>
-        <td>${data.filter(order => order.status === 'delivering').length}</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>Hoàn thành</td>
-        <td>${data.filter(order => order.status === 'done').length}</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>Đã Huỷ</td>
-        <td>${data.filter(order => order.status === 'cancel').length}</td>
-        <td></td>
-      </tr>
     </tbody>
   `
 
-  document.querySelector('div.order').appendChild(table)
+  const orderDiv = document.querySelector('div.order')
+  const oldTable = orderDiv.querySelector("table")
 
-  new Chart(order, {
+  if (oldTable) oldTable.remove()
+  orderDiv.appendChild(table)
+
+  const orderStatusCtx = document.getElementById("order-status")
+  Chart.getChart(orderStatusCtx)?.destroy()
+  new Chart(orderStatusCtx, {
+    type: 'doughnut',
+    options: {
+      plugins: {
+        legend: {
+          display: false
+        },
+        title: {
+          display: true,
+          text: 'TRẠNG THÁI ĐƠN HÀNG'
+        }
+      }
+    },
+    data: {
+      labels: Array.from(status.map((status) => status.name)),
+      datasets: [{
+        data: status.map((status) => {
+          return data.filter((order) => order.status === status.code).length
+        }),
+        borderWidth: 1,
+      }]
+    }
+  })
+  
+  const orderCtx = document.getElementById("order")
+  Chart.getChart(orderCtx)?.destroy()
+  new Chart(orderCtx, {
     type: 'bar',
+    options: {
+      plugins: {
+        legend: {
+          display: false
+        },
+        title: {
+          display: true,
+          text: 'ĐƠN HÀNG THEO THỜI GIAN'
+        }
+      }
+    },
     data: {
       labels: Array.from(new Set(data.map(order => formatDate(order.createdAt)))),
       datasets: [{
-        label: 'ĐƠN HÀNG THEO THỜI GIAN',
         data: data.map(order => order.createdAt).reduce((acc, date) => {
           const formattedDate = formatDate(date)
           acc[formattedDate] = (acc[formattedDate] || 0) + 1
@@ -239,8 +265,8 @@ async function getProducts() {
   document.querySelector('div.product').appendChild(table)
 }
 
-async function getPurchases() {
-  const response = await fetch('/admin/all/data/purchases')
+async function getPurchases(fetchBody) {
+  const response = await fetch('/admin/all/data/purchases', fetchBody)
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
   const {data} = await response.json()
 
@@ -255,16 +281,18 @@ async function getPurchases() {
         <td>${data.length}</td>
         <td><a href="/admin/all-purchases">Chi tiết</a></td>
       </tr>
-      <tr></tr>
-      <tr></tr>
-      <tr></tr>
-      <tr></tr>
     </tbody>
   `
 
-  document.querySelector('div.purchase').appendChild(table)
+  const purchaseDiv = document.querySelector('div.purchase')
+  const oldTable = purchaseDiv.querySelector("table")
 
-  new Chart(purchase, {
+  if (oldTable) oldTable.remove()
+  purchaseDiv.appendChild(table)
+
+  const purchaseCtx = document.getElementById("purchase")
+  Chart.getChart(purchaseCtx)?.destroy()
+  new Chart(purchaseCtx, {
     type: 'bar',
     data: {
       labels: Array.from(new Set(data.map(purchase => formatDate(purchase.createdAt)))),
@@ -320,9 +348,6 @@ async function getSuppliers() {
         <td>${data.length}</td>
         <td><a href="/admin/all-suppliers">Chi tiết</a></td>
       </tr>
-      <tr></tr>
-      <tr></tr>
-      <tr></tr>
     </tbody>
   `
 
@@ -367,10 +392,19 @@ async function getAll() {
     startDate.value =  formatDate(firstDay)
     endDate.value   =  formatDate(lastDay)
 
-    await getFinance(firstDay, lastDay)
-    await getOrders()
-    await getPurchases() 
-    await getCustomers()
+    const fetchBody = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        startDate: firstDay,
+        endDate: lastDay
+      })
+    }
+
+    await getFinance(fetchBody)
+    await getOrders(fetchBody)
+    await getCustomers(fetchBody)
+    await getPurchases(fetchBody)
     await getSuppliers()
     await getProducts()
     await getBrands()
@@ -390,7 +424,18 @@ document.querySelector('button[type="submit"]').addEventListener('click', async 
 
   if (new Date(startDate) > new Date(endDate)) return pushNotification('Ngày bắt đầu đang lớn hơn ngày kết thúc')
 
-  await getFinance(startDate, endDate)
+  const fetchBody = {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      startDate: startDate,
+      endDate: endDate
+    })
+  }
+  await getFinance(fetchBody)
+  await getOrders(fetchBody)
+  await getCustomers(fetchBody)
+  await getPurchases(fetchBody)
 })
 
 window.addEventListener('DOMContentLoaded', async function loadData() {

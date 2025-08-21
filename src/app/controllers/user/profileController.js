@@ -5,6 +5,7 @@ const voucher = require('../../models/voucherModel')
 const userVoucher = require('../../models/userVoucherModel')
 const orderStatus = require('../../models/orderStatusModel')
 const checkForHexRegExp = require('../../middleware/checkForHexRegExp')
+const bcrypt = require('bcryptjs')
 
 class profileController {
   async getUser(req, res, next) {
@@ -155,6 +156,32 @@ class profileController {
       })
   
       return res.json({isValid: true, message: 'Cập nhật thông tin thành công'})
+
+    } catch (error) {
+      return res.json({error: error})
+    }
+  }
+  
+  async passwordUpdate(req, res, next) {
+    try {
+      const oldPassword = req.body.oldPassword
+      const newPassword = req.body.newPassword
+      const userInfo = await user.findOne({ _id: req.cookies.uid }).lean()
+      bcrypt.compare(oldPassword, userInfo.password, async function(err, result) {
+        if (result) {
+          const salt = await bcrypt.genSalt(10)
+          const hashedPassword = await bcrypt.hash(newPassword, salt)
+
+          await user.updateOne({ _id: userInfo._id}, {
+            password: hashedPassword
+          })
+
+          return res.json({isValid: true, message: 'Cập nhật mật khẩu thành công'})
+
+        } else {
+          return res.json({isValid: false, message: 'Mật khẩu không đúng'})
+        }
+      })
 
     } catch (error) {
       return res.json({error: error})

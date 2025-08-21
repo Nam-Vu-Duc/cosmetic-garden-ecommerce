@@ -9,7 +9,9 @@ async function getOrder() {
     body: JSON.stringify({id: urlSlug})
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const {data, status} = await response.json()
+  const {data, status, method, error} = await response.json()
+
+  if (error) return pushNotification(error)
 
   document.querySelector('td#id').textContent = data._id || ''
   document.querySelector('td#date').textContent = formatDate(data.createdAt) || ''
@@ -19,6 +21,7 @@ async function getOrder() {
   document.querySelector('td#note').textContent = data.customerInfo.note || ''
   document.querySelector('td#total-price').textContent = formatNumber(data.totalOrderPrice) || ''
   document.querySelector('td#total-new-price').textContent = formatNumber(data.totalNewOrderPrice) || ''
+  document.querySelector('td#payment-method').textContent = method.name || ''
   document.querySelector('td#status').textContent = status.name || ''
 
   data.products.forEach((product) => {

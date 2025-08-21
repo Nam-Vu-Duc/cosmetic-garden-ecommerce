@@ -33,5 +33,6 @@ function formatInputNumber(input) {
 }
 
 function deFormatNumber(number) {
+  if (number === undefined) return undefined
   return parseInt(number.replace(/\./g, '').replace(/\s?VND$/, ''))
 }
