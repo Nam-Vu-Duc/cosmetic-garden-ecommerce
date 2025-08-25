@@ -10,7 +10,6 @@ const employee = new Schema({
   phone    : { type: String, default: '' },
   gender   : { type: String, default: 'male' },
   address  : { type: String, default: '' },
-  storeCode: { type: String, default: '' },
   isActive  : { type: Boolean, default: false },
   slug      : { type: String, slug: 'name', unique: true },
 }, { timestamps: true })
