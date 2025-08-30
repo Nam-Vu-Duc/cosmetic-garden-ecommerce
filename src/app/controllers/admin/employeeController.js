@@ -12,7 +12,7 @@ class allEmployeesController {
       const currentPage  = req.body.page
       const sort         = req.body.sort
       const filter       = req.body.filter
-      const itemsPerPage = 10
+      const itemsPerPage = req.body.itemsPerPage
       const skip         = (currentPage - 1) * itemsPerPage
       const userInfo     = await employee.findOne({ _id: req.cookies.uid }).lean()
       if (!userInfo) throw new Error('User not found')
@@ -95,7 +95,7 @@ class allEmployeesController {
         phone    : req.body.phone   ,
         address  : req.body.address ,
         gender   : req.body.gender  ,
-        storeCode: req.body.store   ,
+        dob      : req.body.dob
       })
   
       return res.json({message: 'Cập nhật thông tin thành công'})

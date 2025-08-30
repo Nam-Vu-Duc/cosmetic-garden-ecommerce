@@ -1,6 +1,7 @@
 importLinkCss('/css/admin/all/customers.css')
 
 const tbody         = document.querySelector('table').querySelector('tbody')
+const paginationBtn = document.querySelector('select[name="pagination"]')
 const sortOptions   = {}
 const filterOptions = {} 
 const currentPage   = { page: 1 }
@@ -23,7 +24,7 @@ async function getFilter() {
   })
 }
 
-async function getCustomers(sortOptions, filterOptions, currentPage) {
+async function getCustomers(sortOptions, filterOptions, currentPage, itemsPerPage) {
   tbody.querySelectorAll('tr').forEach((tr, index) => {
     tr.querySelector('td:nth-child(1)').textContent = ''
     tr.querySelector('td:nth-child(1)').classList.add('loading')
@@ -36,6 +37,7 @@ async function getCustomers(sortOptions, filterOptions, currentPage) {
       sort  : sortOptions, 
       filter: filterOptions, 
       page  : currentPage,
+      itemsPerPage: itemsPerPage
     })  
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
@@ -52,7 +54,7 @@ async function getCustomers(sortOptions, filterOptions, currentPage) {
       tr.remove()
     })
 
-    let productIndex = (currentPage - 1) * 10 + 1
+    let productIndex = (currentPage - 1) * itemsPerPage + 1
 
     data.forEach((item, index) => {
       const newTr = document.createElement('tr')
@@ -73,10 +75,16 @@ async function getCustomers(sortOptions, filterOptions, currentPage) {
   pagination(getCustomers, sortOptions, filterOptions, currentPage, dataSize.size)
 }
 
+paginationBtn.onchange = function () {
+  const selectedValue = parseInt(paginationBtn.value)
+  currentPage.page = 1
+  getCustomers(sortOptions, filterOptions, currentPage.page, selectedValue)
+}
+
 window.addEventListener('DOMContentLoaded', async function loadData() {
   try {
     await getFilter()
-    await getCustomers(sortOptions, filterOptions, currentPage.page)
+    await getCustomers(sortOptions, filterOptions, currentPage.page, 10)
     await sortAndFilter(getCustomers, sortOptions, filterOptions, currentPage.page)
     await exportJs()
   } catch (error) {

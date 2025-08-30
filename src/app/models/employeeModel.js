@@ -8,6 +8,7 @@ const employee = new Schema({
   role     : { type: String, default: 'employee' },
   name     : { type: String, default: '' },
   phone    : { type: String, default: '' },
+  dob      : { type: Date, default: null},
   gender   : { type: String, default: 'male' },
   address  : { type: String, default: '' },
   isActive  : { type: Boolean, default: false },

@@ -33,6 +33,7 @@ async function getEmployee() {
   document.querySelector('input#email').value    = employeeInfo.email
   document.querySelector('input#phone').value    = employeeInfo.phone
   document.querySelector('input#address').value  = employeeInfo.address
+  document.querySelector('input#dob').value      = employeeInfo.dob === null ? null : employeeInfo.dob.split('T')[0]
   document.querySelectorAll('input[name="gender"]').forEach((input) => {
     if (input.value === employeeInfo.gender) input.checked = true
   })
@@ -48,7 +49,9 @@ async function updateEmployee(employeeInfo) {
   const phone   = document.querySelector('input#phone').value
   const address = document.querySelector('input#address').value
   const gender  = document.querySelector('input[name="gender"]:checked').value
-  const store   = document.querySelector('select#store').value
+  const dob     = document.querySelector('input#dob').value
+
+  const initialDob = employeeInfo.dob === null ? null : customerInfo.dob.split('T')[0] 
 
   if (
     name    === employeeInfo.name    &&
@@ -56,7 +59,7 @@ async function updateEmployee(employeeInfo) {
     phone   === employeeInfo.phone   &&
     address === employeeInfo.address &&
     gender  === employeeInfo.gender  &&
-    store   === employeeInfo.storeCode
+    dob     === initialDob
   ) return pushNotification('Hãy cập nhật thông tin')
 
   const response = await fetch('/admin/all-employees/employee/updated', {
@@ -69,7 +72,7 @@ async function updateEmployee(employeeInfo) {
       phone   : phone,
       address : address,
       gender  : gender,
-      store   : store
+      dob     : dob
     })
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)

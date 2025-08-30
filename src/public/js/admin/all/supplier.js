@@ -1,6 +1,7 @@
 importLinkCss('/css/admin/all/suppliers.css')
 
 const tbody         = document.querySelector('table').querySelector('tbody')
+const paginationBtn = document.querySelector('select[name="pagination"]')
 const sortOptions   = {}
 const filterOptions = {}
 const currentPage   = { page: 1 }
@@ -23,7 +24,7 @@ async function getFilter() {
   })
 }
 
-async function getSuppliers(sortOptions, filterOptions, currentPage) {
+async function getSuppliers(sortOptions, filterOptions, currentPage, itemsPerPage) {
   tbody.querySelectorAll('tr').forEach((tr, index) => {
     tr.querySelector('td:nth-child(1)').textContent = ''
     tr.querySelector('td:nth-child(1)').classList.add('loading')
@@ -32,7 +33,12 @@ async function getSuppliers(sortOptions, filterOptions, currentPage) {
   const response = await fetch('/admin/all-suppliers/data/suppliers', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({sort: sortOptions, filter: filterOptions, page: currentPage})
+    body: JSON.stringify({
+      sort: sortOptions, 
+      filter: filterOptions, 
+      page: currentPage,
+      itemsPerPage: itemsPerPage
+    })
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
   const json = await response.json()
@@ -69,9 +75,15 @@ async function getSuppliers(sortOptions, filterOptions, currentPage) {
   pagination(getSuppliers, sortOptions, filterOptions, currentPage, dataSize.size)
 }
 
+paginationBtn.onchange = function () {
+  const selectedValue = parseInt(paginationBtn.value)
+  currentPage.page = 1
+  getSuppliers(sortOptions, filterOptions, currentPage.page, selectedValue)
+}
+
 window.addEventListener('DOMContentLoaded', async function loadData() {
   try {
-    await getSuppliers(sortOptions, filterOptions, currentPage.page)
+    await getSuppliers(sortOptions, filterOptions, currentPage.page, 10)
     await sortAndFilter(getSuppliers, sortOptions, filterOptions, currentPage.page)
     await exportJs()
   } catch (error) {

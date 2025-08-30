@@ -22,7 +22,7 @@ class allProductsController {
       const currentPage  = req.body.page
       const sort         = req.body.sort
       const filter       = req.body.filter
-      const itemsPerPage = 10
+      const itemsPerPage = req.body.itemsPerPage
       const skip         = (currentPage - 1) * itemsPerPage
 
       if (filter['_id']) {

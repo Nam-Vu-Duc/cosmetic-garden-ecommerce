@@ -18,7 +18,7 @@ class allOrdersController {
       const currentPage  = req.body.page
       const sort         = req.body.sort
       const filter       = req.body.filter
-      const itemsPerPage = 10
+      const itemsPerPage = req.body.itemsPerPage
       const skip         = (currentPage - 1) * itemsPerPage
       const userInfo     = await employee.findOne({ _id: req.cookies.uid }).lean()
       if (!userInfo) throw new Error('User not found')
@@ -120,15 +120,6 @@ class allOrdersController {
           },
         }))
         await product.bulkWrite(bulkOps)
-    
-        if(userId !== 'guest') {
-          await user.updateOne({ _id: userId }, {
-            $inc: { 
-              revenue: orderInfo.totalNewOrderPrice,
-              quantity: 1
-            }
-          })
-        }
       }
 
       if (req.body.status === 'cancel') {
@@ -181,6 +172,12 @@ class allOrdersController {
               $set: { memberCode: 'silver' }
             })
           }
+          await user.updateOne({ _id: userId }, {
+            $inc: { 
+              revenue: orderInfo.totalNewOrderPrice,
+              quantity: 1
+            }
+          })
         }
       }
 

@@ -1,7 +1,7 @@
 export const permissions = {
   attributePermission : ['admin', 'manager'],
   brandPermission     : ['admin', 'manager', 'employee'],
-  chatPermission      : ['chat'],
+  chatPermission      : ['chat' , 'admin'],
   chatEmpPermission   : ['admin', 'manager', 'employee'],
   customerPermission  : ['admin', 'manager', 'employee'],
   employeePermission  : ['admin', 'manager', 'employee'],

@@ -26,10 +26,13 @@ class homeController {
       const userInfo = await employee.findOne({ _id: req.cookies.uid }).lean()
       if (!userInfo) throw new Error('User not found')
 
+      const start = new Date(req.body.startDate) || null
+      const end = new Date(req.body.endDate) || null
+
       if (req.body.startDate && req.body.endDate) {
         matchStage.createdAt = {
-          $gte: new Date(req.body.startDate),
-          $lte: new Date(req.body.endDate),
+          $gte: new Date(start),
+          $lte: new Date(end),
         }
       }
 
@@ -57,10 +60,9 @@ class homeController {
         },
       ])
 
+      const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+
       const wage = await employee.aggregate([
-        {
-          $match: matchStage
-        },
         {
           $lookup: {
             from: 'positions',
@@ -78,12 +80,19 @@ class homeController {
             wage: { $sum: '$position.wage' },
           },
         },
+        {
+          $addFields: {
+            totalWageForRange: {
+              $divide: [{ $multiply: ["$wage", diffDays] }, 30],
+            },
+          },
+        }
       ])
 
       return res.json({ 
-        revenue: revenue.length > 0 ? revenue[0].revenue : 0,
-        cost   : cost.length    > 0 ? cost[0].cost       : 0,
-        wage   : wage.length    > 0 ? wage[0].wage       : 0,
+        revenue: revenue.length > 0 ? revenue[0].revenue        : 0,
+        cost   : cost.length    > 0 ? cost[0].cost              : 0,
+        wage   : wage.length    > 0 ? wage[0].totalWageForRange : 0,
       })
     } catch (error) {
       console.log(error)

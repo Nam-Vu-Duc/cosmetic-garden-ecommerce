@@ -11,10 +11,10 @@ const brandPermission = {
   DELETE: ['admin', 'manager']
 }
 const chatPermission = {
-  CREATE: ['chat'], 
-  READ  : ['chat'],
-  UPDATE: ['chat'],
-  DELETE: ['chat']
+  CREATE: ['chat', 'admin'], 
+  READ  : ['chat', 'admin'],
+  UPDATE: ['chat', 'admin'],
+  DELETE: ['chat', 'admin']
 }
 const chatEmpPermission = {
   CREATE: ['admin', 'manager', 'employee'],

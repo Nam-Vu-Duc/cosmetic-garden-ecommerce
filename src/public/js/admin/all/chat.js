@@ -24,6 +24,7 @@ async function getUser() {
     if (error) return pushNotification(error)
 
     adminId.id = message
+    console.log(adminId.id)
   } catch (error) {
     console.error("Error fetching chat data:", error)
   }

@@ -3,6 +3,7 @@ async function sortAndFilter(getDataFunction, sortOptions, filterOptions, curren
   const filterButton  = document?.querySelector('div.filter')?.querySelectorAll('select') ?? []
   const clearButton   = document.querySelector('button#clear-sort-filter')
   const searchInput   = document.querySelector('input#search-input')
+  const itemsPerPage  = document.querySelector('select#items-per-page')?.value ?? 10
   
   sortButton.forEach((button) => {
     button.onchange = function () {
@@ -11,7 +12,7 @@ async function sortAndFilter(getDataFunction, sortOptions, filterOptions, curren
       const sortValue = parseInt(button.value)
       sortOptions[sortType] = sortValue
       if (!sortValue) delete sortOptions[sortType]
-      getDataFunction(sortOptions, filterOptions, currentPage)
+      getDataFunction(sortOptions, filterOptions, currentPage, itemsPerPage)
     }
   }) 
   
@@ -22,7 +23,7 @@ async function sortAndFilter(getDataFunction, sortOptions, filterOptions, curren
       const filterValue = button.value
       filterOptions[filterType] = filterValue
       if (!filterValue) delete filterOptions[filterType]
-      getDataFunction(sortOptions, filterOptions, currentPage)
+      getDataFunction(sortOptions, filterOptions, currentPage, itemsPerPage)
     }
   }) 
 
@@ -31,7 +32,7 @@ async function sortAndFilter(getDataFunction, sortOptions, filterOptions, curren
     if (e.key === "Enter") {
       filterOptions['_id'] = searchInput.value.trim()
       clearButton.style.display = ''
-      getDataFunction(sortOptions, filterOptions, currentPage)
+      getDataFunction(sortOptions, filterOptions, currentPage, itemsPerPage)
     }
   })
 
@@ -43,6 +44,6 @@ async function sortAndFilter(getDataFunction, sortOptions, filterOptions, curren
     sortOptions = {}
     filterOptions = {}
     currentPage = 1
-    getDataFunction(sortOptions, filterOptions, currentPage)
+    getDataFunction(sortOptions, filterOptions, currentPage, itemsPerPage)
   })
 }

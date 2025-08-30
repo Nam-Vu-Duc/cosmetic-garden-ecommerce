@@ -1,6 +1,7 @@
 importLinkCss('/css/admin/all/userVouchers.css')
 
 const tbody         = document.querySelector('table').querySelector('tbody')
+const paginationBtn = document.querySelector('select[name="pagination"]')
 const sortOptions   = {}
 const filterOptions = {}
 const currentPage   = { page: 1 }
@@ -23,7 +24,7 @@ async function getFilter() {
   // })
 }
 
-async function getVouchers(sortOptions, filterOptions, currentPage) {
+async function getVouchers(sortOptions, filterOptions, currentPage, itemsPerPage) {
   tbody.querySelectorAll('tr').forEach((tr, index) => {
     tr.querySelector('td:nth-child(1)').textContent = ''
     tr.querySelector('td:nth-child(1)').classList.add('loading')
@@ -36,6 +37,7 @@ async function getVouchers(sortOptions, filterOptions, currentPage) {
       sort  : sortOptions, 
       filter: filterOptions, 
       page  : currentPage,
+      itemsPerPage: itemsPerPage
     })
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
@@ -72,10 +74,16 @@ async function getVouchers(sortOptions, filterOptions, currentPage) {
   pagination(getVouchers, sortOptions, filterOptions, currentPage, dataSize.size)
 }
 
+paginationBtn.onchange = function () {
+  const selectedValue = parseInt(paginationBtn.value)
+  currentPage.page = 1
+  getVouchers(sortOptions, filterOptions, currentPage.page, selectedValue)
+}
+
 window.addEventListener('DOMContentLoaded', async function loadData() {
   try {
     await getFilter()
-    await getVouchers(sortOptions, filterOptions, currentPage.page)
+    await getVouchers(sortOptions, filterOptions, currentPage.page, 10)
     await sortAndFilter(getVouchers, sortOptions, filterOptions, currentPage.page)
     await exportJs()
   } catch (error) {

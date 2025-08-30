@@ -1,12 +1,13 @@
 importLinkCss('/css/admin/all/purchases.css')
 
 const tbody         = document.querySelector('table').querySelector('tbody')
+const paginationBtn = document.querySelector('select[name="pagination"]')
 const sortOptions   = {}
 const filterOptions = {}
 const currentPage   = { page: 1 }
 const dataSize      = { size: 0 }
 
-async function getPurchases(sortOptions, filterOptions, currentPage) {
+async function getPurchases(sortOptions, filterOptions, currentPage, itemsPerPage) {
   tbody.querySelectorAll('tr').forEach((tr, index) => {
     tr.querySelector('td:nth-child(1)').textContent = ''
     tr.querySelector('td:nth-child(1)').classList.add('loading')
@@ -19,6 +20,7 @@ async function getPurchases(sortOptions, filterOptions, currentPage) {
       sort  : sortOptions, 
       filter: filterOptions, 
       page  : currentPage,
+      itemsPerPage: itemsPerPage
     })
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
@@ -55,9 +57,15 @@ async function getPurchases(sortOptions, filterOptions, currentPage) {
   pagination(getPurchases, sortOptions, filterOptions, currentPage, dataSize.size)
 }
 
+paginationBtn.onchange = function () {
+  const selectedValue = parseInt(paginationBtn.value)
+  currentPage.page = 1
+  getPurchases(sortOptions, filterOptions, currentPage.page, selectedValue)
+}
+
 window.addEventListener('DOMContentLoaded', async function loadData() {
   try {
-    await getPurchases(sortOptions, filterOptions, currentPage.page)
+    await getPurchases(sortOptions, filterOptions, currentPage.page, 10)
     await sortAndFilter(getPurchases, sortOptions, filterOptions, currentPage.page)
     await exportJs()
   } catch (error) {
