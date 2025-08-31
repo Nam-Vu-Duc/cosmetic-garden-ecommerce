@@ -225,8 +225,10 @@ class allOrderController {
         const secretKey = process.env.MOMO_SECRET_KEY
         const orderInfo = 'pay with MoMo'
         const partnerCode = 'MOMO'
-        const redirectUrl = 'http://localhost:3000/all-orders/callback'
-        const ipnUrl = 'http://localhost:3000/all-orders/callback'
+        // const redirectUrl = 'http://localhost:3000/all-orders/callback'
+        // const ipnUrl = 'http://localhost:3000/all-orders/callback'
+        const redirectUrl = 'https://cosmetic-garden.vercel.app/all-orders/callback'
+        const ipnUrl = 'https://cosmetic-garden.vercel.app/all-orders/callback'
         const requestType = "payWithMethod"
         const amount = totalNewOrderPrice
         const orderId = newOrder._id.toString()

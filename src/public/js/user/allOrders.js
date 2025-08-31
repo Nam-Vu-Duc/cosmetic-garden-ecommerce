@@ -235,27 +235,24 @@ function submitOrder() {
       if (!paymentMethod) throw Error('Hãy chọn phương thức thanh toán nha')
       if (paymentMethod === 'transfer' & !imgPath.path) throw Error('Hãy up bill chuyển khoản lên nha')
         
-      // const response = await fetch('/all-orders/create-orders', {
-      //   method: 'POST',
-      //   headers: {'Content-Type': 'application/json'},
-      //   body: JSON.stringify({
-      //     productInfo   : productIds,
-      //     paymentMethod : paymentMethod,
-      //     userId        : userId.id || 'guest',
-      //     code          : code,
-      //     name          : name,
-      //     phone         : phone,
-      //     address       : address,
-      //     note          : note,
-      //     img           : imgPath.path,
-      //   })
-      // })
-      // if (!response.ok) throw new Error(`Response status: ${response.status}`)
-      // const {id, voucher_id , payUrl, error} = await response.json()
-      // if (error) throw Error(error)
-
-      const payUrl = '123'
-      const id = '123'
+      const response = await fetch('/all-orders/create-orders', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          productInfo   : productIds,
+          paymentMethod : paymentMethod,
+          userId        : userId.id || 'guest',
+          code          : code,
+          name          : name,
+          phone         : phone,
+          address       : address,
+          note          : note,
+          img           : imgPath.path,
+        })
+      })
+      if (!response.ok) throw new Error(`Response status: ${response.status}`)
+      const {id, voucher_id , payUrl, error} = await response.json()
+      if (error) throw Error(error)
 
       if (payUrl) {
         socket.emit('order', { id: id})
