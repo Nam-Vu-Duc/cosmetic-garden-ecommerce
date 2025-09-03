@@ -22,22 +22,14 @@ async function getPurchase() {
   document.querySelector('input#note').value     = purchaseInfo.note
   document.querySelector('input#total').value    = formatNumber(purchaseInfo.totalPurchasePrice)
 
-  purchaseInfo.products.forEach((product) => {
+  purchaseInfo.materials.forEach((material) => {
     const tr = document.createElement('tr')
     tr.innerHTML = `
       <td></td>
-      <td style="
-        display: flex; 
-        justify-content: start;
-        align-items: center;
-        gap: 5px"
-      >
-        <img src="${product.image}" alt="${product.name}" loading="lazy">
-        ${product.name}
-      </td>
-      <td>${product.quantity}</td>
-      <td>${formatNumber(product.price)}</td>
-      <td><a href="/admin/all-products/product/${product.id}">Xem</a></td>
+      <td>${material.name}</td>
+      <td>${material.quantity}</td>
+      <td>${formatNumber(material.price)}</td>
+      <td><a href="/admin/all-products/product/${material.id}">Xem</a></td>
     `
     document.querySelector('table#table-2').querySelector('tbody').appendChild(tr)
   })

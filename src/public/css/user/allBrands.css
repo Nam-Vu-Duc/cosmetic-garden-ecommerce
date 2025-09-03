@@ -26,6 +26,8 @@
     border: 1px solid white;
     transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
     cursor: pointer;
+    box-sizing: border-box;
+    padding: 5px;
 
     a {
       display: flex;
@@ -36,6 +38,7 @@
       text-decoration: none;
       color: black;
       gap: 10px;
+      box-sizing: border-box;
     }
 
     img {

@@ -29,8 +29,10 @@ async function sortAndFilter(getDataFunction, sortOptions, filterOptions, curren
 
   searchInput.addEventListener('keypress', function(e) {
     if (searchInput.value.trim() === '') return
+
+    const searchType = document.querySelector('select#search-type').value
     if (e.key === "Enter") {
-      filterOptions['_id'] = searchInput.value.trim()
+      filterOptions[searchType] = { $regex: searchInput.value.trim(), $options: "i" }
       clearButton.style.display = ''
       getDataFunction(sortOptions, filterOptions, currentPage, itemsPerPage)
     }

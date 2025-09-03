@@ -44,9 +44,9 @@ async function getPurchases(sortOptions, filterOptions, currentPage, itemsPerPag
       newTr.innerHTML = `
         <td>${productIndex}</td>
         <td>${item._id}</td>
-        <td>${formatDate(item.purchaseDate)}</td>
-        <td>${item.totalProducts}</td>
-        <td>${formatNumber(item.totalPurchasePrice)}</td>
+        <td style="text-align: right;">${formatDate(item.purchaseDate)}</td>
+        <td style="text-align: right;">${item.totalProducts}</td>
+        <td style="text-align: right;">${formatNumber(item.totalPurchasePrice)}</td>
         <td><a target="_blank" rel="noopener noreferrer" href="/admin/all-purchases/purchase/${item._id}">Xem</a></td>
       `
       tbody.appendChild(newTr)

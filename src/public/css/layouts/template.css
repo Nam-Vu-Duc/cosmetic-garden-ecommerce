@@ -75,7 +75,7 @@ input:not(input[type='radio'], input[type='checkbox']) {
 select {
   height: 40px;
   border: 1px solid #389845;
-  border-radius: 8px;
+  border-radius: 5px;
   padding: 0 30px 0 10px;
   background: #fff url("data:image/svg+xml;utf8,<svg fill='%23389845' height='24' viewBox='0 0 24 24' width='24'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 8px center;
   background-size: 16px;

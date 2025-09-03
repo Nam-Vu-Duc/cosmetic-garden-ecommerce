@@ -175,7 +175,7 @@
   }
 
 }
-.order-successfully-message {
+.order-successfully-message, .order-confirm-message {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -196,26 +196,22 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   animation: fadeInScale 0.3s ease-out; /* smooth entrance */
 }
-
 .order-successfully-message i {
   color: #28a745;
   font-size: 60px;
   margin-bottom: 10px;
 }
-
 .order-successfully-message h3 {
   text-align: center;
   margin: 5px 0;
   color: #333;
 }
-
 .order-successfully-message h5 {
   text-align: center;
   font-style: italic;
   margin: 0;
   color: #555;
 }
-
 .order-successfully-message a {
   display: inline-block;
   padding: 8px 16px;
@@ -225,10 +221,34 @@
   text-decoration: none;
   transition: background 0.3s;
 }
-
 .order-successfully-message a:hover {
   background: #4aa157;
 }
+
+.order-confirm-message h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+.order-confirm-message .actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+.order-confirm-message .deletebtn {
+  background: #f44336;
+  color: #fff;
+  width: 100px;
+  border: 1px solid #f44336;
+}
+.order-confirm-message .confirmbtn {
+  background: #5ab868;
+  color: #fff;
+  width: 100px;
+  border: 1px solid #5ab868;
+}
+
 a.momo-pay-btn {
   display: inline-block;
   padding: 12px 24px;
@@ -241,12 +261,10 @@ a.momo-pay-btn {
   font-size: 16px;
   box-shadow: 0 4px 10px rgba(216, 45, 139, 0.4);
 }
-
 a.momo-pay-btn:hover {
   background: #ec1f52; /* brighter pink on hover */
   box-shadow: 0 6px 14px rgba(236, 31, 82, 0.5);
 }
-
 a.momo-pay-btn:active {
   background: #b51f6e; /* darker for press */
   transform: scale(0.97);
@@ -261,21 +279,5 @@ a.momo-pay-btn:active {
   to {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
-  }
-}
-@media screen and (max-width: 700px) {
-  table {
-    a {
-      overflow: hidden;
-      display: -webkit-box;
-      line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
-  }
-  table tr td:nth-child(2) {
-    width: 20% !important;
-  }
-  .contact-info .info{
-    grid-template-columns: auto !important
   }
 }

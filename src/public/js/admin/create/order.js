@@ -192,14 +192,12 @@ async function createOrder() {
   try {
     const orderDate     = document.querySelector('input#orderDate').value
     const userId        = document.querySelector('select#userId').value
-    const storeCode     = document.querySelector('select#storeCode').value
     const paymentMethod = document.querySelector('select#paymentMethod').value
     const note          = document.querySelector('input#note').value
   
     if (
       !orderDate        || 
       !userId           || 
-      !storeCode        || 
       !paymentMethod    || 
       !productId        || 
       !productQuantity  || 
@@ -215,7 +213,6 @@ async function createOrder() {
       body: JSON.stringify({
         orderDate         : orderDate,
         userId            : userId,
-        storeCode         : storeCode,
         paymentMethod     : paymentMethod,
         note              : note,
         productId         : productId,

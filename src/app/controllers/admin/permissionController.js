@@ -52,6 +52,12 @@ const productPermission = {
   UPDATE: ['admin', 'manager', 'employee'],
   DELETE: ['admin', 'manager']
 }
+const materialPermission = {
+  CREATE: ['admin', 'manager', 'employee'],
+  READ  : ['admin', 'manager', 'employee'],
+  UPDATE: ['admin', 'manager', 'employee'],
+  DELETE: ['admin', 'manager']
+}
 const purchasePermission = {
   CREATE: ['admin', 'manager', 'employee', 'merchandise'],
   READ  : ['admin', 'manager', 'employee', 'merchandise'],
@@ -87,6 +93,7 @@ module.exports = {
   homePermission      ,
   orderPermission     ,
   productPermission   ,
+  materialPermission  ,
   purchasePermission  ,
   storePermission     ,
   supplierPermission  ,

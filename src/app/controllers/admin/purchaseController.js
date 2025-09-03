@@ -3,6 +3,7 @@ const purchase = require('../../models/purchaseModel')
 const supplier = require('../../models/supplierModel')
 const store = require('../../models/storeModel')
 const employee = require('../../models/employeeModel')
+const material = require('../../models/materialModel')
 const checkForHexRegExp = require('../../middleware/checkForHexRegExp')
 const { ObjectId } = require('mongodb')
 
@@ -98,23 +99,13 @@ class adminController {
     }
   }
   
-  async getStores(req, res, next) {
-    try {
-      const stores = await store.find().lean()
-      return res.json({data: stores})
-    } catch (error) {
-      return res.json({error: error.message})
-    }
-  }
-  
-  async getProducts(req, res, next) {
+  async getMaterials(req, res, next) {
     try {
       const query = req.body.query
-      const products = await product.find({
-        deletedAt: null,
+      const materials = await material.find({
         name: { $regex: query, $options: 'i'}
       }).lean()
-      return res.json({data: products})
+      return res.json({data: materials})
     } catch (error) {
       console.log(error)
       return res.json({error: error.message})
@@ -134,11 +125,9 @@ class adminController {
       let { 
         purchaseDate, 
         supplierId,
-        storeCode,
         note,
         productId, 
         productName,
-        productImg,
         productPrice,
         productQuantity,
         totalPurchasePrice
@@ -148,32 +137,29 @@ class adminController {
       if(!Array.isArray(productId)) {
         productId       = [productId]
         productName     = [productName]
-        productImg      = [productImg]
         productPrice    = [productPrice]
         productQuantity = [productQuantity]
       }
   
       const newPurchase = new purchase({
-        products: productId.map((product, index) => ({
+        materials: productId.map((product, index) => ({
           id        : productId[index],
           name      : productName[index],
-          image     : productImg[index],
           price     : productPrice[index],
           quantity  : productQuantity[index], 
           totalPrice: productPrice[index] * productQuantity[index]
         })),
         supplierId: supplierId,
-        storeCode: storeCode,
         note: note,
         purchaseDate: purchaseDate,
         totalProducts: productQuantity.reduce((acc, curr) => acc + parseInt(curr), 0),
         totalPurchasePrice: totalPurchasePrice
       });
       await newPurchase.save()
-  
-      const productUpdates = []
+
+      const materialUpdates = []
       productId.forEach((id, index) => {
-        productUpdates.push({ productId: id, quantity: productQuantity[index] })
+        materialUpdates.push({ materialId: id, quantity: productQuantity[index] })
       })
       
       await supplier.updateOne({ _id: supplierId }, {
@@ -182,15 +168,15 @@ class adminController {
           quantity: 1
          }
       })
-  
-      const bulkOps = productUpdates.map(({ productId, quantity }) => ({
+
+      const bulkOps = materialUpdates.map(({ materialId, quantity }) => ({
         updateOne: {
-          filter: { _id: productId },
+          filter: { _id: materialId },
           update: { $inc: { quantity: quantity } }, 
           upsert: true,
         },
       }))
-      await product.bulkWrite(bulkOps)
+      await material.bulkWrite(bulkOps)
 
       return res.json({message: 'Tạo đơn nhập mới thành công'})
     } catch (error) {

@@ -53,6 +53,8 @@ async function loadData(retriesLeft) {
   }
 }
 
+loadData(5)
+
 // window.addEventListener('DOMContentLoaded', function () {
 //   loadData(5)
 //   getLog(

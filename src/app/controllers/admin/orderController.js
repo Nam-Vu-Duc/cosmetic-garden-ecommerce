@@ -211,15 +211,6 @@ class allOrdersController {
     }
   }
 
-  async getStores(req, res, next) {
-    try {
-      const stores = await store.find().lean()
-      return res.json({data: stores})
-    } catch (error) {
-      return res.json({error: error.message})
-    }
-  }
-
   async getPaymentMethod(req, res, next) {
     try {
       const paymentMethods = await paymentMethod.find().lean()

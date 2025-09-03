@@ -6,7 +6,6 @@ const tfoot              = document.querySelector('tfoot')
 const submitButton       = document.querySelector('button[type="submit"]')
 const productId          = []
 const productName        = []
-const productImg         = []
 const productQuantity    = []
 const productPrice       = []
 const totalPurchasePrice = { value: 0 }
@@ -40,7 +39,6 @@ function updateProductTotalPrice() {
         if (element === id) {
           productId.splice(index, 1)
           productName.splice(index, 1)
-          productImg.splice(index, 1)
           productQuantity.splice(index, 1)
           productPrice.splice(index, 1)
         }
@@ -81,31 +79,12 @@ async function getSuppliers() {
   return
 }
 
-async function getStores() {
-  const response = await fetch('/admin/all-purchases/data/stores', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-  })
-  if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const json = await response.json()
-  if (json.error) return pushNotification(error)
-
-  json.data.forEach((element) => {
-    const option = document.createElement('option')
-    option.value = element.code
-    option.textContent = element.name
-    document.querySelector('select[name="storeCode"]').appendChild(option) 
-  })
-
-  return
-}
-
 async function getProducts(query) {
   document.querySelector('div.products-match').querySelectorAll('div').forEach(element => element.remove())
 
   if (query === '') return
 
-  const response = await fetch('/admin/all-purchases/data/products', {
+  const response = await fetch('/admin/all-purchases/data/materials', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ query: query })
@@ -122,22 +101,15 @@ async function getProducts(query) {
     div.classList.add('product')
     div.innerHTML = `
       <p style="display: none" id="product-id">${element._id}</p>
-      <p style="width: 15%">${element.brand}</p>
-      <p 
-        style="width: 65%; display:flex; align-items:center; justify-content:start; gap:5px"
-        id="product-name"
-      >
-        <img src="${element.img.path}" alt="${element.name}" loading="lazy" loading="lazy"> 
-        ${element.name}
-      </p>  
-      <p style="width: 10%;">${element.categories}</p>
-      <p style="width: 10%; text-align:right" id="product-price">${formatNumber(element.purchasePrice)}</p>
+      <p style="width: 15%">${element.code}</p>
+      <p id="product-name">${element.name}</p>
+      <p style="width: 10%;">${element.category}</p>
+      <p style="width: 10%; text-align:right" id="product-price">${formatNumber(element.price)}</p>
     `
 
     div.addEventListener('click', function() {
       productId.push(element._id)
       productName.push(element.name)
-      productImg.push(element.img.path)
       productQuantity.push('1')
       productPrice.push(element.price)
 
@@ -147,13 +119,10 @@ async function getProducts(query) {
       newRow.innerHTML = `
         <td></td>
         <td style="display: none"><input type="hidden" id="productId" value="${element._id}"></td>
-        <td style="display:flex; align-items:center; justify-content:start; gap:5px">
-          <img src="${element.img.path}" alt="${element.name}" loading="lazy" loading="lazy"> 
-          ${element.name}
-        </td>
-        <td style="text-align: right;">${formatNumber(element.purchasePrice)}</td>
+        <td>${element.name}</td>
+        <td style="text-align: right;">${formatNumber(element.price)}</td>
         <td><input type="number" id="productQuantity" min="1" value="1" style="max-width: 50px; text-align: center;"></td>
-        <td style="text-align: right;">${formatNumber(element.purchasePrice)}</td>
+        <td style="text-align: right;">${formatNumber(element.price)}</td>
         <td>x</td>
       `
 
@@ -179,7 +148,6 @@ async function createPurchase() {
     if (
       !purchaseDate       || 
       !supplierId         || 
-      !note               || 
       !productId          || 
       !productQuantity    || 
       !totalPurchasePrice
@@ -197,7 +165,6 @@ async function createPurchase() {
         note              : note,
         productId         : productId,
         productName       : productName,
-        productImg        : productImg,
         productQuantity   : productQuantity,
         productPrice      : productPrice,
         totalPurchasePrice: totalPurchasePrice.value
@@ -226,5 +193,4 @@ submitButton.onclick = function() {
 
 window.addEventListener('DOMContentLoaded', async function loadData() {
   getSuppliers()
-  getStores() 
 })

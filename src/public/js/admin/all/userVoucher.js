@@ -62,8 +62,8 @@ async function getVouchers(sortOptions, filterOptions, currentPage, itemsPerPage
         <td>${productIndex}</td>
         <td>${item.code}</td>
         <td>${item.voucherType}</td>
-        <td>${formatNumber(item.discount)}</td>
-        <td>${formatDate(item.endDate)}</td>
+        <td style="text-align: right;">${formatNumber(item.discount)}</td>
+        <td style="text-align: right;">${formatDate(item.endDate)}</td>
         <td><a target="_blank" rel="noopener noreferrer" href="/admin/all-u-vouchers/voucher/${item._id}">Xem</a></td>
       `
       tbody.appendChild(newTr)

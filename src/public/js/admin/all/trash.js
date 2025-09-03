@@ -48,7 +48,7 @@ async function getDeletedProducts(sortOptions, filterOptions, currentPage) {
           <p>${item.name}</p>
         </td>
         <td>${item.categories}</td>
-        <td>${formatNumber(item.price)}</td>
+        <td style="text-align: right;">${formatNumber(item.price)}</td>
         <td>
           <button id="${item._id}" onclick="clickToRestore(this.id)">Khôi Phục</button>
           <button id="${item._id}" onclick="clickToDelete(this.id)">Xoá</button>

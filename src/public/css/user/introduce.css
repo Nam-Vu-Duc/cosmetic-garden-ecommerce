@@ -100,14 +100,3 @@
 .btn:hover {
   background: #2e7a39;
 }
-
-/* Responsive */
-@media (max-width: 900px) {
-  .intro-section {
-    flex-direction: column;
-    text-align: center;
-  }
-  .intro-section.reverse {
-    flex-direction: column;
-  }
-}

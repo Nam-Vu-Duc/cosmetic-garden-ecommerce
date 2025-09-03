@@ -157,39 +157,3 @@
     }
   }
 }
-@media screen and (max-width: 500px) {
-  .title {
-    font-size: 25px !important;
-  }
-  .all-category-skincare, .all-category-makeup {
-    ul {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
-      overflow-x: scroll;
-      box-sizing: content-box;
-      scroll-behavior: smooth;
-      align-items: center;
-      display: grid;
-      grid-template-columns: repeat(6, minmax(min(175px, 100%), 1fr));
-      scroll-snap-type: x mandatory;
-    }
-  }
-  .all-products {
-    grid-template-columns: repeat(2, minmax(min(11.25rem, 100%), 1fr)) !important;
-  }
-  .sort {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .sort label {
-    margin-right: 0;
-  }
-  .sort select {
-    width: 100%;
-  }
-  #clear-sort {
-    width: 100%;
-    text-align: center;
-  }
-}

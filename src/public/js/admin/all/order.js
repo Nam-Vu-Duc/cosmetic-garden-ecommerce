@@ -68,8 +68,8 @@ async function getOrders(sortOptions, filterOptions, currentPage, itemsPerPage) 
         <td>${productIndex}</td>
         <td>${item._id}</td>
         <td>${item.customerInfo.name}</td>
-        <td>${formatNumber(item.totalNewOrderPrice)}</td>
-        <td>${formatDate(item.createdAt)}</td>
+        <td style="text-align: right;">${formatNumber(item.totalNewOrderPrice)}</td>
+        <td style="text-align: right;">${formatDate(item.createdAt)}</td>
         <td><a target="_blank" rel="noopener noreferrer" href="/admin/all-orders/order/${item._id}">Xem</a></td>
       `
       tbody.appendChild(newTr)

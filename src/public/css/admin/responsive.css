@@ -21,7 +21,7 @@
   }
 }
 
-/* all products */
+/* all items */
 @media screen and (max-width: 800px) {
   .control-bar {
     display: flex;
@@ -51,6 +51,9 @@
   }
   .control-bar #clear-filter {
     align-self: flex-start;
+  }
+  .table .table-button {
+    justify-content: flex-start !important;
   }
 }
 

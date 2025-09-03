@@ -230,27 +230,3 @@
     animation: flicker 1s infinite;
   }
 }
-@media screen and (max-width: 700px) {
-  .table {
-    flex-direction: column;
-    .image-box {
-      width: 90% !important;
-      .image {
-        margin-left: 0;
-        margin-top: 10px
-      }
-    }
-    .details-box {
-      width: 90% !important;
-      h1 {font-size: 25px !important}
-      h3 {font-size: 20px !important}
-      .quantity {
-        width: 100% !important;
-        justify-content: center !important;
-      }
-      .button > div {
-        width: 50% !important
-      }
-    }
-  }
-}

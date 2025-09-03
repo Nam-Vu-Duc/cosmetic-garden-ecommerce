@@ -75,11 +75,11 @@ async function getProducts(sortOptions, filterOptions, currentPage, itemsPerPage
           <img src="${item.img.path}" alt="${item.name}" loading="lazy"> 
           <p>${item.name}</p>
         </td>  
-        <td>${formatNumber(item.purchasePrice)}</td>
-        <td>${formatNumber(item.price)}</td>
-        <td>${item.quantity}</td>
-        <td>
-          <button><a target="_blank" rel="noopener noreferrer" href="/admin/all-products/product/${item._id}" class="update-button">Xem</a></button>
+        <td style="text-align: right;">${formatNumber(item.purchasePrice)}</td>
+        <td style="text-align: right;">${formatNumber(item.price)}</td>
+        <td style="text-align: right;">${item.quantity}</td>
+        <td style="display: flex; align-items: center; justify-content:center; gap: 5px;">
+          <a target="_blank" rel="noopener noreferrer" href="/admin/all-products/product/${item._id}" class="update-button">Xem</a>
           <button class="delete-btn" data-id="${item._id}" data-name="${item.name}">Xoá</button>
         </td>
       `

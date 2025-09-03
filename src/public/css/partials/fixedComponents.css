@@ -146,8 +146,7 @@
   100% {rotate: 10deg}
 }
 @media screen and (max-width: 800px) {
-  .scroll-to-top-icon {bottom: 195px}
-  .chatbot-icon {bottom: 135px}
+  .scroll-to-top-icon {bottom: 135px}
   .chat-icon {bottom: 75px}
   .chat-box {bottom: 75px;}
 }

@@ -201,108 +201,157 @@ async function checkOutOfOrderProduct() {
   })
 }
 
-function submitOrder() {
-  document.querySelector('button.submit-button').onclick = async function() {
-    const preloader = document.querySelector('div.preloader')
-    try {
-      preloader.classList.remove('inactive')
-
-      const getProductInfo = JSON.parse(localStorage.getItem('product_cart_count')) || {}
-      if (getProductInfo.productInfo.length === 0) throw Error('Giỏ hàng của bạn đang trống')
-        
-      const checkedProducts = document.querySelectorAll('tbody input[type="checkbox"]:checked')
-      const productIds = Array.from(checkedProducts).map((input) => {
-        return {
-          id: input.id,
-          quantity: input.value
-        }
-      })
-
-      if (productIds.length === 0) throw Error('Hãy chọn sản phẩm nha')  
-
-      const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value
-      const code          = document.querySelector('input[name="voucher-code"]').value
-      const name          = document.querySelector('input[name="name"]').value
-      const phone         = document.querySelector('input[name="phone"]').value
-      const address       = document.querySelector('input[name="address"]').value
-      const note          = document.querySelector('input[name="note"]').value
-      if (
-        !name     || 
-        !phone    || 
-        !address 
-      ) throw Error('Hãy điền đầy đủ thông tin cá nhân nha')  
-  
-      if (!paymentMethod) throw Error('Hãy chọn phương thức thanh toán nha')
-      if (paymentMethod === 'transfer' & !imgPath.path) throw Error('Hãy up bill chuyển khoản lên nha')
-        
-      const response = await fetch('/all-orders/create-orders', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          productInfo   : productIds,
-          paymentMethod : paymentMethod,
-          userId        : userId.id || 'guest',
-          code          : code,
-          name          : name,
-          phone         : phone,
-          address       : address,
-          note          : note,
-          img           : imgPath.path,
-        })
-      })
-      if (!response.ok) throw new Error(`Response status: ${response.status}`)
-      const {id, voucher_id , payUrl, error} = await response.json()
-      if (error) throw Error(error)
-
-      if (payUrl) {
-        socket.emit('order', { id: id})
-        const momoPaymentMessage = document.createElement('div')
-        momoPaymentMessage.setAttribute('class', 'order-successfully-message')
-        momoPaymentMessage.innerHTML = `
-          <h3>Đơn hàng của bạn đã được tạo thành công, hãy bấm vào đây để tiến hành thanh toán qua momo nha</h3>
-          <a class="momo-pay-btn" href="${payUrl}">Tiến hành thanh toán</a>
-        `
-        document.body.appendChild(momoPaymentMessage)
-        preloader.classList.add('inactive')
-        return
+document.querySelector('button.submit-button').onclick = async function() {
+  try {
+    const getProductInfo = JSON.parse(localStorage.getItem('product_cart_count')) || {}
+    if (getProductInfo.productInfo.length === 0) throw Error('Giỏ hàng của bạn đang trống')
+      
+    const checkedProducts = document.querySelectorAll('tbody input[type="checkbox"]:checked')
+    const productIds = Array.from(checkedProducts).map((input) => {
+      return {
+        id: input.id,
+        quantity: input.value
       }
+    })
 
+    if (productIds.length === 0) throw Error('Hãy chọn sản phẩm nha')  
+
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value
+    const name          = document.querySelector('input[name="name"]').value
+    const phone         = document.querySelector('input[name="phone"]').value
+    const address       = document.querySelector('input[name="address"]').value
+    if (
+      !name     || 
+      !phone    || 
+      !address 
+    ) throw Error('Hãy điền đầy đủ thông tin cá nhân nha')  
+
+    if (!paymentMethod) throw Error('Hãy chọn phương thức thanh toán nha')
+    if (paymentMethod === 'transfer' & !imgPath.path) throw Error('Hãy up bill chuyển khoản lên nha')
+    
+    const confirmMessage = document.createElement('div')
+    confirmMessage.setAttribute('class', 'order-confirm-message')
+    confirmMessage.innerHTML = `
+      <h2>Bạn xác nhận muốn đặt hàng chứ ?</h2>
+      <div class="actions">
+        <button 
+          id="delete-button" 
+          type="button" 
+          class="deletebtn"
+          onclick="document.querySelector('div.order-confirm-message').remove()"
+        ">Huỷ</button>
+        <button type="button" class="confirmbtn" onclick="submitOrder()">Đồng ý</button>
+      </div>
+    `
+    document.body.appendChild(confirmMessage)
+        
+    return
+  }
+  catch (error) {
+    return pushNotification(error.message)
+  }
+}
+
+async function submitOrder() {
+  const preloader = document.querySelector('div.preloader')
+  try {
+    preloader.classList.remove('inactive')
+
+    const getProductInfo = JSON.parse(localStorage.getItem('product_cart_count')) || {}
+    if (getProductInfo.productInfo.length === 0) throw Error('Giỏ hàng của bạn đang trống')
+      
+    const checkedProducts = document.querySelectorAll('tbody input[type="checkbox"]:checked')
+    const productIds = Array.from(checkedProducts).map((input) => {
+      return {
+        id: input.id,
+        quantity: input.value
+      }
+    })
+
+    if (productIds.length === 0) throw Error('Hãy chọn sản phẩm nha')  
+
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value
+    const code          = document.querySelector('input[name="voucher-code"]').value
+    const name          = document.querySelector('input[name="name"]').value
+    const phone         = document.querySelector('input[name="phone"]').value
+    const address       = document.querySelector('input[name="address"]').value
+    const note          = document.querySelector('input[name="note"]').value
+    if (
+      !name     || 
+      !phone    || 
+      !address 
+    ) throw Error('Hãy điền đầy đủ thông tin cá nhân nha')  
+
+    if (!paymentMethod) throw Error('Hãy chọn phương thức thanh toán nha')
+    if (paymentMethod === 'transfer' & !imgPath.path) throw Error('Hãy up bill chuyển khoản lên nha')
+      
+    const response = await fetch('/all-orders/create-orders', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        productInfo   : productIds,
+        paymentMethod : paymentMethod,
+        userId        : userId.id || 'guest',
+        code          : code,
+        name          : name,
+        phone         : phone,
+        address       : address,
+        note          : note,
+        img           : imgPath.path,
+      })
+    })
+    if (!response.ok) throw new Error(`Response status: ${response.status}`)
+    const {id, voucher_id , payUrl, error} = await response.json()
+    if (error) throw Error(error)
+
+    if (payUrl) {
       socket.emit('order', { id: id})
-
-      const orderSuccessfullyMessage = document.createElement('div')
-      orderSuccessfullyMessage.setAttribute('class', 'order-successfully-message')
-      orderSuccessfullyMessage.innerHTML = `
-        <i class="fi fi-ss-check-circle"></i>
-        <h3>Chúc mừng bạn đã đặt hàng thành công !!!</h3>
-        <h3>Mã đơn hàng của bạn là: ${id}</h3>
-        <h5>Nếu là người mới, bạn hãy lưu lại mã này để theo dõi đơn hàng ở mục 'Đơn hàng' nhé</h5>
-        <h5>Còn nếu bạn đã có tài khoản rồi thì có thể theo dõi đơn hàng ở mục 'Thông tin cá nhân' luôn nha</h5>
-        <a href="/all-orders/order/${id}">Xem đơn hàng</a>
+      const momoPaymentMessage = document.createElement('div')
+      momoPaymentMessage.setAttribute('class', 'order-successfully-message')
+      momoPaymentMessage.innerHTML = `
+        <h3>Đơn hàng của bạn đã được tạo thành công, hãy bấm vào đây để tiến hành thanh toán qua momo nha</h3>
+        <a class="momo-pay-btn" href="${payUrl}">Tiến hành thanh toán</a>
       `
-      if (voucher_id) {
-        orderSuccessfullyMessage.innerHTML += `
-          <h5>Để cảm ơn sự tin tưởng của bạn, shop mình tặng bạn voucher giảm giá cho đơn hàng lần sau nữa đó</h5>
-          <a href="/all-vouchers/voucher/${voucher_id}">Xem voucher</a>
-        `
-      }
-      document.body.appendChild(orderSuccessfullyMessage)
+      document.body.appendChild(momoPaymentMessage)
       preloader.classList.add('inactive')
-
-      // await fetch('/data/notification', {
-      //   method: 'POST',
-      //   headers: {'Content-Type': 'application/json'},
-      //   body: JSON.stringify({
-      //     message: `Bạn có đơn hàng mới: ${id}`,
-      //     type: 'order'
-      //   })
-      // })
-
       return
     }
-    catch (error) {
-      preloader.classList.add('inactive')
-      return pushNotification(error.message)
+
+    socket.emit('order', { id: id})
+
+    const orderSuccessfullyMessage = document.createElement('div')
+    orderSuccessfullyMessage.setAttribute('class', 'order-successfully-message')
+    orderSuccessfullyMessage.innerHTML = `
+      <i class="fi fi-ss-check-circle"></i>
+      <h3>Chúc mừng bạn đã đặt hàng thành công !!!</h3>
+      <h3>Mã đơn hàng của bạn là: ${id}</h3>
+      <h5>Nếu là người mới, bạn hãy lưu lại mã này để theo dõi đơn hàng ở mục 'Đơn hàng' nhé</h5>
+      <h5>Còn nếu bạn đã có tài khoản rồi thì có thể theo dõi đơn hàng ở mục 'Thông tin cá nhân' luôn nha</h5>
+      <a href="/all-orders/order/${id}">Xem đơn hàng</a>
+    `
+    if (voucher_id) {
+      orderSuccessfullyMessage.innerHTML += `
+        <h5>Để cảm ơn sự tin tưởng của bạn, shop mình tặng bạn voucher giảm giá cho đơn hàng lần sau nữa đó</h5>
+        <a href="/all-vouchers/voucher/${voucher_id}">Xem voucher</a>
+      `
     }
+    document.body.appendChild(orderSuccessfullyMessage)
+    preloader.classList.add('inactive')
+
+    // await fetch('/data/notification', {
+    //   method: 'POST',
+    //   headers: {'Content-Type': 'application/json'},
+    //   body: JSON.stringify({
+    //     message: `Bạn có đơn hàng mới: ${id}`,
+    //     type: 'order'
+    //   })
+    // })
+
+    return
+  }
+  catch (error) {
+    preloader.classList.add('inactive')
+    return pushNotification(error.message)
   }
 }
 
@@ -310,7 +359,6 @@ async function loadData(retriesLeft) {
   try {
     updateTableBody()
     displayProcess()
-    submitOrder()
   } catch (err) {
     if (retriesLeft > 1) {
       console.error(`Retrying... Attempts left: ${retriesLeft - 1}`)

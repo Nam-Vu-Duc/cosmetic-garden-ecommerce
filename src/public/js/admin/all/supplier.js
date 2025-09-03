@@ -63,8 +63,8 @@ async function getSuppliers(sortOptions, filterOptions, currentPage, itemsPerPag
         <td>${item._id}</td>
         <td>${item.name}</td>
         <td>${item.address}</td>
-        <td>${item.quantity}</td>
-        <td>${formatNumber(item.totalCost)}</td>
+        <td style="text-align: right;">${item.quantity}</td>
+        <td style="text-align: right;">${formatNumber(item.totalCost)}</td>
         <td><a target="_blank" rel="noopener noreferrer" href="/admin/all-suppliers/supplier/${item._id}">Xem</a></td>
       `
       tbody.appendChild(newTr)
