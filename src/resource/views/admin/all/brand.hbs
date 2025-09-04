@@ -1,47 +1,59 @@
 <div class="admin-all-brands-container">  
-  <div class="board-title">
-    <p>Thương hiệu:</p>
+  <div class="header">
+    <div class="board-title">
+      <p>Thương hiệu: </p>
+    </div>
+
+    <div class="date-filter">
+      <input type="date" id="start-date">
+      <input type="date" id="end-date">
+      <button title="submit" type="submit">Xem</button>
+    </div>
   </div>
 
   <div class="control-bar">
-    <div class="filter-and-create">
+    <div class="search">
+      <select id="search-type" class="search-btn">
+        <option value="">Tìm kiếm theo</option>
+        <option value="_id" selected>ID</option>
+        <option value="name">Tên</option>
+      </select>
+      <input type="text" id="search-input" name="name" placeholder="Tìm kiếm thương hiệu" />
+    </div>
+
+    <div class="sort-filter">
       <div class="sort">
         <label>Sắp xếp:</label>
         <select id="price" class="filter-btn">
           <option value="">Giá</option>
-          <option value="1">Giá tăng</option>
-          <option value="-1">Giá giảm</option>
+          <option value="1">Giá tăng dần</option>
+          <option value="-1">Giá giảm dần</option>
         </select>
-
         <select id="rate" class="filter-btn">
           <option value="">Đánh giá</option>
-          <option value="1">Đánh giá tăng</option>
-          <option value="-1">Đánh giá giảm</option>
+          <option value="1">Đánh giá tăng dần</option>
+          <option value="-1">Đánh giá giảm dần</option>
         </select>
-
         <select id="saleNumber" class="filter-btn">
           <option value="">Lượng bán</option>
-          <option value="1">Lượng bán tăng</option>
-          <option value="-1">Lượng bán giảm</option>
+          <option value="1">Lượng bán tăng dần</option>
+          <option value="-1">Lượng bán giảm dần</option>
         </select>
       </div>
 
       <div class="filter">
         <label>Lọc:</label>
         <select id="price" class="filter-btn">
-          {{!-- <option value="">Giá mặc định</option>
-          <option value="1">Giá tăng</option>
-          <option value="-1">Giá giảm</option> --}}
+          <option value="">Giá</option>
         </select>
+        <button id="clear-sort-filter" style="display: none">Xoá bộ lọc</button>
       </div>
-      <button id="clear-sort-filter" style="display: none">Xoá bộ lọc</button>
-
-      <a target="_blank" rel="noopener noreferrer" href="/admin/all-orders/order/create" class="create-btn" id="create-btn">
-        <i class="fi fi-rr-plus"></i>
-        <p>Thêm Đơn Hàng</p>
-      </a>
     </div>
-    <input type="text" id="search-input" placeholder="Tìm kiếm khách hàng">
+
+    <a href="/admin/all-orders/order/create" target="_blank" rel="noopener noreferrer" class="create-btn" id="create-btn">
+      <i class="fi fi-rr-plus"></i>
+      <span>Thêm Thương Hiệu</span>
+    </a>
   </div>
 
   <div class="table">

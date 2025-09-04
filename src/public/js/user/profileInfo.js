@@ -178,7 +178,7 @@ async function getOrders() {
     tr.innerHTML = `
       <td style="text-align:center" >${index}</td>
       <td style="text-align:left"   >${order.customerInfo.name}</td>
-      <td style="text-align:right"  >${formatNumber(order.totalOrderPrice)}</td>
+      <td style="text-align:right"  >${formatNumber(order.totalNewOrderPrice)}</td>
       <td style="text-align:right"  >${formatDate(order.createdAt)}</td>
       <td style="text-align:left"   >${order.orderStatus.name}</td>
       <td style="text-align:center" ><a target="_blank" rel="noopener noreferrer" href="/all-orders/order/${order._id}">Chi Tiết</a></td>
@@ -207,7 +207,7 @@ async function getDoneOrders() {
   const {data} = await response.json()
 
   const p = document.createElement('p')
-  p.textContent = 'Đánh giá Đơn Hàng'
+  p.textContent = 'Đánh Giá Đơn Hàng'
 
   const thead = document.createElement('thead')
   thead.innerHTML = `
@@ -228,7 +228,7 @@ async function getDoneOrders() {
     tr.innerHTML = `
       <td style="text-align:center" >${index}</td>
       <td style="text-align:left"   >${order.customerInfo.name}</td>
-      <td style="text-align:right"  >${formatNumber(order.totalOrderPrice)}</td>
+      <td style="text-align:right"  >${formatNumber(order.totalNewOrderPrice)}</td>
       <td style="text-align:right"  >${formatDate(order.createdAt)}</td>
       <td style="text-align:left"   >${order.orderStatus.name}</td>
       <td style="text-align:center" ><a target="_blank" rel="noopener noreferrer" href="/all-orders/order/rate/${order._id}">Chi Tiết</a></td>
@@ -258,7 +258,7 @@ async function getVouchers() {
   if (error) return pushNotification(error)
 
   const p = document.createElement('p')
-  p.textContent = 'Thông tin Vouchers'
+  p.textContent = 'Thông Tin Vouchers'
 
   const thead = document.createElement('thead')
   thead.innerHTML = `
@@ -279,8 +279,8 @@ async function getVouchers() {
     tr.innerHTML = `
       <td style="text-align:center" >${index}</td>
       <td style="text-align:left"   >${voucher.code}</td>
-      <td style="text-align:right"  >${formatNumber(voucher.discount)}</td>
-      <td style="text-align:right"  >${voucher.status}</td>
+      <td style="text-align:right"  >${voucher.discount}%</td>
+      <td style="text-align:right"  >${voucher.status === 'active' ? 'Đang hoạt động' : voucher.status === 'used' ? 'Đã sử dụng' : 'Hết hạn'}</td>
       <td style="text-align:left"   >${formatDate(voucher.endDate)}</td>
       <td style="text-align:center" ><a target="_blank" rel="noopener noreferrer" href="/all-vouchers/voucher/${voucher._id}">Chi Tiết</a></td>
     `
@@ -308,7 +308,7 @@ async function getUserVouchers() {
   const {data} = await response.json()
 
   const p = document.createElement('p')
-  p.textContent = 'Vouchers dành riêng cho bạn'
+  p.textContent = 'Vouchers Dành Riêng Cho Bạn'
 
   const thead = document.createElement('thead')
   thead.innerHTML = `
@@ -330,7 +330,7 @@ async function getUserVouchers() {
       <td style="text-align:center" >${index}</td>
       <td style="text-align:left"   >${voucher.code}</td>
       <td style="text-align:right"  >${formatNumber(voucher.discount)}</td>
-      <td style="text-align:right"  >${voucher.status}</td>
+      <td style="text-align:right"  >${voucher.status === 'active' ? 'Đang hoạt động' : voucher.status === 'used' ? 'Đã sử dụng' : 'Hết hạn'}</td>
       <td style="text-align:left"   >${formatDate(voucher.endDate)}</td>
       <td style="text-align:center" ><a target="_blank" rel="noopener noreferrer" href="/all-vouchers/voucher/user/${voucher._id}">Chi Tiết</a></td>
     `

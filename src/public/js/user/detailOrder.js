@@ -23,6 +23,36 @@ async function getOrder() {
   document.querySelector('td#total-new-price').textContent = formatNumber(data.totalNewOrderPrice) || ''
   document.querySelector('td#payment-method').textContent = method.name || ''
   document.querySelector('td#status').textContent = status.name || ''
+  document.querySelector('td#isPaid').textContent = data.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'
+  if (data.status === 'delivered' && data.isPaid) {
+    const div = document.createElement("div")
+    div.className = "button"
+
+    const button = document.createElement("button")
+    button.className = "submit-button"
+    button.textContent = "Đã nhận hàng thành công"
+
+    div.appendChild(button)
+
+    document.querySelector('div.detail-order-container').appendChild(div)
+    button.onclick = async function() {
+      const confirmMessage = document.createElement('div')
+      confirmMessage.setAttribute('class', 'update-order-message')
+      confirmMessage.innerHTML = `
+        <h2>Bạn xác nhận đã nhận hàng rồi chứ ?</h2>
+        <div class="actions">
+          <button 
+            id="delete-button" 
+            type="button" 
+            class="deletebtn"
+            onclick="document.querySelector('div.update-order-message').remove()"
+          ">Huỷ</button>
+          <button type="button" class="confirmbtn" onclick="updateOrder()">Đồng ý</button>
+        </div>
+      `
+      document.body.appendChild(confirmMessage)
+    }
+  }
 
   data.products.forEach((product) => {
     const tr = document.createElement('tr')
@@ -56,6 +86,25 @@ async function getOrder() {
   })
 
   return
+}
+
+async function updateOrder() {
+  try {
+    const response = await fetch('/all-orders/order/updated', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({id: urlSlug})
+    })
+    if (!response.ok) throw new Error(`Response status: ${response.status}`)
+    const {error, message} = await response.json()
+    if (error) return pushNotification(error)
+    pushNotification(message)
+
+    setTimeout(() => window.location.reload(), 3000)
+  } catch (err) {
+    console.error("Error confirming order receipt:", err)
+    pushNotification(`Error confirming order receipt: ${err}. Please try again later`)
+  }
 }
 
 async function loadData(retriesLeft) {

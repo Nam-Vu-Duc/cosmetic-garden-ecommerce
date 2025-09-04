@@ -25,6 +25,7 @@ const order = new Schema({
   paymentMethod      : { type: String , default: '' },
   status             : { type: String , default: 'pending' },
   isRated            : { type: Boolean, default: false},
+  isPaid             : { type: Boolean, default: false},
   voucherCode        : { type: String , default: '' },
   deletedAt          : { type: Date   , default: null }
 }, { timestamps: true })

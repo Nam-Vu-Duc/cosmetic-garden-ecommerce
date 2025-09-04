@@ -41,9 +41,9 @@ const homePermission = {
   DELETE: ['admin']
 }
 const orderPermission = {
-  CREATE: ['admin', 'manager', 'employee', 'merchandise'],
-  READ  : ['admin', 'manager', 'employee', 'merchandise'],
-  UPDATE: ['admin', 'manager', 'employee', 'merchandise'],
+  CREATE: ['admin', 'manager', 'employee', 'merchandise', 'shipper'],
+  READ  : ['admin', 'manager', 'employee', 'merchandise', 'shipper'],
+  UPDATE: ['admin', 'manager', 'employee', 'merchandise', 'shipper'],
   DELETE: ['admin', 'manager', 'merchandise']
 }
 const productPermission = {

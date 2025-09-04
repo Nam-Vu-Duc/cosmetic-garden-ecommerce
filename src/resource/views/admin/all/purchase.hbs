@@ -1,33 +1,46 @@
 <div class="admin-all-purchases-container">  
-  <div class="board-title">
-    <p>Đơn nhập: </p>
+  <div class="header">
+    <div class="board-title">
+      <p>Đơn nhập: </p>
+    </div>
+
+    <div class="date-filter">
+      <input type="date" id="start-date">
+      <input type="date" id="end-date">
+      <button title="submit" type="submit">Xem</button>
+    </div>
   </div>
 
   <div class="control-bar">
-    <div class="filter-and-create">
+    <div class="search">
+      <select id="search-type" class="search-btn">
+        <option value="">Tìm kiếm theo</option>
+        <option value="_id" selected>ID</option>
+        <option value="supplierId">Mã NCC</option>
+      </select>
+      <input type="text" id="search-input" name="name" placeholder="Tìm kiếm đơn nhập" />
+    </div>
+
+    <div class="sort-filter">
       <div class="sort">
         <label>Sắp xếp:</label>
         <select id="purchaseDate" class="filter-btn">
           <option value="">Ngày đặt hàng</option>
-          <option value="1">Ngày tăng</option>
-          <option value="-1">Ngày giảm</option>
+          <option value="1">Ngày tăng dần</option>
+          <option value="-1">Ngày giảm dần</option>
         </select>
-
         <select id="totalPurchasePrice" class="filter-btn">
           <option value="">Giá trị</option>
-          <option value="1">Giá trị tăng</option>
-          <option value="-1">Giá trị giảm</option>
+          <option value="1">Giá trị tăng dần</option>
+          <option value="-1">Giá trị giảm dần</option>
         </select>
       </div>
-
-      <button id="clear-sort-filter" style="display: none">Xoá bộ lọc</button>
-
-      <a target="_blank" rel="noopener noreferrer" href="/admin/all-purchases/purchase/create" class="create-btn" id="create-btn">
-        <i class="fi fi-rr-plus"></i>
-        <p>Thêm Đơn Nhập</p>
-      </a>
     </div>
-    <input type="text" id="search-input" placeholder="Tìm kiếm đơn nhập">
+
+    <a href="/admin/all-purchases/purchase/create" target="_blank" rel="noopener noreferrer" class="create-btn" id="create-btn">
+      <i class="fi fi-rr-plus"></i>
+      <span>Thêm Đơn Nhập</span>
+    </a>
   </div>
 
   <div class="table">

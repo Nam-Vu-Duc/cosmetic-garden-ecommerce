@@ -9,7 +9,7 @@ async function getOrder() {
     body: JSON.stringify({id: urlSlug})
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const {error, orderInfo, orderStatuses, paymentMethods} = await response.json()
+  const {error, orderInfo, orderStatuses, paymentMethods, userRole} = await response.json()
   if (error) return pushNotification('Có lỗi xảy ra')
 
   document.title = 'Đơn hàng ' + orderInfo.customerInfo.name
@@ -25,8 +25,15 @@ async function getOrder() {
     const option = document.createElement('option')
     option.value = element.code
     option.textContent = element.name
+    option.disabled = true
     if (element.code === orderInfo.status) option.selected = true
-    
+    if (userRole === 'employee' && element.code === 'preparing') option.disabled = false
+    if (userRole === 'merchandise' && element.code === 'out_for_delivery') option.disabled = false
+    if (userRole === 'shipper' && element.code === 'delivering') option.disabled = false
+    if (userRole === 'shipper' && element.code === 'delivered') option.disabled = false
+    if (userRole === 'manager' && element.code === 'cancel') option.disabled = false
+    if (userRole === 'admin') option.disabled = false
+
     document.querySelector('select#status').appendChild(option)
   })
   
@@ -41,7 +48,10 @@ async function getOrder() {
 
   document.querySelector('input#total').value = formatNumber(orderInfo.totalOrderPrice)
   document.querySelector('input#new-total').value = formatNumber(orderInfo.totalNewOrderPrice)
-  
+  document.querySelector('input#isRated').value = orderInfo.isRated ? 'Đã đánh giá' : 'Chưa đánh giá'
+
+  document.querySelector('select#isPaid').value = orderInfo.isPaid
+
   const submitButton = document.querySelector('button[type="submit"]')
   if (orderInfo.status === 'done' || orderInfo.status === 'cancel') {
     document.querySelector('select#paymentMethod').disabled = true
@@ -78,10 +88,12 @@ async function getOrder() {
 async function updateOrder(orderInfo) {
   const paymentMethod  = document.querySelector('select#paymentMethod').value
   const status         = document.querySelector('select#status').value
+  const isPaid         = document.querySelector('select#isPaid').value
 
   if (
     paymentMethod === orderInfo.paymentMethod    &&
-    status        === orderInfo.status 
+    status        === orderInfo.status           &&
+    isPaid        === orderInfo.isPaid
   ) return pushNotification('Hãy cập nhật thông tin')
 
   const response = await fetch('/admin/all-orders/order/updated', {
@@ -90,7 +102,8 @@ async function updateOrder(orderInfo) {
     body: JSON.stringify({
       id            : urlSlug,
       paymentMethod : paymentMethod,
-      status        : status
+      status        : status,
+      isPaid        : isPaid
     })
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)

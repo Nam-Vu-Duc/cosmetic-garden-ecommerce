@@ -71,14 +71,15 @@ class allOrdersController {
   // update
   async getOrder(req, res, next) {
     try {
-      const [orderInfo, orderStatuses, paymentMethods] = await Promise.all([
+      const [orderInfo, orderStatuses, paymentMethods, userInfo] = await Promise.all([
         order.find({ _id: req.body.id }).lean(),
         orderStatus.find().sort({name: 1}).lean(),
-        paymentMethod.find().lean()
+        paymentMethod.find().lean(),
+        employee.findOne({ _id: req.cookies.uid }).lean()
       ])
       if (!orderInfo) throw new Error('Order not found')
-  
-      return res.json({orderInfo: orderInfo[0], orderStatuses: orderStatuses, paymentMethods: paymentMethods})
+
+      return res.json({orderInfo: orderInfo[0], orderStatuses: orderStatuses, paymentMethods: paymentMethods, userRole: userInfo.role})
     } catch (error) {
       console.log(error)
       return res.json({error: error.message})
@@ -103,14 +104,14 @@ class allOrdersController {
         { _id: req.body.id }, 
         { 
           status        : req.body.status,
-          paymentMethod : req.body.paymentMethod
+          paymentMethod : req.body.paymentMethod,
+          isPaid        : req.body.isPaid
         },
         {new: true}
       )
 
       if (req.body.status === 'preparing') {
         const orderInfo = await order.findOne({ _id: req.body.id }).lean()
-        const userId = orderInfo.customerInfo.userId
 
         const bulkOps = orderInfo.products.map(({ id, quantity }) => ({
           updateOne: {

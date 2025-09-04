@@ -292,7 +292,7 @@ async function submitOrder() {
         productInfo   : productIds,
         paymentMethod : paymentMethod,
         userId        : userId.id || 'guest',
-        code          : code,
+        code          : code.trim(),
         name          : name,
         phone         : phone,
         address       : address,
@@ -301,7 +301,7 @@ async function submitOrder() {
       })
     })
     if (!response.ok) throw new Error(`Response status: ${response.status}`)
-    const {id, voucher_id , payUrl, error} = await response.json()
+    const {id, payUrl, error} = await response.json()
     if (error) throw Error(error)
 
     if (payUrl) {
@@ -329,12 +329,6 @@ async function submitOrder() {
       <h5>Còn nếu bạn đã có tài khoản rồi thì có thể theo dõi đơn hàng ở mục 'Thông tin cá nhân' luôn nha</h5>
       <a href="/all-orders/order/${id}">Xem đơn hàng</a>
     `
-    if (voucher_id) {
-      orderSuccessfullyMessage.innerHTML += `
-        <h5>Để cảm ơn sự tin tưởng của bạn, shop mình tặng bạn voucher giảm giá cho đơn hàng lần sau nữa đó</h5>
-        <a href="/all-vouchers/voucher/${voucher_id}">Xem voucher</a>
-      `
-    }
     document.body.appendChild(orderSuccessfullyMessage)
     preloader.classList.add('inactive')
 
@@ -389,7 +383,7 @@ document.querySelector('button.voucher-button').addEventListener('click', async 
   const response = await fetch('/all-orders/data/voucher', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({voucherCode: voucherCode})
+    body: JSON.stringify({voucherCode: voucherCode.trim()})
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
   const {voucherInfo, discountType, error} = await response.json()

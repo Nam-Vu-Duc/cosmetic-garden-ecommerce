@@ -23,37 +23,42 @@ async function rateStar() {
 
 async function submitRate(data) {
   submitBtn.onclick = async function() {
-    if (data.isRated) return
-
-    const rateProducts = document.querySelectorAll('td.rate-product')
-    const Ids = []
-    const comments = []
-    const rates = []
-    rateProducts.forEach((product) => {
-      Ids.push(product.querySelector('input').id)
-      comments.push(product.querySelector('input').value)
-      rates.push(product.querySelector('span.rate-score').innerText)
-    })
-
-    const response = await fetch('/all-orders/order/rate/updated', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        orderId: urlSlug,
-        senderId: data.customerInfo.userId,
-        productId: Ids, 
-        productComment: comments, 
-        productRate: rates})
-    })
-    if (!response.ok) throw new Error(`Response status: ${response.status}`)
-    const {message} = await response.json()
-
-    if (message) {
-      pushNotification('Đánh giá đơn thành công')
-      submitBtn.innerText = 'Đã đánh giá'
-      submitBtn.style.cursor = 'not-allowed'
-      submitBtn.style.opacity = '0.8'
-    } 
+    try {
+      if (data.isRated) return
+      
+      const rateProducts = document.querySelectorAll('td.rate-product')
+      const Ids = []
+      const comments = []
+      const rates = []
+      rateProducts.forEach((product) => {
+        Ids.push(product.querySelector('input').id)
+        comments.push(product.querySelector('input').value)
+        rates.push(product.querySelector('span.rate-score').innerText)
+      })
+  
+      const response = await fetch('/all-orders/order/rate/updated', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          orderId: urlSlug,
+          senderId: data.customerInfo.userId,
+          productId: Ids, 
+          productComment: comments, 
+          productRate: rates})
+      })
+      if (!response.ok) throw new Error(`Response status: ${response.status}`)
+      const {message, error} = await response.json()
+      if (error) throw new Error(error)
+  
+      if (message) {
+        pushNotification('Đánh giá đơn thành công')
+        setTimeout(() => window.location.reload(), 3000)
+      } 
+    }
+    catch (err) {
+      console.error("Error submitting rate:", err)
+      pushNotification(`Error submitting rate: ${err}. Please try again later`)
+    }
   }
 }
 
@@ -74,11 +79,13 @@ async function getOrder() {
   document.querySelector('td#note').textContent = data.customerInfo.note
   document.querySelector('td#total-price').textContent = formatNumber(data.totalOrderPrice) 
   document.querySelector('td#status').textContent = status.name
+  document.querySelector('td#isPaid').textContent = data.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'
 
   if (data.isRated) {
     submitBtn.innerText = 'Đã đánh giá'
     submitBtn.style.cursor = 'not-allowed'
     submitBtn.style.opacity = '0.5'
+    submitBtn.disabled = true
   }
 
   data.products.forEach((product) => {
@@ -118,18 +125,36 @@ async function getOrder() {
 
     const input = document.createElement('input')
     input.setAttribute('type', 'text')
-    input.setAttribute('value', product.comment)
-    input.setAttribute('disabled', 'true')
+    input.setAttribute('id', product.id)
+    if (data.isRated) {
+      input.setAttribute('value', product.comment)
+      input.setAttribute('disabled', 'true')
+    }
 
     const rateStar = document.createElement('div')
-    rateStar.innerHTML = `
-      <div class="rate-star">
-        <span class="rate-score">${product.rate}</span>
+    if (data.isRated) {
+      rateStar.innerHTML = `
+        <div class="rate-star">
+          <span>${product.rate}</span>
+          <span>/</span>
+          <span>5</span>
+          <i class="fi fi-ss-star" style="color: orange"></i>
+        </div>
+      `
+    } else {
+      rateStar.innerHTML = `
+        <div class="rate-star">
+        <i class="fi fi-ss-star"></i>
+        <i class="fi fi-ss-star"></i>
+        <i class="fi fi-ss-star"></i>
+        <i class="fi fi-ss-star"></i>
+        <i class="fi fi-ss-star"></i>
+        <span class="rate-score">0</span>
         <span>/</span>
         <span>5</span>
-        <i class="fi fi-ss-star"></i>
-      </div>
-    `
+        </div>
+      `
+    }
 
     td.appendChild(input)
     td.appendChild(rateStar)

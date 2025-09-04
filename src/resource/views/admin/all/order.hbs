@@ -1,22 +1,39 @@
 <div class="admin-all-orders-container">  
-  <div class="board-title">
-    <p>Đơn hàng: </p>
+  <div class="header">
+    <div class="board-title">
+      <p>Đơn hàng: </p>
+    </div>
+
+    <div class="date-filter">
+      <input type="date" id="start-date">
+      <input type="date" id="end-date">
+      <button title="submit" type="submit">Xem</button>
+    </div>
   </div>
   
   <div class="control-bar">
-    <div class="filter-and-create">
+    <div class="search">
+      <select id="search-type" class="search-btn">
+        <option value="">Tìm kiếm theo</option>
+        <option value="_id" selected>ID</option>
+        <option value="customerInfo.userId">Mã khách hàng</option>
+        <option value="customerInfo.name">Tên khách hàng</option>
+      </select>
+      <input type="text" id="search-input" name="name" placeholder="Tìm kiếm đơn hàng" />
+    </div>
+
+    <div class="sort-filter">
       <div class="sort">
         <label>Sắp xếp:</label>
         <select id="createdAt" class="filter-btn">
           <option value="">Ngày đặt hàng</option>
-          <option value="-1">Ngày mới</option>
-          <option value="1">Ngày cũ</option>
+          <option value="-1">Ngày mới nhất</option>
+          <option value="1">Ngày cũ nhất</option>
         </select>
-
         <select id="totalNewOrderPrice" class="filter-btn">
           <option value="">Giá trị đơn</option>
-          <option value="1">Giá trị tăng</option>
-          <option value="-1">Giá trị giảm</option>
+          <option value="1">Giá trị tăng dần</option>
+          <option value="-1">Giá trị giảm dần</option>
         </select>
       </div>
 
@@ -25,19 +42,17 @@
         <select id="status" class="filter-btn">
           <option value="">Trạng thái đơn</option>
         </select>
-
         <select id="paymentMethod" class="filter-btn">
           <option value="">Thanh toán</option>
         </select>
+        <button id="clear-sort-filter" style="display: none">Xoá bộ lọc</button>
       </div>
-      <button id="clear-sort-filter" style="display: none">Xoá bộ lọc</button>
-
-      <a target="_blank" rel="noopener noreferrer" href="/admin/all-orders/order/create" class="create-btn" id="create-btn">
-        <i class="fi fi-rr-plus"></i>
-        <p>Thêm Đơn Hàng</p>
-      </a>
     </div>
-    <input type="text" id="search-input" placeholder="Tìm kiếm đơn hàng">
+
+    <a href="/admin/all-orders/order/create" target="_blank" rel="noopener noreferrer" class="create-btn" id="create-btn">
+      <i class="fi fi-rr-plus"></i>
+      <span>Thêm Đơn Hàng</span>
+    </a>
   </div>
 
   <div class="table">

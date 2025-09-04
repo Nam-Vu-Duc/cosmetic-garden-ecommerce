@@ -31,7 +31,7 @@ class profileController {
   
       const orderInfo = await order.aggregate([
         {
-          $match: { 'customerInfo.userId': userId } // Filter by userId first
+          $match: {$and: [{ 'customerInfo.userId': userId }, { status: { $ne: 'done' } }]} // Filter by userId first
         },
         {
           $lookup: {

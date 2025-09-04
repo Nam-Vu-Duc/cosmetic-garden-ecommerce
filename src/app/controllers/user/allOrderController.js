@@ -15,6 +15,7 @@ const kafkaClient = new kafka({ brokers: ["localhost:9092"] })
 const producer = kafkaClient.producer()
 const crypto = require('crypto')
 const https = require('https')
+const nodemailer = require("nodemailer")
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -70,10 +71,9 @@ class allOrderController {
       const userInfo = await user.findOne({ _id: req.cookies.uid }).lean()
       if (!userInfo) throw new Error('User not found') 
 
-      
       const voucherInfo = await voucher.findOne({ code: req.body.voucherCode, status: 'active', memberCode: userInfo.memberCode }).lean()
       const userVoucherInfo = await userVoucher.findOne({ code: req.body.voucherCode, status: 'active', userId: req.cookies.uid }).lean()
-      if (!voucherInfo && !userVoucherInfo) throw new Error('Voucher not found')
+      if (!voucherInfo && !userVoucherInfo) throw new Error('Không tìm thấy voucher')
 
       if (voucherInfo) return res.json({voucherInfo: voucherInfo, discountType: 'percentage'})
       if (userVoucherInfo) return res.json({voucherInfo: userVoucherInfo, discountType: 'value'})
@@ -161,9 +161,7 @@ class allOrderController {
           name    : customerInfo.name,
           phone   : customerInfo.phone,
           address : customerInfo.address,
-          note    : `${customerInfo.note}, 
-                    link bill: ${result.secure_url}
-                    `
+          note    : `${customerInfo.note}, ${result.secure_url}`
         },
         voucherCode: code,
         totalOrderPrice: totalOrderPrice,
@@ -214,6 +212,33 @@ class allOrderController {
                 status: 'used'
               })
             }
+            const adminEmail    = process.env.ADMIN_EMAIL
+            const adminPassword = process.env.GOOGLE_APP_EMAIL
+      
+            const transporter = nodemailer.createTransport({
+              service: "gmail",
+              secure: false, // true for port 465, false for other ports
+              auth: {
+                user: adminEmail,
+                pass: adminPassword,
+              },
+            })
+    
+            async function sendEmail(userEmail) {
+              await transporter.sendMail({
+                from: adminEmail, 
+                to: userEmail, 
+                subject: "Tặng bạn voucher cho lần mua tiếp theo", 
+                text: `
+                  Tặng bạn voucher giảm ${newUserVoucher.discount} cho đơn hàng từ ${newUserVoucher.minOrder} trong lần mua tiếp theo.
+                  Lưu ý: voucher chỉ có hiệu lực trong vòng 1 tháng kể từ ngày nhận được.
+                  Hãy copy mã voucher của bạn và sử dụng thật sớm nhé: 
+                  ${newUserVoucher.code}
+                `,
+              })
+            }
+      
+            await sendEmail(userInfo.email)
           }
         }
       }
@@ -358,7 +383,8 @@ class allOrderController {
     console.log(result)
 
     await order.updateOne({ _id: orderId}, {
-      status: 'payment_success'
+      status: 'preparing',
+      isPaid: true
     })
 
     return res.redirect(`/all-orders/order/${orderId}`)
@@ -438,6 +464,17 @@ class allOrderController {
   
       return res.json({message: true})
       
+    } catch (error) {
+      return res.json({error: error})
+    }
+  }
+  
+  async orderUpdated(req, res, next) {
+    try {
+      const { id } = req.body
+      await order.updateOne({ _id: id }, { status: 'done' })
+      return res.json({message: 'Xác nhận đơn hàng thành công'})
+    
     } catch (error) {
       return res.json({error: error})
     }

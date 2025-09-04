@@ -30,7 +30,6 @@ localStorage.setItem('product_cart_count', JSON.stringify(myObj))
 
 // set default quantity value to 0 on first load and hidden the quantity div
 getQuantityValue.innerText = 0
-getQuantityDiv.style.visibility = 'hidden'
 
 async function getProduct() {
   const response = await fetch('/all-products/data/product', {
@@ -190,10 +189,11 @@ function addToCart(productInfo) {
   
       // add 1 to the cartCounting and set the quantity value min = 1
       myObj.localCounting++
-      getQuantityValue.innerText = 1
-      getQuantityDiv.style.visibility = 'visible'
-      
-      // create new added product 
+      if (getQuantityValue.innerText === '0') {
+        getQuantityValue.innerText = 1
+      }
+
+      // create new added product
       const newProductInfo = {
         id      : productInfo._id,
         quantity: getQuantityValue.innerText
@@ -221,7 +221,6 @@ function addToCart(productInfo) {
       // minus 1 from the cartCounting and reset the productQuantity to 0
       myObj.localCounting--
       getQuantityValue.innerText = 0
-      getQuantityDiv.style.visibility = 'hidden'
   
       // remove the product from the localStorage
       listProductLength.length = myObj.productInfo.length
@@ -252,9 +251,10 @@ function buyNow(productInfo) {
   getBuyNow.onclick = function () {
     if (getAddToCart.style.backgroundColor === '') {
       myObj.localCounting++
-      getQuantityValue.innerText = 1
-      getQuantityDiv.style.visibility = 'visible'
-  
+      if (getQuantityValue.innerText === '0') {
+        getQuantityValue.innerText = 1
+      }
+
       const newProductInfo = {
         id      : productInfo._id,
         quantity: getQuantityValue.innerText

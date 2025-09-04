@@ -1,26 +1,43 @@
 <div class="admin-all-voucher-container">  
-  <div class="board-title">
-    <p>Voucher: </p>
+  <div class="header">
+    <div class="board-title">
+      <p>Voucher: </p>
+    </div>
+
+    <div class="date-filter">
+      <input type="date" id="start-date">
+      <input type="date" id="end-date">
+      <button title="submit" type="submit">Xem</button>
+    </div>
   </div>
 
   <div class="control-bar">
-    <div class="filter-and-create">
+    <div class="search">
+      <select id="search-type" class="search-btn">
+        <option value="">Tìm kiếm theo</option>
+        <option value="_id" selected>ID</option>
+        <option value="name">Tên</option>
+      </select>
+      <input type="text" id="search-input" name="name" placeholder="Tìm kiếm voucher" />
+    </div>
+
+    <div class="sort-filter">
       <div class="sort">
         <label>Sắp xếp:</label>
         <select id="discount" class="filter-btn">
           <option value="">Chiết khấu</option>
-          <option value="1">Chiết khấu tăng</option>
-          <option value="-1">Chiết khấu giảm</option>
+          <option value="1">Chiết khấu tăng dần</option>
+          <option value="-1">Chiết khấu giảm dần</option>
         </select>
         <select id="startDate" class="filter-btn">
           <option value="">Ngày tạo</option>
-          <option value="1">Ngày tạo mới</option>
-          <option value="-1">Ngày tạo cũ</option>
+          <option value="1">Ngày tạo mới nhất</option>
+          <option value="-1">Ngày tạo cũ nhất</option>
         </select>
         <select id="endDate" class="filter-btn">
           <option value="">Ngày hết hạn</option>
-          <option value="-1">Ngày hết hạn mới</option>
-          <option value="1">Ngày hết hạn cũ</option>
+          <option value="-1">Ngày hết hạn mới nhất</option>
+          <option value="1">Ngày hết hạn cũ nhất</option>
         </select>
       </div>
 
@@ -34,15 +51,14 @@
         <select id="memberCode" class="filter-btn">
           <option value="">Hạng thành viên</option>
         </select>
+        <button id="clear-sort-filter" style="display: none">Xoá bộ lọc</button>
       </div>
-      <button id="clear-sort-filter" style="display: none">Xoá bộ lọc</button>
-
-      <a target="_blank" rel="noopener noreferrer" href="/admin/all-vouchers/voucher/create" class="create-btn" id="create-btn">
-        <i class="fi fi-rr-plus"></i>
-        <p>Thêm Voucher</p>
-      </a>
     </div>
-    <input type="text" id="search-input" name="name" placeholder="Tìm kiếm voucher">
+
+    <a href="/admin/all-vouchers/voucher/create" target="_blank" rel="noopener noreferrer" class="create-btn" id="create-btn">
+      <i class="fi fi-rr-plus"></i>
+      <span>Thêm Voucher</span>
+    </a>
   </div>
 
   <div class="table">

@@ -22,7 +22,7 @@ class allCustomersController {
       const skip         = (currentPage - 1) * itemsPerPage
 
       if (filter['_id']) {
-        filter['_id'] = ObjectId.createFromHexString(filter['_id'])
+        filter['_id'] = ObjectId.createFromHexString(filter['_id'].$regex)
       }
   
       const [data, dataSize] = await Promise.all([

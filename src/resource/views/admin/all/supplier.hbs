@@ -1,42 +1,57 @@
 <div class="admin-all-suppliers-container">  
-  <div class="board-title">
-    <p>Nhà cung cấp:</p>
+  <div class="header">
+    <div class="board-title">
+      <p>Nhà cung cấp:</p>
+    </div>
+
+    <div class="date-filter">
+      <input type="date" id="start-date">
+      <input type="date" id="end-date">
+      <button title="submit" type="submit">Xem</button>
+    </div>
   </div>
 
   <div class="control-bar">
-    <div class="filter-and-create">
+    <div class="search">
+      <select id="search-type" class="search-btn">
+        <option value="">Tìm kiếm theo</option>
+        <option value="_id" selected>ID</option>
+        <option value="name">Tên</option>
+        <option value="email">Email</option>
+        <option value="phone">Số điện thoại</option>
+        <option value="address">Địa chỉ</option>
+      </select>
+      <input type="text" id="search-input" name="name" placeholder="Tìm kiếm nhà cung cấp" />
+    </div>
+
+    <div class="sort-filter">
       <div class="sort">
         <label>Sắp xếp:</label>
         <select id="quantity" class="filter-btn">
           <option value="">Tổng đơn</option>
-          <option value="1">Tổng đơn tăng</option>
-          <option value="-1">Tổng đơn giảm</option>
+          <option value="1">Tổng đơn tăng dần</option>
+          <option value="-1">Tổng đơn giảm dần</option>
         </select>
-
         <select id="totalCost" class="filter-btn">
           <option value="">Chi phí</option>
-          <option value="1">Chi phí tăng</option>
-          <option value="-1">Chi phí giảm</option>
+          <option value="1">Chi phí tăng dần</option>
+          <option value="-1">Chi phí giảm dần</option>
         </select>
       </div>
 
       <div class="filter">
         <label>Lọc:</label>
         <select id="revenue" class="filter-btn">
-          {{!-- <option value="">Doanh thu</option>
-          <option value="1">Doanh thu tăng</option>
-          <option value="-1">Doanh thu giảm</option> --}}
+          <option value="">Doanh thu</option>
         </select>
+        <button id="clear-sort-filter" style="display: none">Xoá bộ lọc</button>
       </div>
-
-      <button id="clear-sort-filter" style="display: none">Xoá bộ lọc</button>
-
-      <a target="_blank" rel="noopener noreferrer" href="/admin/all-suppliers/supplier/create" class="create-btn" id="create-btn">
-        <i class="fi fi-rr-plus"></i>
-        <p>Thêm Nhà Cung Cấp</p>
-      </a>
     </div>
-    <input type="text" id="search-input" name="name" placeholder="Tìm kiếm nhà cung cấp">
+
+    <a href="/admin/all-suppliers/supplier/create" target="_blank" rel="noopener noreferrer" class="create-btn" id="create-btn">
+      <i class="fi fi-rr-plus"></i>
+      <span>Thêm Nhà Cung Cấp</span>
+    </a>
   </div>
 
   <div class="table">

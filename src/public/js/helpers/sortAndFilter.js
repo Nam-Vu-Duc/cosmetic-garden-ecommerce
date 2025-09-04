@@ -4,7 +4,10 @@ async function sortAndFilter(getDataFunction, sortOptions, filterOptions, curren
   const clearButton   = document.querySelector('button#clear-sort-filter')
   const searchInput   = document.querySelector('input#search-input')
   const itemsPerPage  = document.querySelector('select#items-per-page')?.value ?? 10
-  
+  const startDate     = document.querySelector('input#start-date')
+  const endDate       = document.querySelector('input#end-date')
+  const dateFilterBtn = document.querySelector('div.date-filter button')
+
   sortButton.forEach((button) => {
     button.onchange = function () {
       button.selectedIndex === 0 ? clearButton.style.display = 'none' : clearButton.style.display = ''
@@ -26,6 +29,14 @@ async function sortAndFilter(getDataFunction, sortOptions, filterOptions, curren
       getDataFunction(sortOptions, filterOptions, currentPage, itemsPerPage)
     }
   }) 
+
+  dateFilterBtn.onclick = function() {
+    if (startDate.value && endDate.value) {
+      clearButton.style.display = ''
+      filterOptions.createdAt = { $gte: new Date(startDate.value), $lte: new Date(endDate.value) }
+      getDataFunction(sortOptions, filterOptions, currentPage, itemsPerPage)
+    }
+  }
 
   searchInput.addEventListener('keypress', function(e) {
     if (searchInput.value.trim() === '') return

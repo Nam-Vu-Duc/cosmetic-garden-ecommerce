@@ -83,7 +83,7 @@ select {
   color: #333;
   cursor: pointer;
   appearance: none;  
-  width: 100px;
+  width: auto;
 }
 select:focus {
   border-color: #2a6c32;
@@ -205,8 +205,9 @@ span.pagination p.current {
   transform: scale(1.1);
 }
 button {
-  width: fit-content; 
-  height: 30px; 
+  width: fit-content;
+  min-width: 60px;
+  height: 40px; 
   background-color: white; 
   color: #389845; 
   border: 1px solid #389845; 
