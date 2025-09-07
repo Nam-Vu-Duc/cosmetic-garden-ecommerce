@@ -27,6 +27,7 @@ class allStoresController {
           .sort(sort)
           .skip(skip)
           .limit(itemsPerPage)
+          .sort({ createdAt: -1 })
           .lean(),
         store.find(filter).countDocuments(),
       ]) 

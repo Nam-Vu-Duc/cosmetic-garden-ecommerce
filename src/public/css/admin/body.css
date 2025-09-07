@@ -89,19 +89,6 @@ main {
   color: #444;
 }
 
-.filter-btn {
-  padding: 6px 8px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  background: #fafafa;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.filter-btn:hover {
-  border-color: #389845;
-  background: #f1fdf3;
-}
 #clear-sort-filter {
   padding: 6px 10px;
   border: none;

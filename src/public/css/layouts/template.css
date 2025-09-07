@@ -74,21 +74,26 @@ input:not(input[type='radio'], input[type='checkbox']) {
 }
 select {
   height: 40px;
-  border: 1px solid #389845;
   border-radius: 5px;
-  padding: 0 30px 0 10px;
-  background: #fff url("data:image/svg+xml;utf8,<svg fill='%23389845' height='24' viewBox='0 0 24 24' width='24'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 8px center;
   background-size: 16px;
   font-size: 14px;
   color: #333;
   cursor: pointer;
   appearance: none;  
   width: auto;
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  transition: all 0.2s ease;
 }
 select:focus {
   border-color: #2a6c32;
   outline: 1.5px solid #389845;
   box-shadow: 0 0 5px rgba(56,152,69,0.4);
+}
+select:hover {
+  border-color: #389845;
+  background: #f1fdf3;
 }
 div.notification {
   position: fixed;

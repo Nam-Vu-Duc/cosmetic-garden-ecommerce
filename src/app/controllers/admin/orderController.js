@@ -35,6 +35,7 @@ class allOrdersController {
           .sort(sort)
           .skip(skip)
           .limit(itemsPerPage)
+          .sort({ createdAt: -1 })
           .lean(),
         order.find(filter).countDocuments(),
       ]) 

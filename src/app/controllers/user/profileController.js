@@ -187,5 +187,48 @@ class profileController {
       return res.json({error: error})
     }
   }
+
+  async orderUpdate(req, res, next) {
+    try {
+      await order.updateOne({ _id: req.body.id}, {
+        status: 'done',
+      })
+
+      const orderInfo = await order.findOne({ _id: req.body.id }).lean()
+      const userId = orderInfo.customerInfo.userId
+      
+      const silver  = 1000000
+      const gold    = 2000000
+      const diamond = 4000000
+
+      const userInfo = await user.findOne({ _id: userId }).lean()
+      if (userInfo.revenue >= diamond) {
+        await user.updateOne({ _id: userId }, {
+          $set: { memberCode: 'diamond' }
+        })
+      }
+      else if (userInfo.revenue >= gold) {
+        await user.updateOne({ _id: userId }, {
+          $set: { memberCode: 'gold' }
+        })
+      }
+      else if (userInfo.revenue >= silver) {
+        await user.updateOne({ _id: userId }, {
+          $set: { memberCode: 'silver' }
+        })
+      }
+      await user.updateOne({ _id: userId }, {
+        $inc: { 
+          revenue: orderInfo.totalNewOrderPrice,
+          quantity: 1
+        }
+      })
+  
+      return res.json({isValid: true, message: 'Cập nhật thông tin thành công'})
+
+    } catch (error) {
+      return res.json({error: error})
+    }
+  }
 }
 module.exports = new profileController

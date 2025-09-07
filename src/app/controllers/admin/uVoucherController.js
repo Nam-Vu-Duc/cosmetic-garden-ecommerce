@@ -25,6 +25,7 @@ class allUVouchersController {
           .sort(sort)
           .skip(skip)
           .limit(itemsPerPage)
+          .sort({ createdAt: -1 })
           .lean(),
         userVoucher.find(filter).countDocuments(),
       ]) 

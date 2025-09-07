@@ -6,6 +6,7 @@ router.get('/info'              , profileController.profileInfo)
 
 router.post('/updated'          , profileController.profileUpdate)
 router.post('/password-updated' , profileController.passwordUpdate)
+router.post('/order/updated'    , profileController.orderUpdate)
 
 router.post('/data/user'        , profileController.getUser)
 router.post('/data/orders'      , profileController.getOrders)

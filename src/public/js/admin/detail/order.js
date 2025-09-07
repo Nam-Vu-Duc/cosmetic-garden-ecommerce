@@ -41,6 +41,7 @@ async function getOrder() {
     const option = document.createElement('option')
     option.value = element.code
     option.textContent = element.name
+    option.disabled = true
     if (element.code === orderInfo.paymentMethod) option.selected = true
     
     document.querySelector('select#paymentMethod').appendChild(option)
@@ -51,6 +52,9 @@ async function getOrder() {
   document.querySelector('input#isRated').value = orderInfo.isRated ? 'Đã đánh giá' : 'Chưa đánh giá'
 
   document.querySelector('select#isPaid').value = orderInfo.isPaid
+  if (userRole === 'admin' || userRole === 'accountant') {
+    document.querySelector('select#isPaid').querySelectorAll('option').forEach((option) => option.disabled = false)
+  }
 
   const submitButton = document.querySelector('button[type="submit"]')
   if (orderInfo.status === 'done' || orderInfo.status === 'cancel') {

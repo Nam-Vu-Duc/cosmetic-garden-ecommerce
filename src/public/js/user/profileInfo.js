@@ -181,7 +181,13 @@ async function getOrders() {
       <td style="text-align:right"  >${formatNumber(order.totalNewOrderPrice)}</td>
       <td style="text-align:right"  >${formatDate(order.createdAt)}</td>
       <td style="text-align:left"   >${order.orderStatus.name}</td>
-      <td style="text-align:center" ><a target="_blank" rel="noopener noreferrer" href="/all-orders/order/${order._id}">Chi Tiết</a></td>
+      <td style="text-align:center">
+        ${
+          order.orderStatus.code === 'delivered' && order.isPaid === true
+          ? `<button onclick="orderAction('${order._id}')">Chi Tiết</button>`
+          : `<a target="_blank" rel="noopener noreferrer" href="/all-orders/order/${order._id}">Chi Tiết</a>`
+        }
+      </td>
     `
     index++
     tbody.appendChild(tr)
@@ -448,6 +454,45 @@ async function getFeedback() {
 
   content.appendChild(div)
 
+}
+
+function orderAction(orderId) {
+  const actionBox = document.createElement('div')
+  actionBox.setAttribute('class', 'action-box')
+  actionBox.innerHTML = `
+    <div class="actions">
+      <button class="confirmation-button">Xác nhận đã nhận đơn hàng</button>
+      <a target="_blank" rel="noopener noreferrer" href="/all-orders/order/${orderId}">Xem Chi Tiết</a>
+      <button 
+        id="delete-button" 
+        type="button" 
+        class="deletebtn"
+        onclick="document.querySelector('div.action-box').remove()"
+      ">Huỷ</button>
+    </div>
+  `
+  document.body.appendChild(actionBox)
+
+  document.querySelector('button.confirmation-button').onclick = async function() {
+    try {
+      const response = await fetch('/profile/order/updated', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ id: orderId })
+      })
+      if (!response.ok) throw new Error(`Response status: ${response.status}`)
+      const {isValid, message} = await response.json()
+      pushNotification(message)
+
+      if (!isValid) return
+      setTimeout(() => window.location.reload(), 3000)
+    } catch (error) {
+      console.error("Error confirming order:", error)
+      pushNotification(`Error confirming order: ${error}. Please try again later`)
+    }
+  }
+
+  return
 }
 
 infoBtn.onclick = function() {
