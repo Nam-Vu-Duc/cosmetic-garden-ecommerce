@@ -15,13 +15,13 @@ router.get('/:id', async function(req, res) {
 router.post('/create', async function(req, res) {
   const chatRoom = await chat.findOne({ userId: req.cookies.uid }).lean()
   const newMessage = new message({
-    chatId: chatRoom._id,
+    chatId  : chatRoom._id,
     senderId: req.cookies.uid,
-    content: req.body.value
+    content : req.body.value
   })
   await chat.updateOne({_id: chatRoom._id}, {
-    updatedAt: new Date(),
-    lastMessage: req.body.value
+    updatedAt   : new Date(),
+    lastMessage : req.body.value
   })
   await newMessage.save()
   return res.json({message: 'save successfully'})

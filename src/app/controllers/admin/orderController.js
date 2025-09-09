@@ -116,8 +116,22 @@ class allOrdersController {
 
         const bulkOps = orderInfo.products.map(({ id, quantity }) => ({
           updateOne: {
-            filter: { _id: id }, 
-            update: { $inc: { quantity: -quantity, saleNumber: quantity }}, 
+            filter: { _id: id },
+            update: [
+              {
+                $set: {
+                  quantity: { $subtract: ["$quantity", quantity] },
+                  saleNumber: { $add: ["$saleNumber", quantity] },
+                  status: {
+                    $cond: [
+                      { $eq: [{ $subtract: ["$quantity", quantity] }, 0] },
+                      "out-of-order",
+                      "$status"
+                    ]
+                  }
+                }
+              }
+            ],
             upsert: true,
           },
         }))

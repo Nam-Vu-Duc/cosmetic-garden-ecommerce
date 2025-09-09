@@ -3,8 +3,10 @@ importLinkCss('/css/user/allOrders.css')
 const voucher         = document.querySelector('div.voucher')
 const contactInfo     = document.querySelector('div.contact-info')
 const paymentMethod   = document.querySelector('div.payment-method')
+const voucherButton   = document.querySelector('button.voucher-button')
 const nextButton      = document.querySelector('button.next-button')
 const submitButton    = document.querySelector('button.submit-button')
+const imgInput        = document.querySelector('input#img')
 const tableBody       = document.querySelector('tbody')
 const tableFooter     = document.querySelector('tfoot')
 const userId          = {id: null}
@@ -201,57 +203,6 @@ async function checkOutOfOrderProduct() {
   })
 }
 
-document.querySelector('button.submit-button').onclick = async function() {
-  try {
-    const getProductInfo = JSON.parse(localStorage.getItem('product_cart_count')) || {}
-    if (getProductInfo.productInfo.length === 0) throw Error('Giỏ hàng của bạn đang trống')
-      
-    const checkedProducts = document.querySelectorAll('tbody input[type="checkbox"]:checked')
-    const productIds = Array.from(checkedProducts).map((input) => {
-      return {
-        id: input.id,
-        quantity: input.value
-      }
-    })
-
-    if (productIds.length === 0) throw Error('Hãy chọn sản phẩm nha')  
-
-    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value
-    const name          = document.querySelector('input[name="name"]').value
-    const phone         = document.querySelector('input[name="phone"]').value
-    const address       = document.querySelector('input[name="address"]').value
-    if (
-      !name     || 
-      !phone    || 
-      !address 
-    ) throw Error('Hãy điền đầy đủ thông tin cá nhân nha')  
-
-    if (!paymentMethod) throw Error('Hãy chọn phương thức thanh toán nha')
-    if (paymentMethod === 'transfer' & !imgPath.path) throw Error('Hãy up bill chuyển khoản lên nha')
-    
-    const confirmMessage = document.createElement('div')
-    confirmMessage.setAttribute('class', 'order-confirm-message')
-    confirmMessage.innerHTML = `
-      <h2>Bạn xác nhận muốn đặt hàng chứ ?</h2>
-      <div class="actions">
-        <button 
-          id="delete-button" 
-          type="button" 
-          class="deletebtn"
-          onclick="document.querySelector('div.order-confirm-message').remove()"
-        ">Huỷ</button>
-        <button type="button" class="confirmbtn" onclick="submitOrder()">Đồng ý</button>
-      </div>
-    `
-    document.body.appendChild(confirmMessage)
-        
-    return
-  }
-  catch (error) {
-    return pushNotification(error.message)
-  }
-}
-
 async function submitOrder() {
   const preloader = document.querySelector('div.preloader')
   try {
@@ -326,20 +277,20 @@ async function submitOrder() {
       <h3>Chúc mừng bạn đã đặt hàng thành công !!!</h3>
       <h3>Mã đơn hàng của bạn là: ${id}</h3>
       <h5>Nếu là người mới, bạn hãy lưu lại mã này để theo dõi đơn hàng ở mục 'Đơn hàng' nhé</h5>
-      <h5>Còn nếu bạn đã có tài khoản rồi thì có thể theo dõi đơn hàng ở mục 'Thông tin cá nhân' luôn nha</h5>
+      <h5>Nếu bạn đã có tài khoản rồi thì có thể theo dõi đơn hàng ở mục 'Thông tin cá nhân' luôn nha</h5>
       <a href="/all-orders/order/${id}">Xem đơn hàng</a>
     `
     document.body.appendChild(orderSuccessfullyMessage)
     preloader.classList.add('inactive')
 
-    // await fetch('/data/notification', {
-    //   method: 'POST',
-    //   headers: {'Content-Type': 'application/json'},
-    //   body: JSON.stringify({
-    //     message: `Bạn có đơn hàng mới: ${id}`,
-    //     type: 'order'
-    //   })
-    // })
+    await fetch('/data/notification', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        message: `Bạn có đơn hàng mới: ${id}`,
+        type: 'order'
+      })
+    })
 
     return
   }
@@ -367,16 +318,16 @@ async function loadData(retriesLeft) {
   }
 }
 
-document.querySelector('input#img').addEventListener('change', function () {
+imgInput.onchange = function() {
   const file = img.files[0] // Get the selected file
   const reader = new FileReader()
   reader.onload = function () {
     imgPath.path = reader.result // Base64-encoded string
   }
   reader.readAsDataURL(file)
-})
+}
 
-document.querySelector('button.voucher-button').addEventListener('click', async function() {
+voucherButton.onclick = async function() {
   const voucherCode = document.querySelector('input#voucher-code').value
   if (!voucherCode) return pushNotification('Hãy nhập mã giảm giá nha')
 
@@ -387,6 +338,7 @@ document.querySelector('button.voucher-button').addEventListener('click', async 
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
   const {voucherInfo, discountType, error} = await response.json()
+
   if (error) return pushNotification(error)
   if (totalOrderPrice.total < voucherInfo.minOrder) return pushNotification(`Đơn hàng của bạn chưa đủ giá trị để áp dụng mã giảm giá này đâu nha`)
 
@@ -394,7 +346,8 @@ document.querySelector('button.voucher-button').addEventListener('click', async 
   if (discountType === 'percentage') {
     discountValue = (totalOrderPrice.total * voucherInfo.discount) / 100
     if (discountValue > voucherInfo.maxDiscount) discountValue = voucherInfo.maxDiscount
-  } else if (discountType === 'value') {
+  } 
+  else if (discountType === 'value') {
     discountValue = voucherInfo.discount
   }
   
@@ -402,7 +355,58 @@ document.querySelector('button.voucher-button').addEventListener('click', async 
 
   document.querySelector('span.new-price-value').textContent = formatNumber(newPrice)
   document.querySelector('span.form-message').textContent = voucherInfo.description
-})
+}
+
+submitButton.onclick = async function() {
+  try {
+    const getProductInfo = JSON.parse(localStorage.getItem('product_cart_count')) || {}
+    if (getProductInfo.productInfo.length === 0) throw Error('Giỏ hàng của bạn đang trống')
+      
+    const checkedProducts = document.querySelectorAll('tbody input[type="checkbox"]:checked')
+    const productIds = Array.from(checkedProducts).map((input) => {
+      return {
+        id: input.id,
+        quantity: input.value
+      }
+    })
+
+    if (productIds.length === 0) throw Error('Hãy chọn sản phẩm nha')  
+
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value
+    const name          = document.querySelector('input[name="name"]').value
+    const phone         = document.querySelector('input[name="phone"]').value
+    const address       = document.querySelector('input[name="address"]').value
+    if (
+      !name     || 
+      !phone    || 
+      !address 
+    ) throw Error('Hãy điền đầy đủ thông tin cá nhân nha')  
+
+    if (!paymentMethod) throw Error('Hãy chọn phương thức thanh toán nha')
+    if (paymentMethod === 'transfer' & !imgPath.path) throw Error('Hãy up bill chuyển khoản lên nha')
+    
+    const confirmMessage = document.createElement('div')
+    confirmMessage.setAttribute('class', 'order-confirm-message')
+    confirmMessage.innerHTML = `
+      <h2>Bạn xác nhận muốn đặt hàng chứ ?</h2>
+      <div class="actions">
+        <button 
+          id="delete-button" 
+          type="button" 
+          class="deletebtn"
+          onclick="document.querySelector('div.order-confirm-message').remove()"
+        ">Huỷ</button>
+        <button type="button" class="confirmbtn" onclick="submitOrder()">Đồng ý</button>
+      </div>
+    `
+    document.body.appendChild(confirmMessage)
+        
+    return
+  }
+  catch (error) {
+    return pushNotification(error.message)
+  }
+}
 
 preCheckAllProducts()
 

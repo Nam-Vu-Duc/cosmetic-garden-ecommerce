@@ -41,7 +41,7 @@ function updateNotification(message) {
 
 function initSocketEvents(role, adminId) {
   socket.on('order', () => {
-    if (role === 'employee') updateNotification('Bạn có đơn hàng mới')
+    if (role === 'employee' || role === 'admin') updateNotification('Bạn có đơn hàng mới')
   })
 
   socket.on('account', () => {
@@ -50,12 +50,12 @@ function initSocketEvents(role, adminId) {
 
   socket.on('chat-message', (id) => {
     if (id === adminId) return
-    if (role === 'chat') updateNotification('Bạn có tin nhắn mới')
+    if (role === 'chat' || role === 'admin') updateNotification('Bạn có tin nhắn mới')
   })
 
-  socket.on('privateMessageEmp', () => {
-    if (role === 'employee') updateNotification('Bạn có đơn hàng mới')
-  })
+  // socket.on('privateMessageEmp', () => {
+  //   if (role === 'employee') updateNotification('Bạn có đơn hàng mới')
+  // })
 }
 
 window.addEventListener('load', () => {

@@ -6,9 +6,9 @@ const homePermission = require('../../app/middleware/checkPermission').homeClass
 router.get('/', homePermission.read, homeController.show)
 
 router.post('/data/finance'             , homeController.getFinance)
-router.post('/data/orders'               , homeController.getOrders)
-router.post('/data/customers'            , homeController.getCustomers)
-router.post('/data/purchases'            , homeController.getPurchases)
+router.post('/data/orders'              , homeController.getOrders)
+router.post('/data/customers'           , homeController.getCustomers)
+router.post('/data/purchases'           , homeController.getPurchases)
 router.get('/data/brands'               , homeController.getBrands)
 router.get('/data/employees'            , homeController.getEmployees)
 router.get('/data/products'             , homeController.getProducts)

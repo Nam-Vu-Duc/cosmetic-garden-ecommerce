@@ -55,14 +55,11 @@ async function loadData(retriesLeft) {
 
 loadData(5)
 
-// window.addEventListener('DOMContentLoaded', function () {
-//   loadData(5)
-//   getLog(
-//     topic = 'page-view', 
-//     value = {
-//       "user_id"   : window.uid,
-//       "page_type" : 'brands',
-//       "timestamp" : new Date(),
-//     }
-//   )
-// })
+// getLog(
+//   topic = 'page-view', 
+//   value = {
+//     "user_id"   : window.uid,
+//     "page_type" : 'brands',
+//     "timestamp" : new Date(),
+//   }
+// )

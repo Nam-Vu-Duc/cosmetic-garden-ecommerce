@@ -49,12 +49,11 @@ app.set('view options', { layout: 'other' })
 async function main() {
   // await getUsersWithBirthdayThisMonth()
   await setVoucherExpired()
-  
 }
 
 // main()
 
 route(app)
 server.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`);
+  console.log(`App listening at http://localhost:${port}`)
 })

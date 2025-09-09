@@ -14,7 +14,7 @@ router.get('/', async function(req, res) {
   await emp.updateOne({_id: req.cookies.uid}, {
     isActive: false
   })
-  res.redirect('/emp/authentication/sign-in');
+  res.redirect('/emp/authentication/sign-in')
 })
 
 module.exports = router

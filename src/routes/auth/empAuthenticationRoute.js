@@ -10,12 +10,12 @@ router.use(session({
   saveUninitialized: true,
 }));
 router.use(flash())
-router.get('/sign-in', empAuthenticationController.signIn )
-router.post('/checking-account', empAuthenticationController.checkingAccount )
+router.get('/sign-in'           , empAuthenticationController.signIn )
+router.post('/checking-account' , empAuthenticationController.checkingAccount )
 
-router.get('/reset-password', empAuthenticationController.resetPassword )
-router.post('/reset-password/verifying-email', empAuthenticationController.verifyingEmail )
-router.post('/reset-password/verifying-code', empAuthenticationController.verifyingCode )
-router.post('/resetting-password', empAuthenticationController.resettingPassword )
+router.get('/reset-password'                  , empAuthenticationController.resetPassword )
+router.post('/reset-password/verifying-email' , empAuthenticationController.verifyingEmail )
+router.post('/reset-password/verifying-code'  , empAuthenticationController.verifyingCode )
+router.post('/resetting-password'             , empAuthenticationController.resettingPassword )
 
 module.exports = router

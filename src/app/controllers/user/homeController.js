@@ -108,7 +108,7 @@ class homeController {
       const {message, type, userId} = req.body
 
       if (type === 'order') {
-        const employees = await employee.find({role: 'employee'}).lean()
+        const employees = await employee.find().lean()
         const employeeIDs = employees.map(employee => employee._id)
 
         for (const id of employeeIDs) {
