@@ -1,4 +1,4 @@
-async function exportJs() {
+async function exportJs(title) {
   document.getElementById("export-js").addEventListener('click', function () {
     const table = document.querySelector("table.all-items").cloneNode(true)
 
@@ -27,20 +27,40 @@ async function exportJs() {
 
     const row2 = document.createElement("tr")
     row2.innerHTML = `
-      <td></td><td></td><td></td><td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
       <td colspan="2" style="text-align: center;">
         Độc lập - Tự do - Hạnh phúc
       </td>
     `
 
-    // Optionally: add empty spacing rows
-    for (let i = 0; i < 2; i++) {
-      const emptyRow = document.createElement("tr")
-      emptyRow.innerHTML = `<td></td><td></td><td></td><td></td><td></td><td></td>`
-      thead.insertBefore(emptyRow, thead.firstChild.nextSibling)
-    }
+    const row3 = document.createElement("tr")
+    row3.innerHTML = `
+      <td></td>
+      <td></td>
+      <td colspan="2" style="text-align: center;">
+        ${title}
+      </td>
+      <td></td>
+      <td></td>
+    `
+
+    const emptyRow = document.createElement("tr")
+    emptyRow.innerHTML = `
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    `
 
     // Insert custom rows at the top of thead
+    thead.insertBefore(emptyRow.cloneNode(true), thead.firstChild)
+    thead.insertBefore(row3, thead.firstChild)
+    thead.insertBefore(emptyRow.cloneNode(true), thead.firstChild)
     thead.insertBefore(row2, thead.firstChild)
     thead.insertBefore(row1, thead.firstChild)
 

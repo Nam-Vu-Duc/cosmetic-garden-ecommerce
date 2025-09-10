@@ -27,15 +27,12 @@ class allOrdersController {
         filter['_id'] = ObjectId.createFromHexString(filter['_id'])
       }
 
-      console.log(filter)
-
       const [data, dataSize] = await Promise.all([
         order
           .find(filter)
           .sort(sort)
           .skip(skip)
           .limit(itemsPerPage)
-          .sort({ createdAt: -1 })
           .lean(),
         order.find(filter).countDocuments(),
       ]) 

@@ -30,7 +30,6 @@ class adminController {
           .sort(sort)
           .skip(skip)
           .limit(itemsPerPage)
-          .sort({ createdAt: -1 })
           .lean(),
         purchase.find(filter).countDocuments(),
       ]) 

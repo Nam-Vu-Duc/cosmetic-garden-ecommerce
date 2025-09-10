@@ -17,7 +17,7 @@ async function getVouchers() {
     })
     if (!response.ok) throw new Error(`Response status: ${response.status}`)
     const {data} = await response.json()
-
+  
     const vouchersDiv = document.querySelector('div[class="vouchers-board"][id="voucher"]').querySelectorAll('div.voucher')
     window.setTimeout(function() {
       vouchersDiv.forEach((voucher, index) => {
@@ -32,6 +32,7 @@ async function getVouchers() {
             navigator.clipboard.writeText(codeText)
             alert("Sao chép mã thành công: " + codeText)
           })
+          voucher.parentElement.setAttribute('href', '/all-vouchers/voucher/' + data[index]._id)
         } else {
           voucher.style.display = 'none'
         }

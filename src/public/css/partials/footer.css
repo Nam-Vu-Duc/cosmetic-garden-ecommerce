@@ -69,13 +69,13 @@
   border-color: #ffffff;
 }
 
-/* Optional: Icon Font (if using Font Awesome or similar) */
-.social-icons .facebook i::before {
-  content: "\f09a"; /* FontAwesome Facebook */
+.social-icons img {
+  width: 28px;      /* icon size */
+  height: 28px;
+  filter: invert(50%) sepia(20%) saturate(500%) hue-rotate(180deg); /* color tweak if needed */
+  transition: transform 0.2s ease-in-out;
 }
-.social-icons .email i::before {
-  content: "\f0e0"; /* FontAwesome Envelope */
-}
-.social-icons .phone i::before {
-  content: "\f095"; /* FontAwesome Phone */
+
+.social-icons a:hover img {
+  transform: scale(1.2);
 }

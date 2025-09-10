@@ -23,7 +23,6 @@ class allSuppliersController {
           .sort(sort)
           .skip(skip)
           .limit(itemsPerPage)
-          .sort({ createdAt: -1 })
           .lean(),
         supplier.find(filter).countDocuments(),
       ]) 

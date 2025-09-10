@@ -10,6 +10,7 @@ const supplier = require('../../models/supplierModel')
 const notification = require('../../models/notificationModel')
 const orderStatus = require('../../models/orderStatusModel')
 const member = require('../../models/memberModel')
+const position = require('../../models/positionModel')
 
 class homeController {
   async show(req, res, next) {
@@ -131,8 +132,17 @@ class homeController {
 
   async getEmployees(req, res, next) {
     try {
-      const employees = await employee.find().lean()
-      return res.json({data: employees})
+      const matchStage = {}
+      if (req.body.startDate && req.body.endDate) {
+        matchStage.createdAt = {
+          $gte: new Date(req.body.startDate),
+          $lte: new Date(req.body.endDate),
+        }
+      }
+
+      const employees = await employee.find(matchStage).lean()
+      const positions = await position.find().lean()
+      return res.json({data: employees, positions: positions})
     } catch (error) {
       console.log(error)
       return res.json({error: error.message})

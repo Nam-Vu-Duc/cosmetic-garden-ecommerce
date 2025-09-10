@@ -124,6 +124,8 @@ class allOrderController {
         code,
         ...customerInfo 
       } = req.body
+
+      const note = req.body.img ? `${customerInfo.note}, ${result.secure_url}` : customerInfo.note
   
       let totalOrderPrice = 0
   
@@ -161,7 +163,7 @@ class allOrderController {
           name    : customerInfo.name,
           phone   : customerInfo.phone,
           address : customerInfo.address,
-          note    : `${customerInfo.note}, ${result.secure_url}`
+          note    : note
         },
         voucherCode: code,
         totalOrderPrice: totalOrderPrice,
@@ -223,6 +225,10 @@ class allOrderController {
                 pass: adminPassword,
               },
             })
+
+            function formatNumber(number) {
+              return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' VND'
+            }
     
             async function sendEmail(userEmail) {
               await transporter.sendMail({
@@ -230,7 +236,7 @@ class allOrderController {
                 to: userEmail, 
                 subject: "Tặng bạn voucher cho lần mua tiếp theo", 
                 text: `
-                  Tặng bạn voucher giảm ${newUserVoucher.discount} cho đơn hàng từ ${newUserVoucher.minOrder} trong lần mua tiếp theo.
+                  Tặng bạn voucher giảm ${formatNumber(newUserVoucher.discount)} cho đơn hàng từ ${formatNumber(newUserVoucher.minOrder)} trong lần mua tiếp theo.
                   Lưu ý: voucher chỉ có hiệu lực trong vòng 1 tháng kể từ ngày nhận được.
                   Hãy copy mã voucher của bạn và sử dụng thật sớm nhé: 
                   ${newUserVoucher.code}
@@ -329,6 +335,32 @@ class allOrderController {
         })
 
         return res.json({ payUrl: momoResponse.payUrl })
+      }
+
+      if (paymentMethod === 'transfer') {
+        await order.updateOne({ _id: newOrder._id }, { status: 'preparing', isPaid: true })
+        const bulkOps = finalProductInfo.map(({ id, quantity }) => ({
+          updateOne: {
+            filter: { _id: id },
+            update: [
+              {
+                $set: {
+                  quantity: { $subtract: ["$quantity", parseInt(quantity)] },
+                  saleNumber: { $add: ["$saleNumber", parseInt(quantity)] },
+                  status: {
+                    $cond: [
+                      { $eq: [{ $subtract: ["$quantity", parseInt(quantity)] }, 0] },
+                      "out-of-order",
+                      "$status"
+                    ]
+                  }
+                }
+              }
+            ],
+            upsert: true,
+          },
+        }))
+        await product.bulkWrite(bulkOps)
       }
 
       // try {

@@ -44,6 +44,7 @@ async function getOrders(sortOptions, filterOptions, currentPage, itemsPerPage) 
       sort  : sortOptions, 
       filter: filterOptions, 
       page  : currentPage,
+      itemsPerPage: itemsPerPage
     })
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
@@ -91,7 +92,7 @@ window.addEventListener('DOMContentLoaded', async function loadData() {
     await getFilter()
     await getOrders(sortOptions, filterOptions, currentPage.page, 10)
     await sortAndFilter(getOrders, sortOptions, filterOptions, currentPage.page)
-    await exportJs()
+    await exportJs('BÁO CÁO DANH SÁCH ĐƠN HÀNG')
   } catch (error) {
     console.error('Error loading data:', error)
     pushNotification(error)

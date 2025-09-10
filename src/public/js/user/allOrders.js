@@ -255,8 +255,9 @@ async function submitOrder() {
     const {id, payUrl, error} = await response.json()
     if (error) throw Error(error)
 
+    socket.emit('order', { id: id})
+
     if (payUrl) {
-      socket.emit('order', { id: id})
       const momoPaymentMessage = document.createElement('div')
       momoPaymentMessage.setAttribute('class', 'order-successfully-message')
       momoPaymentMessage.innerHTML = `
@@ -265,23 +266,20 @@ async function submitOrder() {
       `
       document.body.appendChild(momoPaymentMessage)
       preloader.classList.add('inactive')
-      return
+    } else {
+      const orderSuccessfullyMessage = document.createElement('div')
+      orderSuccessfullyMessage.setAttribute('class', 'order-successfully-message')
+      orderSuccessfullyMessage.innerHTML = `
+        <i class="fi fi-ss-check-circle"></i>
+        <h3>Chúc mừng bạn đã đặt hàng thành công !!!</h3>
+        <h3>Mã đơn hàng của bạn là: ${id}</h3>
+        <h5>Nếu là người mới, bạn hãy lưu lại mã này để theo dõi đơn hàng ở mục 'Đơn hàng' nhé</h5>
+        <h5>Nếu bạn đã có tài khoản rồi thì có thể theo dõi đơn hàng ở mục 'Thông tin cá nhân' luôn nha</h5>
+        <a href="/all-orders/order/${id}">Xem đơn hàng</a>
+      `
+      document.body.appendChild(orderSuccessfullyMessage)
+      preloader.classList.add('inactive')
     }
-
-    socket.emit('order', { id: id})
-
-    const orderSuccessfullyMessage = document.createElement('div')
-    orderSuccessfullyMessage.setAttribute('class', 'order-successfully-message')
-    orderSuccessfullyMessage.innerHTML = `
-      <i class="fi fi-ss-check-circle"></i>
-      <h3>Chúc mừng bạn đã đặt hàng thành công !!!</h3>
-      <h3>Mã đơn hàng của bạn là: ${id}</h3>
-      <h5>Nếu là người mới, bạn hãy lưu lại mã này để theo dõi đơn hàng ở mục 'Đơn hàng' nhé</h5>
-      <h5>Nếu bạn đã có tài khoản rồi thì có thể theo dõi đơn hàng ở mục 'Thông tin cá nhân' luôn nha</h5>
-      <a href="/all-orders/order/${id}">Xem đơn hàng</a>
-    `
-    document.body.appendChild(orderSuccessfullyMessage)
-    preloader.classList.add('inactive')
 
     await fetch('/data/notification', {
       method: 'POST',

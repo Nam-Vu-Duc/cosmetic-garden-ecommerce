@@ -37,121 +37,6 @@ async function getFinance(fetchBody) {
   document.querySelector('div.finance').appendChild(table)
 }
 
-async function getBrands() {
-  const response = await fetch('/admin/all/data/brands')
-  if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const {data} = await response.json()
-
-  const table = document.createElement('table')
-  table.innerHTML = `
-    <thead>
-      <tr><td colspan="3">QUẢN LÝ THƯƠNG HIỆU</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Số lượng thương hiệu</td>
-        <td>${data.length}</td>
-        <td><a href="/admin/all-brands">Chi tiết</a></td>
-      </tr>
-    </tbody>
-  `
-
-  document.querySelector('div.brand').appendChild(table)
-}
-
-async function getCustomers(fetchBody) {
-  const response = await fetch('/admin/all/data/customers', fetchBody)
-  if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const {data, members} = await response.json()
-
-  const table = document.createElement('table')
-  table.innerHTML = `
-    <thead>
-      <tr><td colspan="3">QUẢN LÝ KHÁCH HÀNG</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Số lượng khách hàng</td>
-        <td>${data.length}</td>
-        <td><a href="/admin/all-customers">Chi tiết</a></td>
-      </tr>
-    </tbody>
-  `
-
-  const customerDiv = document.querySelector('div.customer')
-  const oldTable = customerDiv.querySelector("table")
-
-  if (oldTable) oldTable.remove()
-  customerDiv.appendChild(table)
-
-  const customerMembershipCtx = document.getElementById("customer-membership")
-  Chart.getChart(customerMembershipCtx)?.destroy()
-  new Chart(customerMembershipCtx, {
-    type: 'pie',
-    options: {
-      plugins: {
-        legend: {
-          display: false
-        },
-        title: {
-          display: true,
-          text: 'HẠNG THÀNH VIÊN'
-        }
-      }
-    },
-    data: {
-      labels: Array.from(members.map((member) => member.name)),
-      datasets: [{
-        data: members.map((member) => {
-          return data.filter((user) => user.memberCode === member.code).length
-        }),
-        borderWidth: 1,
-      }]
-    }
-  })
-
-  const customerCtx = document.getElementById("customer")
-  Chart.getChart(customerCtx)?.destroy()
-  new Chart(customerCtx, {
-    type: 'bar',
-    data: {
-      labels: Array.from(new Set(data.map(user => formatDate(user.createdAt)))),
-      datasets: [{
-        label: 'KHÁCH HÀNG THEO THỜI GIAN',
-        data: data.map(user => user.createdAt).reduce((acc, date) => {
-          const formattedDate = formatDate(date)
-          acc[formattedDate] = (acc[formattedDate] || 0) + 1
-          return acc
-        }, {}),
-        borderWidth: 1,
-        backgroundColor: '#5ab868'
-      }]
-    }
-  })
-}
-
-async function getEmployees() {
-  const response = await fetch('/admin/all/data/employees')
-  if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const {data} = await response.json()
-
-  const table = document.createElement('table')
-  table.innerHTML = `
-    <thead>
-      <tr><td colspan="3">QUẢN LÝ NHÂN SỰ</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Số lượng nhân sự</td>
-        <td>${data.length}</td>
-        <td><a href="/admin/all-employees">Chi tiết</a></td>
-      </tr>
-    </tbody>
-  `
-
-  document.querySelector('div.employee').appendChild(table)
-}
-
 async function getOrders(fetchBody) {
   const response = await fetch('/admin/all/data/orders', fetchBody)
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
@@ -227,7 +112,169 @@ async function getOrders(fetchBody) {
           return acc
         }, {}),
         borderWidth: 1,
-        backgroundColor: '#5ab868'
+        backgroundColor: '#4E79A7'
+      }]
+    }
+  })
+}
+
+async function getCustomers(fetchBody) {
+  const response = await fetch('/admin/all/data/customers', fetchBody)
+  if (!response.ok) throw new Error(`Response status: ${response.status}`)
+  const {data, members} = await response.json()
+
+  const table = document.createElement('table')
+  table.innerHTML = `
+    <thead>
+      <tr><td colspan="3">QUẢN LÝ KHÁCH HÀNG</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Số lượng khách hàng</td>
+        <td>${data.length}</td>
+        <td><a href="/admin/all-customers">Chi tiết</a></td>
+      </tr>
+    </tbody>
+  `
+
+  const customerDiv = document.querySelector('div.customer')
+  const oldTable = customerDiv.querySelector("table")
+
+  if (oldTable) oldTable.remove()
+  customerDiv.appendChild(table)
+
+  const customerMembershipCtx = document.getElementById("customer-membership")
+  Chart.getChart(customerMembershipCtx)?.destroy()
+  new Chart(customerMembershipCtx, {
+    type: 'pie',
+    options: {
+      plugins: {
+        legend: {
+          display: false
+        },
+        title: {
+          display: true,
+          text: 'HẠNG THÀNH VIÊN'
+        }
+      }
+    },
+    data: {
+      labels: Array.from(members.map((member) => member.name)),
+      datasets: [{
+        data: members.map((member) => {
+          return data.filter((user) => user.memberCode === member.code).length
+        }),
+        borderWidth: 1,
+      }]
+    }
+  })
+
+  const customerCtx = document.getElementById("customer")
+  Chart.getChart(customerCtx)?.destroy()
+  new Chart(customerCtx, {
+    type: 'bar',
+    options: {
+      plugins: {
+        legend: {
+          display: false
+        },
+        title: {
+          display: true,
+          text: 'KHÁCH HÀNG THEO THỜI GIAN'
+        }
+      }
+    },
+    data: {
+      labels: Array.from(new Set(data.map(user => formatDate(user.createdAt)))),
+      datasets: [{
+        data: data.map(user => user.createdAt).reduce((acc, date) => {
+          const formattedDate = formatDate(date)
+          acc[formattedDate] = (acc[formattedDate] || 0) + 1
+          return acc
+        }, {}),
+        borderWidth: 1,
+        backgroundColor: '#F28E2B'
+      }]
+    }
+  })
+}
+
+async function getEmployees(fetchBody) {
+  const response = await fetch('/admin/all/data/employees', fetchBody)
+  if (!response.ok) throw new Error(`Response status: ${response.status}`)
+  const {data, positions} = await response.json()
+
+  const table = document.createElement('table')
+  table.innerHTML = `
+    <thead>
+      <tr><td colspan="3">QUẢN LÝ NHÂN SỰ</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Số lượng nhân sự</td>
+        <td>${data.length}</td>
+        <td><a href="/admin/all-employees">Chi tiết</a></td>
+      </tr>
+    </tbody>
+  `
+
+  const employeeDiv = document.querySelector('div.employee')
+  const oldTable = employeeDiv.querySelector("table")
+
+  if (oldTable) oldTable.remove()
+  employeeDiv.appendChild(table)
+
+  const employeeRoleCtx = document.getElementById("employee-role")
+  Chart.getChart(employeeRoleCtx)?.destroy()
+  new Chart(employeeRoleCtx, {
+    type: 'doughnut',
+    options: {
+      plugins: {
+        legend: {
+          display: false
+        },
+        title: {
+          display: true,
+          text: 'VỊ TRÍ NHÂN SỰ'
+        }
+      }
+    },
+    data: {
+      labels: Array.from(positions.map((position) => position.name)),
+      datasets: [{
+        data: positions.map((position) => {
+          return data.filter((user) => user.role === position.code).length
+        }),
+        borderWidth: 1,
+      }]
+    }
+  })
+
+  const employeeCtx = document.getElementById("employee")
+  Chart.getChart(employeeCtx)?.destroy()
+  new Chart(employeeCtx, {
+    type: 'bar',
+    options: {
+      plugins: {
+        legend: {
+          display: false
+        },
+        title: {
+          display: true,
+          text: 'NHÂN SỰ THEO THỜI GIAN'
+        }
+      }
+    },
+    data: {
+      labels: Array.from(new Set(data.map(user => formatDate(user.createdAt)))),
+      datasets: [{
+        data: data.map(user => user.createdAt).reduce((acc, date) => {
+          const formattedDate = formatDate(date)
+          acc[formattedDate] = (acc[formattedDate] || 0) + 1
+          return acc
+        }, {}),
+        borderWidth: 1,
+        backgroundColor: '#E15759'
       }]
     }
   })
@@ -249,20 +296,140 @@ async function getProducts() {
         <td>${data.length}</td>
         <td><a href="/admin/all-products/?page=&type=">Chi tiết</a></td>
       </tr>
+    </tbody>
+  `
+
+  const productDiv = document.querySelector('div.product')
+  const oldTable = productDiv.querySelector("table")
+
+  if (oldTable) oldTable.remove()
+  productDiv.appendChild(table)
+
+  const productCtx = document.getElementById("product")
+  Chart.getChart(productCtx)?.destroy()
+  new Chart(productCtx, {
+    type: 'bar',
+    options: {
+      plugins: {
+        legend: {
+          display: false
+        },
+        title: {
+          display: true,
+          text: 'SẢN PHẨM THEO DANH MỤC'
+        }
+      }
+    },
+    data: {
+      labels: ['Skincare', 'Makeup'],
+      datasets: [{
+        data: [
+          data.filter(product => product.categories === 'skincare').length, 
+          data.filter(product => product.categories === 'makeup').length
+        ],
+        borderWidth: 1,
+        backgroundColor: '#76B7B2'
+      }]
+    }
+  })
+
+  const productCategoryCtx = document.getElementById("product-category")
+  Chart.getChart(productCategoryCtx)?.destroy()
+  new Chart(productCategoryCtx, {
+    type: 'pie',
+    options: {
+      plugins: {
+        legend: {
+          display: false
+        },
+        title: {
+          display: true,
+          text: 'TỈ LỆ DOANH THU'
+        }
+      }
+    },
+    data: {
+      labels: ['Skincare', 'Makeup'],
+      datasets: [{
+        data: [
+          data.filter(product => product.categories === 'skincare').reduce((acc, product) => acc + product.price * product.saleNumber, 0), 
+          data.filter(product => product.categories === 'makeup').reduce((acc, product) => acc + product.price * product.saleNumber, 0)
+        ],
+        borderWidth: 1,
+      }]
+    }
+  })
+}
+
+async function getSuppliers() {
+  const response = await fetch('/admin/all/data/suppliers')
+  if (!response.ok) throw new Error(`Response status: ${response.status}`)
+  const {data} = await response.json()
+
+  const table = document.createElement('table')
+  table.innerHTML = `
+    <thead>
+      <tr><td colspan="3">QUẢN LÝ NHÀ CUNG CẤP</td></tr>
+    </thead>
+    <tbody>
       <tr>
-        <td>Skincare</td>
-        <td>${data.filter(product => product.categories === 'skincare').length}</td>
-        <td><a href="/admin/all-products/?page=&type=">Chi tiết</a></td>
-      </tr>
-      <tr>
-        <td>Makeup</td>
-        <td>${data.filter(product => product.categories === 'makeup').length}</td>
-        <td><a href="/admin/all-products/?page=&type=">Chi tiết</a></td>
+        <td>Số lượng nhà cung cấp</td>
+        <td>${data.length}</td>
+        <td><a href="/admin/all-suppliers">Chi tiết</a></td>
       </tr>
     </tbody>
   `
 
-  document.querySelector('div.product').appendChild(table)
+  document.querySelector('div.supplier').appendChild(table)
+
+  new Chart(supplier, {
+    type: 'bar',
+    options: {
+      plugins: {
+        legend: {
+          display: false
+        },
+        title: {
+          display: true,
+          text: 'NHÀ CUNG CẤP THEO THỜI GIAN'
+        }
+      }
+    },
+    data: {
+      labels: Array.from(new Set(data.map(supplier => formatDate(supplier.createdAt)))),
+      datasets: [{
+        data: data.map(supplier => supplier.createdAt).reduce((acc, date) => {
+          const formattedDate = formatDate(date)
+          acc[formattedDate] = (acc[formattedDate] || 0) + 1
+          return acc
+        }, {}),
+        borderWidth: 1,
+        backgroundColor: '#59A14F'
+      }]
+    }
+  })
+}
+
+async function getBrands() {
+  const response = await fetch('/admin/all/data/brands')
+  if (!response.ok) throw new Error(`Response status: ${response.status}`)
+  const {data} = await response.json()
+
+  const table = document.createElement('table')
+  table.innerHTML = `
+    <thead>
+      <tr><td colspan="3">QUẢN LÝ THƯƠNG HIỆU</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Số lượng thương hiệu</td>
+        <td>${data.length}</td>
+        <td><a href="/admin/all-brands">Chi tiết</a></td>
+      </tr>
+    </tbody>
+  `
+
+  document.querySelector('div.brand').appendChild(table)
 }
 
 async function getPurchases(fetchBody) {
@@ -332,45 +499,6 @@ async function getStores() {
   document.querySelector('div.store').appendChild(table)
 }
 
-async function getSuppliers() {
-  const response = await fetch('/admin/all/data/suppliers')
-  if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const {data} = await response.json()
-
-  const table = document.createElement('table')
-  table.innerHTML = `
-    <thead>
-      <tr><td colspan="3">QUẢN LÝ NHÀ CUNG CẤP</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Số lượng nhà cung cấp</td>
-        <td>${data.length}</td>
-        <td><a href="/admin/all-suppliers">Chi tiết</a></td>
-      </tr>
-    </tbody>
-  `
-
-  document.querySelector('div.supplier').appendChild(table)
-
-  new Chart(supplier, {
-    type: 'bar',
-    data: {
-      labels: Array.from(new Set(data.map(supplier => formatDate(supplier.createdAt)))),
-      datasets: [{
-        label: 'NHÀ CUNG CẤP THEO THỜI GIAN',
-        data: data.map(supplier => supplier.createdAt).reduce((acc, date) => {
-          const formattedDate = formatDate(date)
-          acc[formattedDate] = (acc[formattedDate] || 0) + 1
-          return acc
-        }, {}),
-        borderWidth: 1,
-        backgroundColor: '#5ab868'
-      }]
-    }
-  })
-}
-
 async function getAll() {
   try {
     const date = new Date();
@@ -404,12 +532,12 @@ async function getAll() {
     await getFinance(fetchBody)
     await getOrders(fetchBody)
     await getCustomers(fetchBody)
-    await getPurchases(fetchBody)
+    await getEmployees(fetchBody)
     await getSuppliers()
     await getProducts()
-    await getBrands()
     await getStores()
-    await getEmployees()    
+    // await getPurchases(fetchBody)
+    // await getBrands()
   } catch (error) {
     console.error('Có lỗi xảy ra:', error)
     pushNotification('Có lỗi xảy ra')
@@ -435,7 +563,8 @@ document.querySelector('button[type="submit"]').addEventListener('click', async 
   await getFinance(fetchBody)
   await getOrders(fetchBody)
   await getCustomers(fetchBody)
-  await getPurchases(fetchBody)
+  await getEmployees(fetchBody)
+  // await getPurchases(fetchBody)
 })
 
 window.addEventListener('DOMContentLoaded', async function loadData() {

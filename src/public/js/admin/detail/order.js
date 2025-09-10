@@ -32,7 +32,7 @@ async function getOrder() {
     if (userRole === 'shipper' && element.code === 'delivering') option.disabled = false
     if (userRole === 'shipper' && element.code === 'delivered') option.disabled = false
     if (userRole === 'manager' && element.code === 'cancel') option.disabled = false
-    if (userRole === 'admin') option.disabled = false
+    // if (userRole === 'admin') option.disabled = false
 
     document.querySelector('select#status').appendChild(option)
   })
@@ -52,7 +52,7 @@ async function getOrder() {
   document.querySelector('input#isRated').value = orderInfo.isRated ? 'Đã đánh giá' : 'Chưa đánh giá'
 
   document.querySelector('select#isPaid').value = orderInfo.isPaid
-  if (userRole === 'admin' || userRole === 'accountant') {
+  if (userRole === 'accountant') {
     document.querySelector('select#isPaid').querySelectorAll('option').forEach((option) => option.disabled = false)
   }
 

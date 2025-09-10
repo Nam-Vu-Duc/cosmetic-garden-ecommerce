@@ -25,7 +25,6 @@ class allVouchersController {
           .sort(sort)
           .skip(skip)
           .limit(itemsPerPage)
-          .sort({ createdAt: -1 })
           .lean(),
         voucher.find(filter).countDocuments(),
       ]) 

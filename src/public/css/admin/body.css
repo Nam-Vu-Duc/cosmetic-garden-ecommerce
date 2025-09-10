@@ -113,6 +113,7 @@ main {
   font-weight: 500;
   text-decoration: none;
   transition: background-color 0.2s ease, transform 0.1s ease;
+  box-sizing: border-box;
 }
 .create-btn:hover {
   background-color: #2f7a39;
@@ -219,7 +220,7 @@ table td:last-child {
 table a {
   display: inline-block;
   min-width: 70px;
-  padding: 6px 10px;
+  height: 40px;
   background: #fff;
   color: #389845;
   border: 1px solid #389845;
@@ -228,6 +229,9 @@ table a {
   font-weight: 500;
   text-decoration: none;
   transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 table a:hover {

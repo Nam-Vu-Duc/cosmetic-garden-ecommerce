@@ -27,7 +27,6 @@ class allEmployeesController {
           .sort(sort)
           .skip(skip)
           .limit(itemsPerPage)
-          .sort({ createdAt: -1 })
           .lean(),
         employee.find(filter).countDocuments(),
       ]) 

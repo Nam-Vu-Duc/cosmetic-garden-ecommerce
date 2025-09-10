@@ -135,7 +135,7 @@ window.addEventListener('DOMContentLoaded', async function loadData() {
     await getFilter()
     await getProducts(sortOptions, filterOptions, currentPage.page, 10)
     await sortAndFilter(getProducts, sortOptions, filterOptions, currentPage.page)
-    await exportJs()
+    await exportJs('BÁO CÁO DANH SÁCH SẢN PHẨM')
   } catch (error) {
     console.error('Error loading data:', error)
     pushNotification(error)

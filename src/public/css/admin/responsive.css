@@ -27,6 +27,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    align-items: stretch !important;
   }
   .control-bar .filter-and-create {
     flex-direction: column;

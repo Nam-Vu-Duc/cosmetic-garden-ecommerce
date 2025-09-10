@@ -31,7 +31,6 @@ class allCustomersController {
           .sort(sort)
           .skip(skip)
           .limit(itemsPerPage)
-          .sort({ createdAt: -1 })
           .lean(),
           user.find(filter).countDocuments(),
       ]) 

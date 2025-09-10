@@ -1,17 +1,17 @@
 export const permissions = {
   attributePermission : ['admin', 'manager'],
-  brandPermission     : ['admin', 'manager', 'employee'],
+  brandPermission     : ['admin', 'manager'],
   chatPermission      : ['chat' , 'admin'],
   chatEmpPermission   : ['admin', 'manager', 'employee'],
   customerPermission  : ['admin', 'manager', 'employee'],
-  employeePermission  : ['admin', 'manager', 'employee'],
+  employeePermission  : ['admin', 'manager'],
   homePermission      : ['admin', 'manager'],
   orderPermission     : ['admin', 'manager', 'employee', 'merchandise', 'shipper'], 
   productPermission   : ['admin', 'manager', 'employee'],
   materialPermission  : ['admin', 'manager', 'employee'],
-  purchasePermission  : ['admin', 'manager', 'employee', 'merchandise'],
+  purchasePermission  : ['admin', 'manager', 'merchandise'],
   storePermission     : ['admin', 'manager'],
-  supplierPermission  : ['admin', 'manager', 'employee', 'merchandise'],
+  supplierPermission  : ['admin', 'manager', 'merchandise'],
   voucherPermission   : ['admin', 'manager', 'employee'],
 }
 

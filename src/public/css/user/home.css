@@ -30,6 +30,10 @@
       margin-block-start: 10px;
       margin-block-end: 5px;
     }
+    a, p {
+      text-decoration: none; 
+      color: black;
+    }
     .voucher {
       /* scroll-snap-align: start; */
       position: relative;
@@ -64,6 +68,11 @@
         overflow: hidden;
         word-wrap: break-word;
         font-size: 14px;
+      } 
+      #code {
+        text-overflow: ellipsis; 
+        overflow: hidden;
+        white-space: nowrap;
       }
     };
     .voucher:hover {
