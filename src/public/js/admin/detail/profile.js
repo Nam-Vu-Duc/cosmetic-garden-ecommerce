@@ -6,7 +6,7 @@ async function getProfile() {
     headers: {'Content-Type': 'application/json'},
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const {error, userInfo, storesInfo, positionsInfo} = await response.json()
+  const {error, userInfo, positionsInfo} = await response.json()
   if (error) return pushNotification('Có lỗi xảy ra')
 
   document.title = userInfo.name

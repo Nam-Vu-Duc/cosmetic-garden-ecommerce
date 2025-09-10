@@ -23,11 +23,10 @@ async function getDeletedProducts(sortOptions, filterOptions, currentPage) {
     body: JSON.stringify({sort: sortOptions, filter: filterOptions, page: currentPage})
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const json = await response.json()
-  if (json.error) return pushNotification(error)
-    
-  const data = json.data
-  dataSize.size = json.data_size
+  const {data, data_size, error} = await response.json()
+  if (error) return pushNotification(error)
+
+  dataSize.size = data_size
 
   document.querySelector('div.board-title').querySelector('p').textContent = 'Đã xoá: ' + dataSize.size
 

@@ -6,9 +6,8 @@ const checkForHexRegExp = require('../../middleware/checkForHexRegExp')
 class profileController {
   async getProfile(req, res, next) {
     try {
-      const [userInfo, storesInfo, positionsInfo] = await Promise.all([
+      const [userInfo, positionsInfo] = await Promise.all([
         emp.findOne({ _id: req.cookies.uid }).lean(),
-        store.find().lean(),
         position.find().lean()
       ])
       if (!userInfo) throw new Error('User not found')

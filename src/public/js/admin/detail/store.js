@@ -9,7 +9,7 @@ async function getStore() {
     body: JSON.stringify({id: urlSlug})
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const {error, storeInfo, employeesInfo} = await response.json()
+  const {error, storeInfo} = await response.json()
   if (error) return pushNotification('Có lỗi xảy ra')
 
   document.title = storeInfo.name

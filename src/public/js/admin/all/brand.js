@@ -13,11 +13,9 @@ async function getFilter() {
     headers: {'Content-Type': 'application/json'},
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const json = await response.json()
-  if (json.error) return pushNotification(error)
+  const {data, error} = await response.json()
+  if (error) return pushNotification(error)
 
-  const data = json.data
-  
   data.forEach((element, index) => {
     const option = document.createElement('option')
     option.value = element.code
@@ -43,11 +41,10 @@ async function getBrands(sortOptions, filterOptions, currentPage, itemsPerPage) 
     })
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const json = await response.json()
-  if (json.error) return pushNotification(error)
+  const {data, data_size, error} = await response.json()
+  if (error) return pushNotification(error)
 
-  const data = json.data
-  dataSize.size = json.data_size
+  dataSize.size = data_size
 
   document.querySelector('div.board-title').querySelector('p').textContent = 'Thương hiệu: ' + dataSize.size
 

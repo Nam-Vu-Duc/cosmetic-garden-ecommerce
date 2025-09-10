@@ -12,10 +12,10 @@ async function getMembers() {
     headers: {'Content-Type': 'application/json'},
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const json = await response.json()
-  if (json.error) return pushNotification(error)
+  const {data, error} = await response.json()
+  if (error) return pushNotification(error)
 
-  json.data.forEach((element) => {
+  data.forEach((element) => {
     const option = document.createElement('option')
     option.value = element.code
     option.textContent = element.name

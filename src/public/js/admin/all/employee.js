@@ -13,10 +13,10 @@ async function getFilter() {
     headers: {'Content-Type': 'application/json'},
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const json = await response.json()
-  if (json.error) return pushNotification(error)
-  
-  json.position.forEach((element, index) => {
+  const {position, error} = await response.json()
+  if (error) return pushNotification(error)
+
+  position.forEach((element, index) => {
     const option = document.createElement('option')
     option.value = element.code
     option.textContent = element.name
@@ -41,11 +41,10 @@ async function getEmployees(sortOptions, filterOptions, currentPage, itemsPerPag
     })
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const json = await response.json()
-  if (json.error) return pushNotification(error)
-    
-  const data = json.data
-  dataSize.size = json.data_size
+  const {data, data_size, error} = await response.json()
+  if (error) return pushNotification(error)
+
+  dataSize.size = data_size
 
   document.querySelector('div.board-title').querySelector('p').textContent = 'Nhân sự: ' + dataSize.size
 
