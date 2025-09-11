@@ -127,8 +127,11 @@ class homeController {
         }
       }
 
-      const customers = await user.find(matchStage).lean()
-      const members = await member.find().lean()
+      const [customers, members] = await Promise.all([
+        user.find(matchStage).lean(),
+        member.find().lean()
+      ])
+
       return res.json({data: customers, members: members})
     } catch (error) {
       console.log(error)
@@ -146,8 +149,11 @@ class homeController {
         }
       }
 
-      const employees = await employee.find(matchStage).lean()
-      const positions = await position.find().lean()
+      const [employees, positions] = await Promise.all([
+        employee.find(matchStage).lean(),
+        position.find().lean()
+      ])
+
       return res.json({data: employees, positions: positions})
     } catch (error) {
       console.log(error)
@@ -165,8 +171,11 @@ class homeController {
         }
       }
 
-      const orders = await order.find(matchStage).lean()
-      const status = await orderStatus.find().lean()
+      const [orders, status] = await Promise.all([
+        order.find(matchStage).lean(),
+        orderStatus.find().lean()
+      ])
+      
       return res.json({data: orders, status: status})
     } catch (error) {
       console.log(error)
