@@ -37,9 +37,15 @@ class homeController {
         }
       }
 
+      const revenueFilter = {
+        ...matchStage,
+        status: { $ne: 'cancel' },
+        isPaid: true
+      }
+
       const revenue = await order.aggregate([
         {
-          $match: matchStage
+          $match: revenueFilter
         },
         {
           $group: {

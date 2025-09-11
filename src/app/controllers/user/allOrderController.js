@@ -511,5 +511,47 @@ class allOrderController {
       return res.json({error: error})
     }
   }
+  
+  async doneOrder(req, res, next) {
+    try {
+      const { id, email } = req.query
+      const orderInfo = await order.findOne({ _id: id }).lean()
+      const orderStatus = orderInfo.status
+      if (orderStatus !== 'delivered') throw new Error('Dơn hàng chưa được giao')
+
+      const userInfo = await user.findOne({ email: email }).lean()
+      const userId = userInfo._id
+
+      const silver  = 1000000
+      const gold    = 2000000
+      const diamond = 4000000
+
+      if (userInfo.revenue >= diamond) {
+        await user.updateOne({ _id: userId }, {
+          $set: { memberCode: 'diamond' }
+        })
+      }
+      else if (userInfo.revenue >= gold) {
+        await user.updateOne({ _id: userId }, {
+          $set: { memberCode: 'gold' }
+        })
+      }
+      else if (userInfo.revenue >= silver) {
+        await user.updateOne({ _id: userId }, {
+          $set: { memberCode: 'silver' }
+        })
+      }
+      await user.updateOne({ _id: userId }, {
+        $inc: { 
+          revenue: orderInfo.totalNewOrderPrice,
+          quantity: 1
+        }
+      })
+
+      return res.json({message: 'Cập nhật thông tin thành công'})
+    } catch (error) {
+      return res.json({error: error.message})
+    }
+  }
 }
 module.exports = new allOrderController

@@ -10,6 +10,7 @@ const { ObjectId } = require('mongodb')
 const kafka = require("kafkajs").Kafka
 const kafkaClient = new kafka({ brokers: ["localhost:9092"] })
 const producer = kafkaClient.producer()
+const nodemailer = require("nodemailer")
 
 class allOrdersController {
   // all
@@ -133,6 +134,41 @@ class allOrdersController {
           },
         }))
         await product.bulkWrite(bulkOps)
+      }
+
+      if (req.body.status === 'delivered') {
+        const orderInfo = await order.findOne({ _id: req.body.id }).lean()
+        const userId = orderInfo.customerInfo.userId
+
+        if (userId !== 'guest') {
+          const userInfo = await user.findOne({ _id: userId }).lean()
+          const userEmail     = userInfo.email
+          const adminEmail    = process.env.ADMIN_EMAIL
+          const adminPassword = process.env.GOOGLE_APP_EMAIL
+    
+          const transporter = nodemailer.createTransport({
+            service: "gmail",
+            secure: false, // true for port 465, false for other ports
+            auth: {
+              user: adminEmail,
+              pass: adminPassword,
+            },
+          })
+
+          async function sendEmail(userEmail) {
+            await transporter.sendMail({
+              from: adminEmail,
+              to: userEmail,
+              subject: `Đơn hàng ${req.body.id} đã giao hàng thành công`, 
+              html: `
+                Bấm vào đây để xác nhận đơn hàng
+                <button><a target="_blank" rel="noopener noreferrer" href="http://localhost:3000/all-orders/order/done?id=${req.body.id}&email=${userEmail}">Đã nhận được hàng</a></button>
+              `,
+            })
+          }
+
+          await sendEmail(userEmail)
+        }
       }
 
       if (req.body.status === 'cancel') {

@@ -4,6 +4,7 @@ const allOrderController = require('../../app/controllers/user/allOrderControlle
 
 router.get('/'                    , allOrderController.show)
 
+router.get('/order/done'          , allOrderController.doneOrder)
 router.get('/order/:id'           , allOrderController.orderInfo)
 router.get('/order/rate/:id'      , allOrderController.rateOrder)
 router.post('/order/rate/updated' , allOrderController.orderRated)
