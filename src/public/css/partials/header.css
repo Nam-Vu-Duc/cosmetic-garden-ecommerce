@@ -42,33 +42,88 @@ header {
     position: absolute;
     top: 160px;
     width: 90%;
-    height: 300px;
+    max-height: 320px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: white;
-    border-radius: 10px;
-    overflow-y: scroll;
-    box-sizing: border-box;
+    background: #fff;
     border: 1px solid #389845;
-    .product {
-      width: 100%;
-      box-sizing: border-box;
-      background-color: white;
-      border-radius: 10px;
-      padding: 10px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      a {
-        text-decoration: none;
-        color: #575757;
-      }
-      img { width: 40px; height: 40px;}
-    }
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1000;
   }
-  #search-products::-webkit-scrollbar {display: none}
+  #search-products-header {
+    display: flex;
+    align-items: center;
+    background: #f5f6f7;
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+    position: sticky;
+    z-index: 1000;
+    top: 0;                    /* stick to top of container */
+  }
+  #search-products-header p {
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    color: #389845;
+  }
+  #search-products .product {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+    border-bottom: 1px solid #f2f2f2;
+  }
+  #search-products .product:last-child {
+    border-bottom: none;
+  }
+  #search-products .product:hover {
+    background: #f8fdf9;
+    transform: translateX(2px);
+  }
+  #search-products .product p,
+  #search-products .product a {
+    margin: 0;
+    font-size: 14px;
+    color: #444;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #search-products .product a {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  #search-products .product a:hover {
+    color: #2a6c32;
+  }
+  #search-products .product img {
+    width: 38px;
+    height: 38px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 1px solid #eee;
+  }
+  #search-products::-webkit-scrollbar-thumb {
+    display: none;
+  }
+
   .header-button {
     padding: 0 20px 0 20px; 
     display: flex;

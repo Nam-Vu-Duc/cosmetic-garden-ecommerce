@@ -141,6 +141,7 @@ div.table .table-button {
   justify-content: flex-end;
   margin-bottom: 10px;
   gap: 8px;
+  position: relative;
 }
 div.table .table-button a {
   padding: 8px 14px;
@@ -155,12 +156,41 @@ div.table .table-button a:hover {
   background: #2f7a38;
   transform: translateY(-2px);
 }
+div.table .table-button i {
+  font-size: 20px;
+  color: #389845;
+  cursor: pointer;
+  padding: 5px;
+}
+div.table .table-button .checkbox-group {
+  display: none;
+  position: absolute;
+  top: 100%;   /* appear under the button group */
+  right: 0;    /* align to the right edge */
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 999;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 6px;
+  min-width: 200px;
+}
+div.table .table-button .checkbox-group label {
+  display: block;
+  margin-bottom: 6px;
+}
+div.table .table-button .checkbox-group button {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
 table {
   width: 100%;
   border-spacing: 0 10px;
   border-collapse: separate;
   padding: 0 5px;
   box-sizing: border-box;
+  overflow-x: scroll;
 }
 table thead {
   background: #5ab868;

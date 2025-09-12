@@ -81,7 +81,7 @@ searchIcon.onclick = function() {
 let timer
 searchInput.oninput = async function(event) {
   searchProducts.style.display = 'none'
-  searchProducts.querySelectorAll('div').forEach(element => element.remove())
+  searchProducts.querySelectorAll('div.product').forEach(element => element.remove())
   if (event.target.value.trim() === '') return
 
   clearTimeout(timer)
@@ -109,11 +109,11 @@ searchInput.oninput = async function(event) {
           <img src="${element.img.path}" alt="${element.name}" loading="lazy" loading="lazy"> 
           ${element.name}
         </a>  
-        <p style="width: 10%;">${element.categories}</p>
+        <p style="width: 10%;">${element.categories === 'skincare' ? 'Skincare' : 'Makeup'}</p>
         <p style="width: 10%; text-align:right" id="product-price">${formatNumber(element.price)}</p>
       `
 
-      document.querySelector('div#search-products').appendChild(div)
+      searchProducts.appendChild(div)
     })
   }, 1000)
 

@@ -45,9 +45,26 @@ async function getChatData() {
     chatContent.replaceChildren()
     messages.forEach((message) => {
       const chat = document.createElement('li')
+      const date = document.createElement('li')
+
       chat.textContent = message.content 
-      message.senderId === window.uid ? chat.setAttribute('class', 'right-content') : chat.setAttribute('class', 'left-content')
+      date.textContent = formatDateTime(message.createdAt)
+      date.style.display = 'none'
+
+      chat.onclick = function() {
+        date.style.display === 'none' ? date.style.display = 'block' : date.style.display = 'none'
+      }
+
+      if (message.senderId === window.uid) {
+        chat.setAttribute('class', 'right-content')
+        date.setAttribute('class', 'right-date')
+      } else {
+        chat.setAttribute('class', 'left-content')
+        date.setAttribute('class', 'left-date')
+      }
+ 
       chatContent.appendChild(chat)
+      chatContent.appendChild(date)
     })
     chatContent.scrollTo(0, chatContent.scrollHeight)
   } catch (error) {
@@ -115,9 +132,26 @@ input.addEventListener("keypress", function(event) {
 
 socket.on('chat-message', async function(id, msg, room) {
   const chat = document.createElement('li')
+  const date = document.createElement('li')
+  
   chat.textContent = msg
-  id.trim() === window.uid ? chat.classList.add('right-content') : chat.classList.add('left-content')
+  date.textContent = formatDateTime(new Date())
+  date.style.display = 'none'
+
+  chat.onclick = function() {
+    date.style.display === 'none' ? date.style.display = 'block' : date.style.display = 'none'
+  }
+
+  if (id.trim() === window.uid) {
+    chat.setAttribute('class', 'right-content')
+    date.setAttribute('class', 'right-date')
+  } else {
+    chat.setAttribute('class', 'left-content')
+    date.setAttribute('class', 'left-date')
+  }
+
   chatContent.appendChild(chat)
+  chatContent.appendChild(date)
   chatContent.scrollTo(0, chatContent.scrollHeight)
 
   const response = await fetch('/data/notification', {
@@ -130,5 +164,4 @@ socket.on('chat-message', async function(id, msg, room) {
     })
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  console.log('save noti success')
 })

@@ -71,12 +71,12 @@
           <i class="fi fi-rr-angle-small-right" style="padding-top: 5px;"></i>
         </span>
       </li>
-      <li>
+      {{!-- <li>
         <span>
           <a href="/advanced-search">Tìm kiếm nâng cao</a>
           <i class="fi fi-rr-angle-small-right" style="padding-top: 5px;"></i>
         </span>
-      </li>
+      </li> --}}
     </ul>
   </div>
 
@@ -94,8 +94,15 @@
   <img src="https://cosmeticgarden.vn/wp-content/uploads/2024/12/logo-xanh-gradient.png" class="dropdown-avatar" alt="loading"/>
 </div>
 
-<input type="text" id="search-input" placeholder="Nhập mã hàng, tên sản phẩm để tìm kiếm" style="display: none">
-<div id="search-products" style="display: none"></div>
+<input type="text" id="search-input" placeholder="Nhập tên sản phẩm, tên thương hiệu để tìm kiếm" style="display: none">
+<div id="search-products" style="display: none">
+  <div id="search-products-header">
+    <p style="width: 15%">Thương hiệu</p>
+    <p style="width: 65%">Sản phẩm</p>  
+    <p style="width: 10%">Dòng loại</p>
+    <p style="width: 10%">Mức giá</p>
+  </div>
+</div>
 
 <div class="avatar-menu" style="display: none"></div>
 

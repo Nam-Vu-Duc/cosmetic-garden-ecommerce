@@ -24,7 +24,6 @@ async function getUser() {
     if (error) return pushNotification(error)
 
     adminId.id = message
-    console.log(adminId.id)
   } catch (error) {
     console.error("Error fetching chat data:", error)
   }
@@ -49,7 +48,7 @@ async function getChatData(adminId, userId, userName, chatContent) {
     chatContent.appendChild(ul)
 
     data.forEach((message) => {
-      appendMessage(ul, message.content, message.senderId, adminId)
+      appendMessage(ul, message.content, message.senderId, message.createdAt, adminId)
     })
   } catch (error) {
     console.error("Error fetching chat data:", error)
@@ -63,13 +62,27 @@ function checkCurrentIndex(index) {
   })
 }
 
-async function appendMessage(ul, msg, senderId, adminId) {
+async function appendMessage(ul, msg, senderId, createdAt, adminId) {
   const chat = document.createElement('li')
-  chat.textContent = msg
+  const date = document.createElement('li')
 
-  if (senderId === adminId) chat.setAttribute('class', 'right-content')
+  chat.textContent = msg
+  date.textContent = formatDateTime(createdAt)
+  date.style.display = 'none'
+
+  chat.onclick = function() {
+    date.style.display === 'none' ? date.style.display = 'block' : date.style.display = 'none'
+  }
+
+  if (senderId === adminId) {
+    chat.setAttribute('class', 'right-content')
+    date.setAttribute('class', 'right-date')
+  } else {
+    date.setAttribute('class', 'left-date')
+  }
 
   ul.appendChild(chat)
+  ul.appendChild(date)
   chatContent.scrollTo(0, chatContent.scrollHeight)
 }
 
@@ -143,6 +156,6 @@ input.addEventListener("keypress", function(event) {
 
 socket.on('chat-message', (id, msg, room) => {
   const ul = chatContent.querySelector('ul')
-  appendMessage(ul, msg, id, adminId.id)
+  appendMessage(ul, msg, id, new Date(), adminId.id)
   reOrderChatSidebar(id, msg, room)
 })

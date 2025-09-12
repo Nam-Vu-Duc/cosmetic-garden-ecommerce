@@ -156,7 +156,7 @@ function increaseQuantity(productInfo) {
       if (myObj.productInfo[i].id === productInfo._id) {
         // store the quantity on page to localStorage
         myObj.productInfo[i].quantity = getQuantityValue.innerText
-        localStorage.setItem('product_cart_count', JSON.stringify(myObj));
+        localStorage.setItem('product_cart_count', JSON.stringify(myObj))
       }
     }
   }
@@ -164,13 +164,14 @@ function increaseQuantity(productInfo) {
 
 function decreaseQuantity(productInfo) {
   getDecreaseQuantity.onclick = function () {
+    getQuantityValue.innerText--
+    listProductLength.length = myObj.productInfo.length
     for (let i = 0; i < listProductLength.length; ++i) {
       if (myObj.productInfo[i].id === productInfo._id) {
         if (getQuantityValue.innerText === '1') {
           getQuantityValue.innerText = 1
           myObj.productInfo[i].quantity = 1
         } else {
-          getQuantityValue.innerText--
           myObj.productInfo[i].quantity = getQuantityValue.innerText
         }
         localStorage.setItem('product_cart_count', JSON.stringify(myObj));
@@ -220,7 +221,6 @@ function addToCart(productInfo) {
   
       // minus 1 from the cartCounting and reset the productQuantity to 0
       myObj.localCounting--
-      getQuantityValue.innerText = 0
   
       // remove the product from the localStorage
       listProductLength.length = myObj.productInfo.length

@@ -16,4 +16,7 @@
     padding: 5px;
     i { cursor: pointer}
   }
+  a:hover {
+    color: black;
+  }
 }

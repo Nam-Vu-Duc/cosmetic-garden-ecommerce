@@ -58,6 +58,7 @@ async function updateTableBody() {
     const newProductImage = document.createElement('td')
     const productImage = document.createElement('img')
     productImage.setAttribute('src', `${product.img.path}`)
+    productImage.setAttribute('style', 'text-align:center')
     newProductImage.appendChild(productImage)
 
     const newProductName = document.createElement('td')
@@ -69,15 +70,46 @@ async function updateTableBody() {
 
     // create product price element
     const newProductPrice = document.createElement('td')
+    newProductPrice.setAttribute('style', 'text-align:right')
     newProductPrice.innerText = formatNumber(product.price)
 
     // create product quantity element
-    const newProductQuantity   = document.createElement('td')
+    const newProductQuantity = document.createElement('td')
+    newProductQuantity.setAttribute('style', 'text-align:center')
+
+    const newProductQuantityInput = document.createElement('input')
+    newProductQuantity.append(newProductQuantityInput)
+    newProductQuantityInput.type = 'number'
+    newProductQuantityInput.min = 1
+    newProductQuantityInput.max = parseInt(product.quantity)
+
+    newProductQuantityInput.onchange = function() {
+      const currentValue = parseInt(newProductQuantityInput.value)
+      const min = parseInt(newProductQuantityInput.min)
+      const max = parseInt(newProductQuantityInput.max)
+
+      if (currentValue < min) newProductQuantityInput.value = min
+      if (currentValue > max) newProductQuantityInput.value = max
+
+      if (CheckBox.checked) totalOrderPrice.total = totalOrderPrice.total + (newProductQuantityInput.value - CheckBox.value) * product.price
+
+      CheckBox.value = newProductQuantityInput.value
+      newProductTotalPrice.innerText = formatNumber(newProductQuantityInput.value * product.price)
+      updateTableFooter()
+      getProductInfo.productInfo.forEach((localProduct, index) => {
+        if (localProduct.id === product._id) {
+          localProduct.quantity = newProductQuantityInput.value
+          localStorage.setItem('product_cart_count', JSON.stringify(getProductInfo))
+        } 
+      })
+    }
+
     const newProductTotalPrice = document.createElement('td')
+    newProductTotalPrice.setAttribute('style', 'text-align:right')
     getProductInfo.productInfo.forEach((localProduct, index) => {
       if (localProduct.id === product._id) {
         const quantity = parseInt(localProduct.quantity)
-        newProductQuantity.innerText   = quantity        
+        newProductQuantityInput.value = quantity        
         newProductTotalPrice.innerText = formatNumber(quantity * product.price)
         CheckBox.value = quantity
       } 

@@ -136,7 +136,7 @@ class allOrdersController {
         await product.bulkWrite(bulkOps)
       }
 
-      if (req.body.status === 'delivered') {
+      if (req.body.status === 'delivered' && req.body.isPaid === 'true') {
         const orderInfo = await order.findOne({ _id: req.body.id }).lean()
         const userId = orderInfo.customerInfo.userId
 

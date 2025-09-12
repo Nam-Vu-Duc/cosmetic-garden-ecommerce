@@ -65,7 +65,7 @@ class allProductsController {
   async getComment(req, res, next) {
     try {
       const productId = req.body.productId
-      const comments = await comment.find({ productId: productId })
+      const comments = await comment.find({ productId: productId, comment: { $ne: '' } })
       if (!comments) return res.status(404).json({ error: "No comments found" })
       
       return res.json({data: comments})

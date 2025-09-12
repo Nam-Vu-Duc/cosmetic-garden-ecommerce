@@ -12,7 +12,7 @@ class profileController {
       ])
       if (!userInfo) throw new Error('User not found')
   
-      return res.json({userInfo: userInfo, storesInfo: storesInfo, positionsInfo: positionsInfo})
+      return res.json({userInfo: userInfo, positionsInfo: positionsInfo})
     } catch (error) {
       return res.json({error: error.message})
     }

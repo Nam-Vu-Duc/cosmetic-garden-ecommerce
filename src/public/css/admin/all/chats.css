@@ -59,8 +59,19 @@
           width: 40px;
           aspect-ratio: 1/1;
         }
-        .name { font-size: large; font-weight: bolder }
-        .last-message { font-size: smaller }
+        .name { 
+          font-size: large; 
+          font-weight: bolder ;
+          text-overflow: ellipsis; 
+          overflow: hidden;
+          white-space: nowrap;
+        }
+        .last-message { 
+          font-size: smaller;
+          text-overflow: ellipsis; 
+          overflow: hidden;
+          white-space: nowrap;
+        }
         .time { margin-top: 5px; font-size: smaller; color: #9FACBC;}
       }
       .item.active {
@@ -119,6 +130,27 @@
         float: right;
         background-color: #5ab868;
         color: white;
+      }
+      .right-date, .left-date {
+        font-size: 12px;
+        color: #888;
+        background-color: white;
+        margin-top: 2px;
+        padding: 0 5px;
+        list-style: none;
+        clear: both;
+        width: fit-content;
+        max-width: 200px;
+      }
+      .right-date {
+        float: right;
+        text-align: right;
+        margin-right: 5px;
+      }
+      .left-date {
+        float: left;
+        text-align: left;
+        margin-left: 5px;
       }
     }
     .chat-content::-webkit-scrollbar-track {

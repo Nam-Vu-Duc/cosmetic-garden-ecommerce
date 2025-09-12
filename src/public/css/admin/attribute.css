@@ -1,10 +1,8 @@
 .admin-attribute-container {
   padding: 0 5px;
-  display: grid;
-  grid-template-columns: 50% 50%;
   gap: 10px;
   div.table {
-    margin-top: 0 !important;
+    margin-bottom: 10 !important;
     min-height: 400px;
     tbody {
       tr {
@@ -18,7 +16,7 @@
           position: relative;
           button {
             position: absolute;
-            right: 15px;
+            right: 10px;
             left: auto;
             top: 50%;
             transform: translateY(-50%);

@@ -33,7 +33,7 @@ async function submitRate(data) {
       rateProducts.forEach((product) => {
         Ids.push(product.querySelector('input').id)
         comments.push(product.querySelector('input').value)
-        rates.push(product.querySelector('span.rate-score').innerText)
+        rates.push(product.querySelector('span.rate-score').innerText.trim())
       })
   
       const response = await fetch('/all-orders/order/rate/updated', {
