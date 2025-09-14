@@ -171,11 +171,17 @@ table {
   padding: 0px 5px;
   border-radius: 10px;
   thead {
-    background-color: #389845;
+    background: linear-gradient(135deg, #389845, #56c47b);
     height: 50px;
     font-weight: bolder;
     text-align: center;
     text-transform:capitalize;
+    color: white;
+  }
+  tfoot {
+    background: linear-gradient(135deg, #389845, #56c47b);
+    height: 50px;
+    font-weight: bolder;
     color: white;
   }
   tbody {

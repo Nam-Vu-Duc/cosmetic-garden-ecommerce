@@ -129,15 +129,6 @@ async function getCustomers(sortOptions, filterOptions, currentPage, itemsPerPag
       const link = document.createElement('td')
       link.innerHTML = `<a target="_blank" rel="noopener noreferrer" href="/admin/all-customers/customer/${item._id}">Xem</a>`
       newTr.appendChild(link)
-      // newTr.innerHTML = `
-      //   <td>${productIndex}</td>
-      //   <td>${item._id}</td>
-      //   <td>${item.name}</td>
-      //   <td>${item.address}</td>
-      //   <td style="text-align: right">${item.quantity}</td>
-      //   <td style="text-align: right">${formatNumber(item.revenue)}</td>
-      //   <td><a target="_blank" rel="noopener noreferrer" href="/admin/all-customers/customer/${item._id}">Xem</a></td>
-      // `
       tbody.appendChild(newTr)
       productIndex++
     })

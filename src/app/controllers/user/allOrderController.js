@@ -83,6 +83,20 @@ class allOrderController {
     }
   }
   
+  async getAllVouchers(req, res, next) {
+    try {
+      const userInfo = await user.findOne({ _id: req.cookies.uid }).lean()
+      if (!userInfo) throw new Error('Hãy đăng nhập để xem voucher của bạn nha!')
+
+      const voucherInfo = await voucher.find({ memberCode: userInfo.memberCode, status: 'active' }).lean()
+      const userVoucherInfo = await userVoucher.find({ status: 'active', userId: req.cookies.uid }).lean()
+
+      return res.json({voucherInfo: voucherInfo || [], userVoucherInfo: userVoucherInfo || []})
+    } catch (error) {
+      return res.json({error: error.message})
+    }
+  }
+  
   async show(req, res, next) {
     return res.render('users/allOrders', { title: 'Đơn hàng' })
   }

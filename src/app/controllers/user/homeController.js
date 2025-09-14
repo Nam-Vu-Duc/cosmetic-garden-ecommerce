@@ -11,7 +11,9 @@ const producer = kafkaClient.producer()
 class homeController {
   async getVouchers(req, res, next) {
     try {
-      const data = await voucher.find({ status: 'active', endDate: { $gte: new Date() } }).lean()
+      const userInfo = await user.findOne({ _id: req.cookies.uid }).lean()
+      const userMember = userInfo.memberCode
+      const data = await voucher.find({memberCode: userMember, status: 'active' }).lean()
       return res.json({data: data})
     } catch (error) {
       return res.json({error: error.message})

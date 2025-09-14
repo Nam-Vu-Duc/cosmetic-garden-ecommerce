@@ -1,26 +1,22 @@
 .all-orders-container {
   .cart, .voucher, .contact-info, .payment-method {
-    background-color: white;
+    background-color: #fff;
     margin-top: 20px;
     border-radius: 10px;
     padding: 10px;
     box-sizing: border-box;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     p {
-      background-color: #F0F0F0;
-      height: fit-content;
-      padding: 10px;
-      text-transform: capitalize;
-      font-weight: bolder;
-      margin-block-start: 0px;
-      margin-block-end: 0px;
-      font-size: x-large;
+      background: linear-gradient(135deg, #389845, #56c47b);
+      color: white;
+      font-weight: 700;
+      font-size: 18px;
+      margin: 0;
+      padding: 12px;
+      border-radius: 8px;
       text-align: center;
-      border-radius: 5px;
-      display: flex;
-      gap: 5px;
-      align-items: center;
-      justify-content: center;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
   }
   .voucher, .contact-info, .payment-method {
@@ -42,12 +38,6 @@
       text-align: center;
     }
     table {
-      tfoot {
-        background-color: #389845;
-        height: 50px;
-        font-weight: bolder;
-        color: white;
-      }
       tbody {
         td {height: 100px}
         tr {
@@ -87,40 +77,55 @@
     }
   }
   .voucher {
-    input#voucher-code {
-      margin-top: 10px;
-      text-align: center;
-    }
-    .price {
+    .voucher-input {
+      margin-top: 15px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 10px;
-      gap: 5px;
-      padding: 5px;
-      box-sizing: border-box;
-      .old-price, .new-price {
-        height: 30px;
-        padding: 5px;
-        box-sizing: border-box;
-        .old-price-value, .new-price-value {
-          width: fit-content;
-          border-radius: 5px;
-          border: 1px solid #389845;
-          padding: 5px;
-        }
+      gap: 10px;
+      input {
+        flex: 1;
+        padding: 10px;
+      }
+      button {
+        background: #389845;
+        color: white;
+        font-weight: 600;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+      button:hover {
+        background: #2e7b37;
       }
     }
+    .price {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      font-size: 16px;
+    }
+    .old-price-value {
+      text-decoration: line-through;
+      color: #888;
+    }
+    .new-price-value {
+      font-weight: 700;
+      color: #389845;
+      background: #eaf7ee;
+      padding: 5px 10px;
+      border-radius: 6px;
+    }
     span.form-message {
-      color: green;
+      margin-top: 15px;
       font-weight: bold;
       text-align: center;
       display: block;
-      margin-top: 10px;
       width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      color: #389845;
     }
   }
   .contact-info {
@@ -144,28 +149,50 @@
     .form-group {
       padding: 10px;
       gap: 5px;
+      box-sizing: border-box;
     }
     label {
       font-weight: bolder;
       text-transform: capitalize;
     }
     .bank-account {
+      margin-top: 15px;
       width: 100%;
-      background-color: #5ab868;
-      border-radius: 5px;
-      padding: 5px;
+      background-color: #eaf7ec;
+      border: 1px solid #389845;
+      border-radius: 8px;
+      box-sizing: border-box;
+      padding: 12px;
       display: flex;
-      justify-content: start;
-      .bank-info {
-        display: flex;
-        flex-direction: column;
-        align-items: start;
-        justify-content: center;
-      }
-      img {
-        width: 200px;
-      }
+      align-items: flex-start;
+      gap: 15px;
+      transition: all 0.3s ease-in-out;
     }
+    .bank-account img {
+      width: 160px;
+      border-radius: 6px;
+      object-fit: contain;
+    }
+
+    .bank-account .form-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .bank-account input[type="file"] {
+      padding: 6px;
+      border: 1px dashed #389845;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #fff;
+      transition: 0.3s;
+    }
+
+    .bank-account input[type="file"]:hover {
+      background: #f2fff4;
+    } 
     .bank-account {
       display: none;
     }
@@ -173,9 +200,8 @@
       display: flex;
     }
   }
-
 }
-.order-successfully-message, .order-confirm-message {
+.order-successfully-message, .order-confirm-message, .vouchers-box {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -270,6 +296,10 @@ a.momo-pay-btn:active {
   transform: scale(0.97);
 }
 
+@keyframes fadeIn {
+  from {opacity: 0; transform: translate(-50%, -45%);}
+  to {opacity: 1; transform: translate(-50%, -50%);}
+}
 /* subtle animation */
 @keyframes fadeInScale {
   from {

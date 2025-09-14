@@ -69,12 +69,15 @@ async function getOrder() {
     nameGroup.classList.add('name-group')
 
     const price = document.createElement('td')
+    price.setAttribute('style', 'text-align:right')
     price.textContent = formatNumber(product.price || '') 
 
     const quantity = document.createElement('td')
+    quantity.setAttribute('style', 'text-align:right')
     quantity.textContent = product.quantity || ''
 
     const totalPrice = document.createElement('td')
+    totalPrice.setAttribute('style', 'text-align:right')
     totalPrice.textContent = formatNumber(product.totalPrice || '') 
 
     tr.appendChild(nameGroup)

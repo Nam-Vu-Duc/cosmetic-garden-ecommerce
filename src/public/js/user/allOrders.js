@@ -1,33 +1,39 @@
 importLinkCss('/css/user/allOrders.css')
 
-const voucher         = document.querySelector('div.voucher')
-const contactInfo     = document.querySelector('div.contact-info')
-const paymentMethod   = document.querySelector('div.payment-method')
-const voucherButton   = document.querySelector('button.voucher-button')
-const nextButton      = document.querySelector('button.next-button')
-const submitButton    = document.querySelector('button.submit-button')
-const imgInput        = document.querySelector('input#img')
-const tableBody       = document.querySelector('tbody')
-const tableFooter     = document.querySelector('tfoot')
-const userId          = {id: null}
-const totalOrderPrice = {total: 0}
-const imgPath         = {path: ''}
+const voucher           = document.querySelector('div.voucher')
+const contactInfo       = document.querySelector('div.contact-info')
+const paymentMethod     = document.querySelector('div.payment-method')
+const voucherButton     = document.querySelector('button.voucher-submit-button')
+const listVoucherButton = document.querySelector('button.voucher-list-button')
+const nextButton        = document.querySelector('button.next-button')
+const submitButton      = document.querySelector('button.submit-button')
+const imgInput          = document.querySelector('input#img')
+const tableBody         = document.querySelector('tbody')
+const tableFooter       = document.querySelector('tfoot')
+const userId            = {id: null}
+const totalOrderPrice   = {total: 0}
+const imgPath           = {path: ''}
 
 async function checkUser() {
-  const response = await fetch('/data/user')
-  if (!response.ok) throw new Error(`Response status: ${response.status}`)
+  try {
+    const response = await fetch('/data/user')
+    if (!response.ok) throw new Error(`Response status: ${response.status}`)
 
-  const {error, uid, data} = await response.json()
-  if (error) return pushNotification(error)
+    const {error, uid, data} = await response.json()
+    if (error) throw new Error(error)
 
-  userId.id = uid
-  if (!userId.id) return
+    userId.id = uid
+    if (!userId.id) return
 
-  document.querySelector('input#name').value = data.name
-  document.querySelector('input#phone').value = data.phone
-  document.querySelector('input#address').value = data.address
+    document.querySelector('input#name').value = data.name
+    document.querySelector('input#phone').value = data.phone
+    document.querySelector('input#address').value = data.address
 
-  return
+    return
+  } catch (error) {
+    console.log(error)
+    pushNotification(error)
+  }
 }
 
 async function updateTableBody() {
@@ -348,6 +354,11 @@ async function loadData(retriesLeft) {
   }
 }
 
+function copyToClipboard(code) {
+  navigator.clipboard.writeText(code)
+  alert("Sao chép mã thành công: " + code)
+}
+
 imgInput.onchange = function() {
   const file = img.files[0] // Get the selected file
   const reader = new FileReader()
@@ -355,6 +366,59 @@ imgInput.onchange = function() {
     imgPath.path = reader.result // Base64-encoded string
   }
   reader.readAsDataURL(file)
+}
+
+listVoucherButton.onclick = async function() {
+  try {
+    const response = await fetch('/all-orders/data/all-vouchers')
+    if (!response.ok) throw new Error(`Response status: ${response.status}`)
+  
+    const {voucherInfo, userVoucherInfo, error} = await response.json()
+    if (error) throw new Error(error)
+
+    const vouchersBox = document.createElement('div')
+    vouchersBox.setAttribute('class', 'vouchers-box')
+    vouchersBox.innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <td style="width: 20%;">Mã Voucher</td>
+            <td style="width: 40%;">Mức giảm giá</td>
+            <td style="width: 30%;">Ngày hết hạn</td>
+            <td style="width: 10%;"></td>
+          </tr>
+        </thead>
+        <tbody>
+          ${voucherInfo.map(voucher => `
+            <tr>
+              <td>${voucher.code}</td>
+              <td style="text-align: right;">${voucher.discount}%</td>
+              <td style="text-align: right;">${formatDate(voucher.endDate)}</td>
+              <td><button class="copy-voucher-btn" onclick="copyToClipboard('${voucher.code}')">Sao chép</button></td>
+            </tr>
+          `).join('')}
+          ${userVoucherInfo.map(voucher => `
+            <tr>
+              <td>${voucher.code}</td>
+              <td style="text-align: right;">${formatNumber(voucher.discount)}</td>
+              <td style="text-align: right;">${formatDate(voucher.endDate)}</td>
+              <td><button class="copy-voucher-btn" onclick="copyToClipboard('${voucher.code}')">Sao chép</button></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+      <button 
+        id="delete-button" 
+        type="button" 
+        class="deletebtn"
+        onclick="document.querySelector('div.vouchers-box').remove()"
+      ">Đóng</button>
+    `
+    document.body.appendChild(vouchersBox)
+  } catch (error) {
+    console.log(error)
+    pushNotification(error)
+  }
 }
 
 voucherButton.onclick = async function() {

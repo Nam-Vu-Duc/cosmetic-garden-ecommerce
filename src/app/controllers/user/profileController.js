@@ -86,7 +86,7 @@ class profileController {
           }
         },
         {
-          $sort: {createdAt: -1}
+          $sort: {updatedAt: -1}
         }
       ])
       if (!orderInfo) return res.json({data: []})

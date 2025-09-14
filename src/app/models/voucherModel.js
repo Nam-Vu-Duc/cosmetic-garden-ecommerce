@@ -10,7 +10,7 @@ const voucher = new Schema({
   discount    : { type: Number, default: 0 },
   maxDiscount : { type: Number, default: 0 },
   minOrder    : { type: Number, default: 0 },
-  status      : { type: String, enum: ['active', 'used', 'expired'], default: 'active' },
+  status      : { type: String, enum: ['active', 'expired'], default: 'active' },
   startDate   : { type: Date, default: Date.now },
   endDate     : { type: Date, default: Date.now },
   usedAt      : { type: Date, default: null },

@@ -27,12 +27,14 @@ async function getVouchers() {
           voucher.querySelector('p#end-date').textContent     = formatDate(data[index].endDate)
           voucher.querySelector('p#code').textContent         = 'Code: ' + data[index].code
           voucher.querySelector('div.loading').style.display  = 'none'
-          voucher.querySelector('button').addEventListener('click', function() {
-            const codeText = data[index].code;
+          voucher.parentElement.setAttribute('href', '/all-vouchers/voucher/' + data[index]._id)
+          voucher.querySelector('button').addEventListener('click', function(e) {
+            e.preventDefault()
+            e.stopPropagation()
+            const codeText = data[index].code
             navigator.clipboard.writeText(codeText)
             alert("Sao chép mã thành công: " + codeText)
           })
-          voucher.parentElement.setAttribute('href', '/all-vouchers/voucher/' + data[index]._id)
         } else {
           voucher.style.display = 'none'
         }

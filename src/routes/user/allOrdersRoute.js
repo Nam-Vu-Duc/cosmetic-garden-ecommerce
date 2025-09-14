@@ -21,5 +21,6 @@ router.post('/callback'           , allOrderController.paymentResult)
 router.post('/data/order'         , allOrderController.getOrder)
 router.post('/data/order-rated'   , allOrderController.getRatedOrder)
 router.post('/data/voucher'       , allOrderController.getVoucher)
+router.get('/data/all-vouchers'   , allOrderController.getAllVouchers)
 
 module.exports = router
