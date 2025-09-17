@@ -52,11 +52,8 @@ class allUVouchersController {
   async getVoucher(req, res, next) {
     try {
       const voucherInfo = await userVoucher.findOne({ _id: req.body.id }).lean()
-      if (!voucherInfo) throw new Error('Store not found')
+      if (!voucherInfo) throw new Error('Voucher not found')
 
-      const memberInfo = await member.findOne({ code: voucherInfo.memberCode }).lean()
-      if (!voucherInfo) throw new Error('Member not found')
-  
       const orderInfo = await order.aggregate([
         {
           $match: { 'voucherCode': voucherInfo.code }
@@ -85,7 +82,7 @@ class allUVouchersController {
         }
       ])
       
-      return res.json({voucherInfo: voucherInfo, memberInfo: memberInfo, orderInfo: orderInfo})
+      return res.json({voucherInfo: voucherInfo, orderInfo: orderInfo})
     } catch (error) {
       return res.json({error: error.message})
     }

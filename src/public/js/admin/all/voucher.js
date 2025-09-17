@@ -13,7 +13,7 @@ const dataSize      = { size: 0 }
 function generateColumns() {
   const columnsGroup = document.querySelector('div.checkbox-group')
   const inputList = `
-    <label><input type="checkbox" value="_id" checked> Mã Voucher</label>
+    <label><input type="checkbox" value="code" checked> Mã Voucher</label>
     <label><input type="checkbox" value="name" checked> Tên Voucher</label>
     <label><input type="checkbox" value="description" checked> Mô tả</label>
     <label><input type="checkbox" value="memberCode" checked> Hạng thành viên</label>
@@ -69,25 +69,66 @@ async function getVouchers(sortOptions, filterOptions, currentPage, itemsPerPage
 
   document.querySelector('div.board-title').querySelector('p').textContent = 'Voucher: ' + dataSize.size
 
+  const selected = Array.from(document.querySelectorAll('.checkbox-group input:checked')).map(cb => ({
+    value: cb.value,
+    name: cb.closest("label").innerText.trim()
+  }))
+
   window.setTimeout(function() {
+    thead.querySelectorAll('tr').forEach((tr, index) => {
+      tr.remove()
+    })
+
+    // header
+    const trHead = document.createElement("tr")
+
+    const headData = document.createElement('td')
+    headData.textContent = 'STT'
+    trHead.appendChild(headData)
+
+    selected.forEach(col => {
+      const td = document.createElement("td")
+      td.textContent = col.name
+      trHead.appendChild(td)
+    })
+
+    const headLink = document.createElement('td')
+    headLink.textContent = 'Chi tiết'
+    trHead.appendChild(headLink)
+
+    thead.appendChild(trHead)
+
+    // body
     tbody.querySelectorAll('tr').forEach((tr, index) => {
       tr.remove()
     })
 
-    let productIndex = (currentPage - 1) * 10 + 1
+    let itemIndex = (currentPage - 1) * itemsPerPage + 1
 
     data.forEach((item, index) => {
       const newTr = document.createElement('tr')
-      newTr.innerHTML = `
-        <td>${productIndex}</td>
-        <td>${item.code}</td>
-        <td>${item.name}</td>
-        <td style="text-align: right;">${item.discount}%</td>
-        <td style="text-align: right;">${formatDate(item.endDate)}</td>
-        <td><a target="_blank" rel="noopener noreferrer" href="/admin/all-vouchers/voucher/${item._id}">Xem</a></td>
-      `
+
+      const itemData = document.createElement('td')
+      itemData.textContent = itemIndex
+      newTr.appendChild(itemData)
+
+      selected.forEach(col => {
+        const td = document.createElement("td")
+        td.textContent = item[col.value]
+
+        if (['discount', 'maxDiscount', 'minOrder', 'startDate', 'endDate', 'usedAt'].includes(col.value) ) td.style.textAlign = 'right'
+        if (['maxDiscount', 'minOrder'].includes(col.value)) td.textContent = formatNumber(item[col.value])
+        if (['discount'].includes(col.value)) td.textContent = formatPercentage(item[col.value])
+        if (['startDate', 'endDate', 'usedAt'].includes(col.value)) td.textContent = formatDate(item[col.value])
+
+        newTr.appendChild(td)
+      })
+
+      const link = document.createElement('td')
+      link.innerHTML = `<a target="_blank" rel="noopener noreferrer" href="/admin/all-vouchers/voucher/${item._id}">Xem</a>`
+      newTr.appendChild(link)
       tbody.appendChild(newTr)
-      productIndex++
+      itemIndex++
     })
   }, 1000)
   
@@ -106,7 +147,7 @@ changeColumns.onclick = function() {
 }
 
 submitChange.onclick = async function() {
-  await getCustomers(sortOptions, filterOptions, currentPage.page, 10)
+  await getVouchers(sortOptions, filterOptions, currentPage.page, 10)
 }
 
 window.addEventListener('DOMContentLoaded', async function loadData() {

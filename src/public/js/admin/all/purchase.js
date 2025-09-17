@@ -13,18 +13,12 @@ const dataSize      = { size: 0 }
 function generateColumns() {
   const columnsGroup = document.querySelector('div.checkbox-group')
   const inputList = `
-    <label><input type="checkbox" value="_id" checked> Mã Khách hàng</label>
-    <label><input type="checkbox" value="name" checked> Tên Khách hàng</label>
-    <label><input type="checkbox" value="address" checked> Địa chỉ</label>
-    <label><input type="checkbox" value="quantity" checked> S/L Đơn</label>
-    <label><input type="checkbox" value="revenue" checked> Tổng doanh thu</label>
-    <label><input type="checkbox" value="email"> Email</label>
-    <label><input type="checkbox" value="phone"> SDT</label>
-    <label><input type="checkbox" value="gender"> Giới tính</label>
-    <label><input type="checkbox" value="memberCode"> Hạng thành viên</label>
-    <label><input type="checkbox" value="isActive"> Trạng thái</label>
-    <label><input type="checkbox" value="dob"> Ngày sinh</label>
-    <label><input type="checkbox" value="lastLogin"> Lần đăng nhập cuối</label>
+    <label><input type="checkbox" value="_id" checked> Mã đơn hàng</label>
+    <label><input type="checkbox" value="supplierId" > Tên Khách hàng</label>
+    <label><input type="checkbox" value="purchaseDate" checked> Ngày nhập</label>
+    <label><input type="checkbox" value="note" > Ghi chú</label>
+    <label><input type="checkbox" value="totalProducts" checked> Tổng sản phẩm</label>
+    <label><input type="checkbox" value="totalPurchasePrice"> Tổng giá trị</label>
   `
   columnsGroup.insertAdjacentHTML('beforeend', inputList)
 } 

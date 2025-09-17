@@ -13,18 +13,13 @@ const dataSize      = { size: 0 }
 function generateColumns() {
   const columnsGroup = document.querySelector('div.checkbox-group')
   const inputList = `
-    <label><input type="checkbox" value="_id" checked> Mã Khách hàng</label>
-    <label><input type="checkbox" value="name" checked> Tên Khách hàng</label>
+    <label><input type="checkbox" value="_id" checked> Mã nhà cung cấp</label>
+    <label><input type="checkbox" value="name" checked> Tên nhà cung cấp</label>
+    <label><input type="checkbox" value="phone" > Số điện thoại</label>
+    <label><input type="checkbox" value="email" > Email</label>
     <label><input type="checkbox" value="address" checked> Địa chỉ</label>
-    <label><input type="checkbox" value="quantity" checked> S/L Đơn</label>
-    <label><input type="checkbox" value="revenue" checked> Tổng doanh thu</label>
-    <label><input type="checkbox" value="email"> Email</label>
-    <label><input type="checkbox" value="phone"> SDT</label>
-    <label><input type="checkbox" value="gender"> Giới tính</label>
-    <label><input type="checkbox" value="memberCode"> Hạng thành viên</label>
-    <label><input type="checkbox" value="isActive"> Trạng thái</label>
-    <label><input type="checkbox" value="dob"> Ngày sinh</label>
-    <label><input type="checkbox" value="lastLogin"> Lần đăng nhập cuối</label>
+    <label><input type="checkbox" value="quantity" checked> Số lượng</label>
+    <label><input type="checkbox" value="totalCost" checked> Tổng doanh thu</label>
   `
   columnsGroup.insertAdjacentHTML('beforeend', inputList)
 } 
@@ -70,26 +65,67 @@ async function getSuppliers(sortOptions, filterOptions, currentPage, itemsPerPag
 
   document.querySelector('div.board-title').querySelector('p').textContent = 'Nhà cung cấp: ' + dataSize.size
 
+  const selected = Array.from(document.querySelectorAll('.checkbox-group input:checked')).map(cb => ({
+    value: cb.value,
+    name: cb.closest("label").innerText.trim()
+  }))
+
   window.setTimeout(function() {
+    thead.querySelectorAll('tr').forEach((tr, index) => {
+      tr.remove()
+    })
+
+    // header
+    const trHead = document.createElement("tr")
+
+    const headData = document.createElement('td')
+    headData.textContent = 'STT'
+    trHead.appendChild(headData)
+
+    selected.forEach(col => {
+      const td = document.createElement("td")
+      td.textContent = col.name
+      trHead.appendChild(td)
+    })
+
+    const headLink = document.createElement('td')
+    headLink.textContent = 'Chi tiết'
+    trHead.appendChild(headLink)
+
+    thead.appendChild(trHead)
+
+    // body
     tbody.querySelectorAll('tr').forEach((tr, index) => {
       tr.remove()
     })
 
-    let productIndex = (currentPage - 1) * 10 + 1
+    let itemIndex = (currentPage - 1) * itemsPerPage + 1
 
     data.forEach((item, index) => {
       const newTr = document.createElement('tr')
-      newTr.innerHTML = `
-        <td>${productIndex}</td>
-        <td>${item._id}</td>
-        <td>${item.name}</td>
-        <td>${item.address}</td>
-        <td style="text-align: right;">${item.quantity}</td>
-        <td style="text-align: right;">${formatNumber(item.totalCost)}</td>
-        <td><a target="_blank" rel="noopener noreferrer" href="/admin/all-suppliers/supplier/${item._id}">Xem</a></td>
-      `
+
+      const itemData = document.createElement('td')
+      itemData.textContent = itemIndex
+      newTr.appendChild(itemData)
+
+      selected.forEach(col => {
+        const td = document.createElement("td")
+        td.textContent = item[col.value]
+
+        // quantity
+        // totalCost
+
+        if (['quantity', 'totalCost'].includes(col.value) ) td.style.textAlign = 'right'
+        if (['totalCost'].includes(col.value)) td.textContent = formatNumber(item[col.value])
+
+        newTr.appendChild(td)
+      })
+
+      const link = document.createElement('td')
+      link.innerHTML = `<a target="_blank" rel="noopener noreferrer" href="/admin/all-suppliers/supplier/${item._id}">Xem</a>`
+      newTr.appendChild(link)
       tbody.appendChild(newTr)
-      productIndex++
+      itemIndex++
     })
   }, 1000)
   
@@ -108,7 +144,7 @@ changeColumns.onclick = function() {
 }
 
 submitChange.onclick = async function() {
-  await getCustomers(sortOptions, filterOptions, currentPage.page, 10)
+  await getSuppliers(sortOptions, filterOptions, currentPage.page, 10)
 }
 
 window.addEventListener('DOMContentLoaded', async function loadData() {

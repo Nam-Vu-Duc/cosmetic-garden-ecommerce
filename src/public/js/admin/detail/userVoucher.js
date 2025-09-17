@@ -3,29 +3,32 @@ importLinkCss('/css/admin/detail/userVoucher.css')
 const urlSlug = location.href.match(/([^\/]*)\/*$/)[1]
 
 async function getVoucher() {
-  const response = await fetch('/admin/all-vouchers/data/voucher', {
+  const response = await fetch('/admin/all-u-vouchers/data/voucher', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({id: urlSlug})
   })
   if (!response.ok) throw new Error(`Response status: ${response.status}`)
-  const {error, voucherInfo, memberInfo, orderInfo} = await response.json()
-  if (error) return pushNotification('Có lỗi xảy ra')
+  const {error, voucherInfo, orderInfo} = await response.json()
+  if (error) return pushNotification(error)
 
-  document.title = voucherInfo.name
+  document.title = voucherInfo.description
 
+  document.querySelector('input#userId').value      = voucherInfo.userId
+  document.querySelector('input#orderId').value     = voucherInfo.orderId
   document.querySelector('input#code').value        = voucherInfo.code
-  document.querySelector('input#name').value        = voucherInfo.name
   document.querySelector('input#description').value = voucherInfo.description
-  document.querySelector('input#memberCode').value  = memberInfo.name
-  document.querySelector('input#discount').value    = voucherInfo.discount + '%'
-  document.querySelector('input#maxDiscount').value = formatNumber(voucherInfo.maxDiscount)
+  document.querySelector('select#voucherType').querySelectorAll('option').forEach(option => {
+    if (option.value === voucherInfo.voucherType) option.selected = true
+  })
+  document.querySelector('input#discount').value    = formatNumber(voucherInfo.discount)
   document.querySelector('input#minOrder').value    = formatNumber(voucherInfo.minOrder)
   document.querySelector('select#status').querySelectorAll('option').forEach(option => {
     if (option.value === voucherInfo.status) option.selected = true
   })
-  document.querySelector('input#start-date').value   = voucherInfo.startDate.split('T')[0]
-  document.querySelector('input#end-date').value     = voucherInfo.endDate.split('T')[0]
+  document.querySelector('input#startDate').value   = voucherInfo.startDate.split('T')[0]
+  document.querySelector('input#endDate').value     = voucherInfo.endDate.split('T')[0]
+  document.querySelector('input#usedAt').value      = voucherInfo.usedAt === null ? null : voucherInfo.usedAt.split('T')[0]
 
   let productIndex = 1
   orderInfo.forEach((order) => {
@@ -87,7 +90,7 @@ window.addEventListener('DOMContentLoaded', async function loadData() {
       updateVoucher(voucherInfo)
     }
   } catch (error) {
-    console.error('Có lỗi xảy ra:', error)
-    pushNotification('Có lỗi xảy ra')
+    console.error(error)
+    pushNotification(error)
   }  
 })

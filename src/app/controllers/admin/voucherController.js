@@ -59,11 +59,11 @@ class allVouchersController {
   async getVoucher(req, res, next) {
     try {
       const voucherInfo = await voucher.findOne({ _id: req.body.id }).lean()
-      if (!voucherInfo) throw new Error('Store not found')
+      if (!voucherInfo) throw new Error('Voucher not found')
 
       const memberInfo = await member.findOne({ code: voucherInfo.memberCode }).lean()
-      if (!voucherInfo) throw new Error('Member not found')
-  
+      if (!memberInfo) throw new Error('Member not found')
+
       const orderInfo = await order.aggregate([
         {
           $match: { 'voucherCode': voucherInfo.code }

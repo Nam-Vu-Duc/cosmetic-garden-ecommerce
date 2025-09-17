@@ -13,8 +13,8 @@ const dataSize      = { size: 0 }
 function generateColumns() {
   const columnsGroup = document.querySelector('div.checkbox-group')
   const inputList = `
-    <label><input type="checkbox" value="_id" checked> Mã Khách hàng</label>
-    <label><input type="checkbox" value="name" checked> Tên Khách hàng</label>
+    <label><input type="checkbox" value="_id" checked> Mã khách hàng</label>
+    <label><input type="checkbox" value="name" checked> Tên khách hàng</label>
     <label><input type="checkbox" value="address" checked> Địa chỉ</label>
     <label><input type="checkbox" value="quantity" checked> S/L Đơn</label>
     <label><input type="checkbox" value="revenue" checked> Tổng doanh thu</label>
@@ -83,9 +83,9 @@ async function getCustomers(sortOptions, filterOptions, currentPage, itemsPerPag
     // header
     const trHead = document.createElement("tr")
 
-    const headOrder = document.createElement('td')
-    headOrder.textContent = 'STT'
-    trHead.appendChild(headOrder)
+    const headData = document.createElement('td')
+    headData.textContent = 'STT'
+    trHead.appendChild(headData)
 
     selected.forEach(col => {
       const td = document.createElement("td")
@@ -104,14 +104,14 @@ async function getCustomers(sortOptions, filterOptions, currentPage, itemsPerPag
       tr.remove()
     })
 
-    let productIndex = (currentPage - 1) * itemsPerPage + 1
+    let itemIndex = (currentPage - 1) * itemsPerPage + 1
 
     data.forEach((item, index) => {
       const newTr = document.createElement('tr')
 
-      const order = document.createElement('td')
-      order.textContent = productIndex
-      newTr.appendChild(order)
+      const itemData = document.createElement('td')
+      itemData.textContent = itemIndex
+      newTr.appendChild(itemData)
 
       selected.forEach(col => {
         const td = document.createElement("td")
@@ -130,7 +130,7 @@ async function getCustomers(sortOptions, filterOptions, currentPage, itemsPerPag
       link.innerHTML = `<a target="_blank" rel="noopener noreferrer" href="/admin/all-customers/customer/${item._id}">Xem</a>`
       newTr.appendChild(link)
       tbody.appendChild(newTr)
-      productIndex++
+      itemIndex++
     })
   }, 1000)
   

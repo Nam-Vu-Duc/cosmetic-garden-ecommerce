@@ -17,18 +17,19 @@ var courseId
 function generateColumns() {
   const columnsGroup = document.querySelector('div.checkbox-group')
   const inputList = `
-    <label><input type="checkbox" value="_id" checked> Mã Khách hàng</label>
-    <label><input type="checkbox" value="name" checked> Tên Khách hàng</label>
-    <label><input type="checkbox" value="address" checked> Địa chỉ</label>
-    <label><input type="checkbox" value="quantity" checked> S/L Đơn</label>
-    <label><input type="checkbox" value="revenue" checked> Tổng doanh thu</label>
-    <label><input type="checkbox" value="email"> Email</label>
-    <label><input type="checkbox" value="phone"> SDT</label>
-    <label><input type="checkbox" value="gender"> Giới tính</label>
-    <label><input type="checkbox" value="memberCode"> Hạng thành viên</label>
-    <label><input type="checkbox" value="isActive"> Trạng thái</label>
-    <label><input type="checkbox" value="dob"> Ngày sinh</label>
-    <label><input type="checkbox" value="lastLogin"> Lần đăng nhập cuối</label>
+    <label><input type="checkbox" value="_id"> Mã sản phẩm</label>
+    <label><input type="checkbox" value="categories" > Loại sản phẩm</label>
+    <label><input type="checkbox" value="skincare" > Dòng skincare</label>
+    <label><input type="checkbox" value="makeup" > Dòng makeup</label>
+    <label><input type="checkbox" value="brand" checked> Hãng</label>
+    <label><input type="checkbox" value="name" checked> Tên sản phẩm</label>
+    <label><input type="checkbox" value="oldPrice" checked> Giá cũ</label>
+    <label><input type="checkbox" value="price" checked> Giá hiện tại</label>
+    <label><input type="checkbox" value="quantity" checked> Tồn kho</label>
+    <label><input type="checkbox" value="status"> Trạng thái</label>
+    <label><input type="checkbox" value="rate"> Đánh giá</label>
+    <label><input type="checkbox" value="saleNumber"> Lượng bán</label>
+    <label><input type="checkbox" value="rateNumber"> Lượng đánh giá</label>
   `
   columnsGroup.insertAdjacentHTML('beforeend', inputList)
 } 
@@ -75,45 +76,65 @@ async function getProducts(sortOptions, filterOptions, currentPage, itemsPerPage
 
   document.querySelector('div.board-title').querySelector('p').textContent = 'Sản phẩm: ' + dataSize.size
 
+  const selected = Array.from(document.querySelectorAll('.checkbox-group input:checked')).map(cb => ({
+    value: cb.value,
+    name: cb.closest("label").innerText.trim()
+  }))
+
   window.setTimeout(function() {
+    thead.querySelectorAll('tr').forEach((tr, index) => {
+      tr.remove()
+    })
+
+    // header
+    const trHead = document.createElement("tr")
+
+    const headData = document.createElement('td')
+    headData.textContent = 'STT'
+    trHead.appendChild(headData)
+
+    selected.forEach(col => {
+      const td = document.createElement("td")
+      td.textContent = col.name
+      trHead.appendChild(td)
+    })
+
+    const headLink = document.createElement('td')
+    headLink.textContent = 'Chi tiết'
+    trHead.appendChild(headLink)
+
+    thead.appendChild(trHead)
+
+    // body
     tbody.querySelectorAll('tr').forEach((tr, index) => {
       tr.remove()
     })
 
-    let productIndex = (currentPage - 1) * itemsPerPage + 1
+    let itemIndex = (currentPage - 1) * itemsPerPage + 1
 
     data.forEach((item, index) => {
       const newTr = document.createElement('tr')
-      newTr.innerHTML = `
-        <td>${productIndex}</td>
-        <td>${item.brand}</td>
-        <td style="
-          display: flex; 
-          justify-content: start;
-          align-items: center;
-          "
-        >
-          <img src="${item.img.path}" alt="${item.name}" loading="lazy"> 
-          <p>${item.name}</p>
-        </td>  
-        <td style="text-align: right;">${formatNumber(item.purchasePrice)}</td>
-        <td style="text-align: right;">${formatNumber(item.price)}</td>
-        <td style="text-align: right;">${item.quantity}</td>
-        <td style="display: flex; align-items: center; justify-content:center; gap: 5px;">
-          <a target="_blank" rel="noopener noreferrer" href="/admin/all-products/product/${item._id}" class="update-button">Xem</a>
-          <button class="delete-btn" data-id="${item._id}" data-name="${item.name}">Xoá</button>
-        </td>
-      `
-      tbody.appendChild(newTr)
-      productIndex++
-    })
 
-    tbody.querySelectorAll(".delete-btn").forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        const id = e.target.dataset.id
-        const name = e.target.dataset.name
-        reply_click(id, name)
+      const itemData = document.createElement('td')
+      itemData.textContent = itemIndex
+      newTr.appendChild(itemData)
+
+      selected.forEach(col => {
+        const td = document.createElement("td")
+        td.textContent = item[col.value]
+
+        if (['oldPrice', 'price', 'quantity', 'rate', 'saleNumber', 'rateNumber'].includes(col.value) ) td.style.textAlign = 'right'
+        if (['oldPrice', 'price'].includes(col.value)) td.textContent = formatNumber(item[col.value])
+        if (['rate'].includes(col.value)) td.textContent = formatRate(item[col.value])
+
+        newTr.appendChild(td)
       })
+
+      const link = document.createElement('td')
+      link.innerHTML = `<a target="_blank" rel="noopener noreferrer" href="/admin/all-products/product/${item._id}">Xem</a>`
+      newTr.appendChild(link)
+      tbody.appendChild(newTr)
+      itemIndex++
     })
   }, 1000)
 
@@ -157,7 +178,7 @@ changeColumns.onclick = function() {
 }
 
 submitChange.onclick = async function() {
-  await getCustomers(sortOptions, filterOptions, currentPage.page, 10)
+  await getProducts(sortOptions, filterOptions, currentPage.page, 10)
 }
 
 window.addEventListener('DOMContentLoaded', async function loadData() {

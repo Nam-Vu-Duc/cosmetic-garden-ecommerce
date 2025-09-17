@@ -5,28 +5,33 @@
         <tr><td colspan="2">THÔNG TIN VOUCHER</td></tr>
       </thead>
       <tr>
-        <td>Mã Voucher</td>
+        <td>Mã người dùng</td>
+        <td><input type="text" id="userId" disabled></td>
+      </tr>
+      <tr>
+        <td>Mã đơn hàng</td>
+        <td><input type="text" id="orderId"></td>
+      </tr>
+      <tr>
+        <td>Mã voucher</td>
         <td><input type="text" id="code" disabled></td>
       </tr>
       <tr>
-        <td>Tên Voucher</td>
-        <td><input type="text" id="name"></td>
-      </tr>
-      <tr>
         <td>Mô tả</td>
-        <td><input type="text" id="description"></td>
+        <td><input type="text" id="description" disabled></td>
       </tr>
       <tr>
-        <td>Hạng thành viên</td>
-        <td><input type="text" id="memberCode" disabled></td>
+        <td>Loại voucher</td>
+        <td>
+          <select name="voucherType" id="voucherType">
+            <option value="order" disabled>Đặt đơn</option>
+            <option value="birthday" disabled>Sinh nhật</option>
+          </select>
+        </td>
       </tr>
       <tr>
         <td>Mức giảm giá</td>
         <td><input type="text" id="discount" disabled></td>
-      </tr>
-      <tr>
-        <td>Mức giảm tối đa</td>
-        <td><input type="text" id="maxDiscount" disabled></td>
       </tr>
       <tr>
         <td>Giá trị đơn hàng</td>
@@ -43,11 +48,15 @@
       </tr>
       <tr>
         <td>Ngày bắt đầu</td>
-        <td><input type="date" id="start-date"></td>
+        <td><input type="date" id="startDate"></td>
       </tr>
       <tr>
         <td>Ngày kết thúc</td>
-        <td><input type="date" id="end-date"></td>
+        <td><input type="date" id="endDate"></td>
+      </tr>
+      <tr>
+        <td>Ngày sử dụng</td>
+        <td><input type="date" id="usedAt" disabled></td>
       </tr>
     </table>
 
