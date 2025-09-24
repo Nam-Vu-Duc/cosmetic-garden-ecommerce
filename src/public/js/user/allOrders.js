@@ -417,7 +417,7 @@ listVoucherButton.onclick = async function() {
     document.body.appendChild(vouchersBox)
   } catch (error) {
     console.log(error)
-    pushNotification(error)
+    pushNotification(error.message)
   }
 }
 

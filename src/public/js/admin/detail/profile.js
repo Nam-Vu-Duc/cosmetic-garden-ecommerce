@@ -55,7 +55,7 @@ async function updateProfile(userInfo) {
       gender  === userInfo.gender
     ) return pushNotification('Hãy cập nhật thông tin')
   
-    const response = await fetch('/admin/profile/updated', {
+    const response = await fetch('/admin/all-personal-info/updated', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({

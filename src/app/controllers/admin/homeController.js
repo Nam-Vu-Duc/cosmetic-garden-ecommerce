@@ -97,9 +97,9 @@ class homeController {
       ])
 
       return res.json({ 
-        revenue: revenue.length > 0 ? revenue[0].revenue        : 0,
-        cost   : cost.length    > 0 ? cost[0].cost              : 0,
-        wage   : wage.length    > 0 ? wage[0].totalWageForRange : 0,
+        revenue: revenue.length > 0 ? revenue[0].revenue.toFixed(0)        : 0,
+        cost   : cost.length    > 0 ? cost[0].cost.toFixed(0)              : 0,
+        wage   : wage.length    > 0 ? wage[0].totalWageForRange.toFixed(0) : 0,
       })
     } catch (error) {
       console.log(error)

@@ -2,9 +2,7 @@ importLinkCss('/css/admin/all/vouchers.css')
 
 const tbody         = document.querySelector('table').querySelector('tbody')
 const thead         = document.querySelector('table').querySelector('thead')
-const paginationBtn = document.querySelector('select[name="pagination"]')
 const changeColumns = document.querySelector('i.fi.fi-rr-objects-column')
-const submitChange  = document.querySelector('button.generate-columns')
 const sortOptions   = {}
 const filterOptions = {}
 const currentPage   = { page: 1 }
@@ -135,19 +133,9 @@ async function getVouchers(sortOptions, filterOptions, currentPage, itemsPerPage
   pagination(getVouchers, sortOptions, filterOptions, currentPage, dataSize.size)
 }
 
-paginationBtn.onchange = function () {
-  const selectedValue = parseInt(paginationBtn.value)
-  currentPage.page = 1
-  getVouchers(sortOptions, filterOptions, currentPage.page, selectedValue)
-}
-
 changeColumns.onclick = function() {
   const columnLists = document.querySelector('div.checkbox-group')
   columnLists.style.display === 'none' ? columnLists.style.display = 'block' : columnLists.style.display = 'none'
-}
-
-submitChange.onclick = async function() {
-  await getVouchers(sortOptions, filterOptions, currentPage.page, 10)
 }
 
 window.addEventListener('DOMContentLoaded', async function loadData() {

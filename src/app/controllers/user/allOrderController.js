@@ -348,7 +348,7 @@ class allOrderController {
           momoReq.end()
         })
 
-        return res.json({ payUrl: momoResponse.payUrl })
+        return res.json({ payUrl: momoResponse.payUrl, id: newOrder._id })
       }
 
       if (paymentMethod === 'transfer') {
@@ -403,8 +403,7 @@ class allOrderController {
         
       // } catch (error) {
       //   console.log(error)
-      // }
-  
+      // }  
       return res.json({id: newOrder._id})
     } catch (error) {
       return res.json({error: error.message})
@@ -532,6 +531,9 @@ class allOrderController {
       const orderInfo = await order.findOne({ _id: id }).lean()
       const orderStatus = orderInfo.status
       if (orderStatus !== 'delivered') throw new Error('Dơn hàng chưa được giao')
+      await order.updateOne({ _id: id }, {
+        status: 'done'
+      })
 
       const userInfo = await user.findOne({ email: email }).lean()
       const userId = userInfo._id

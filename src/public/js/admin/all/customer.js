@@ -2,9 +2,7 @@ importLinkCss('/css/admin/all/customers.css')
 
 const thead         = document.querySelector('table').querySelector('thead')
 const tbody         = document.querySelector('table').querySelector('tbody')
-const paginationBtn = document.querySelector('select[name="pagination"]')
 const changeColumns = document.querySelector('i.fi.fi-rr-objects-column')
-const submitChange  = document.querySelector('button.generate-columns')
 const sortOptions   = {}
 const filterOptions = {}
 const currentPage   = { page: 1 }
@@ -137,20 +135,14 @@ async function getCustomers(sortOptions, filterOptions, currentPage, itemsPerPag
   pagination(getCustomers, sortOptions, filterOptions, currentPage, dataSize.size)
 }
 
-paginationBtn.onchange = function () {
-  const selectedValue = parseInt(paginationBtn.value)
-  currentPage.page = 1
-  getCustomers(sortOptions, filterOptions, currentPage.page, selectedValue)
-}
-
 changeColumns.onclick = function() {
   const columnLists = document.querySelector('div.checkbox-group')
   columnLists.style.display === 'none' ? columnLists.style.display = 'block' : columnLists.style.display = 'none'
 }
 
-submitChange.onclick = async function() {
-  await getCustomers(sortOptions, filterOptions, currentPage.page, 10)
-}
+// submitChange.onclick = async function() {
+//   await getCustomers(sortOptions, filterOptions, currentPage.page, 10)
+// }
 
 window.addEventListener('DOMContentLoaded', async function loadData() {
   try {
